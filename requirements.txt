@@ -1,0 +1,9 @@
+aiofiles
+jinja2
+fastapi
+uvicorn
+authlib
+cryptography
+python-multipart
+requests
+pydantic[dotenv]

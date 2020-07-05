@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{app_name}}</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="/static-login/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/static-login/css/cover.css">
+        <link rel="icon" type="img/ipng" href="/static/img/favicon.png" />
+        <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" >
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class='container'>
+            <div class="cover-container d-flex h-100 p-3 mx-auto flex-column text-center justify-content-center">
+                <main class="inner-cover">
+                    <p class="lead">
+                    {% if logo %}
+                        {{logo | safe }}
+                    {% endif %}
+                    {% if appname %}
+                        <h1 class="h1">{{appname}}</h1>
+                    {% endif %}
+                        <br><br>
+                        <h4 class="mb-3 font-weight-normal">Please sign in</h4>
+                        {{ login | safe }}
+                    </p>
+                {% if copyright %}
+                    <p class="mt-5 mb-3 lead text-muted">© {{ copyright }}</p>
+                {% endif %}
+                {% if explanation %}
+                    <p class="mt-5 mb-3 lead text-muted">{{ explanation }}</p>
+                {% endif %}
+            
+                </main>
+            </div>
+        </div><!-- /.container-fluid -->
+    </body>
+</html>
