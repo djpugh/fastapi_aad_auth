@@ -1,3 +1,7 @@
+import logging
+
+logging.basicConfig(level='DEBUG')
+
 from fastapi import APIRouter, Depends
 from fastapi import FastAPI
 from starlette.responses import HTMLResponse, PlainTextResponse, RedirectResponse

@@ -21,8 +21,22 @@ _BASE_ROUTES = ['openapi', 'swagger_ui_html', 'swagger_ui_redirect', 'redoc_html
 
 
 class AADAuth:
+    """
+    AAD Authenticator Class
+
+    Generates and handles adding AAD authentication, routing and middleware
+
+    Includes a decorator for signifying authentication required on fastapi routes, and a basic Login UI with AAD link
+    """
 
     def __init__(self, config: Config = None, add_to_base_routes=True):
+        """
+        Initialise the AAD config based on the provided configuration
+        
+        Keyword Args:
+            config (fastapi_aad_auth.config.Config): Authentication configuration (includes ui and routing, as well as AAD Application and Tenant IDs)
+            add_to_base_routes (bool): Add the authentication to the router
+        """
         if config is None:
             config = Config()
         self.config = config
@@ -30,18 +44,40 @@ class AADAuth:
         if add_to_base_routes:
             self._add_to_base_routes = True
 
-    def app_routes_add_auth(self, app, route_list, ignore=False):
+    def app_routes_add_auth(self, app, route_list, invert=False):
+        """
+        Add authentication to specified routes in application router
+
+        Used for default routes (e.g. api/docs and api/redocs, openapi.json etc)
+
+        Args:
+            app (fastapi.app.App): fastapi application
+            route_list (list): list of routes to add authentication to (e.g. api docs, redocs etc)
+        
+        Keyword Args:
+            invert (bool): Switch between using the route list as a block list or an allow list
+
+        """
         if self.oauth_backend.enabled:
             routes = app.router.routes
             for i, route in enumerate(routes):
-                # Can use allow list or block list (i.e. ignore = True sets all except the route list to have auth
-                if (route.name in route_list and not ignore) or (route.name not in route_list and ignore):
+                # Can use allow list or block list (i.e. invert = True sets all except the route list to have auth
+                if (route.name in route_list and not invert) or (route.name not in route_list and invert):
                     route.endpoint = self.auth_required()(route.endpoint)
                     route.app = request_response(route.endpoint)
                 app.router.routes[i] = route
         return app
 
     def configure_app(self, app):
+        """
+        Configure the fastapi application to use these authentication handlers
+
+        Adds authentication middleware, error handler and adds authnetication
+        to the default routes as well as adding the authentication specific routes
+
+        Args:
+            app (fastapi.app.App): fastapi application
+        """
 
         def on_auth_error(request: Request, exc: Exception):
             logger.exception(f'Error {exc} for request {request}')
@@ -66,6 +102,16 @@ class AADAuth:
         app.routes.extend(self.build_auth_ui(context))
 
     def auth_required(self, scopes='authenticated', redirect='login'):
+        """
+        Decorator to require specific scopes (and redirect to the login ui) for an endpoint
+        
+        This can be used for toggling authentication (e.g. between an internal/external server)
+        as well as handling the redirection based on the session information
+
+        Keyword Args:
+            scopes (str): scopes for the fastapi requires decorator
+            redirect (str): name of the redirection url
+        """
 
         def wrapper(endpoint):
             if self.config.enabled:
@@ -88,9 +134,16 @@ class AADAuth:
 
     @property
     def auth_routes(self):
+        """
+        Get the default authentication routes and methods.
+
+        Includes login, logout and the login callback
+        """
 
         async def logout(request: Request):
+            logger.debug(f'Logging out - request url {request.url}')
             if self.oauth_backend.enabled:
+                logger.debug(f'Auth {request.auth}')
                 self.oauth_backend.authenticator.logout(request)
             return RedirectResponse(self.config.routing.post_logout_path)
 
@@ -119,6 +172,15 @@ class AADAuth:
         return routes
 
     def build_auth_ui(self, context=None):
+        """
+        Build the ui route and static data for the login UI
+
+        The context kwargs can include ``login`` - button HTML (different to the default Microsoft UI button),
+        ``appname`` - the application name (for the login page title)
+
+        Keyword Args:
+            context (dict): a dicitionary of predefined parameters to pass to the Jinja2 Login UI template
+        """
         if context is None:
             context = {}
         template_path = Path(self.config.login_ui.template_file)
@@ -141,4 +203,5 @@ class AADAuth:
 
     @property
     def api_auth_scheme(self):
+        """Get the authentication scheme for the api page"""
         return self.oauth_backend.api_auth_scheme

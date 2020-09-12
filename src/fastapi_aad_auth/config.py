@@ -18,13 +18,27 @@ def list_from_env(env_value):
 
 
 class RoutingConfig(BaseSettings):
+    """
+    Configuration for authentication related routing
 
-    login_path: str = Field('/login/oauth', env='FASTAPI_AUTH_LOGIN_ROUTE')
-    login_redirect_path: str = Field('/login/oauth/redirect', env='FASTAPI_AUTH_LOGIN_REDIRECT_ROUTE')
-    logout_path: str = Field('/logout', env='FASTAPI_AUTH_LOGOUT_ROUTE')
-    landing_path: str = Field('/login', env='FASTAPI_AUTH_LOGIN_UI_ROUTE')
-    home_path: str = Field('/', env='APP_HOME_ROUTE')
-    post_logout_path: str = Field(None, env='FASTAPI_AUTH_POST_LOGOUT_ROUTE')
+    Includes ``logout_path``, ``login_path``, and ``login_redirect_path``(defaults should
+    be fine for most use-cases).
+
+    There are also the ``landing_path`` for the login page, as well as the ``home_path`` for the home
+    page (defaults to the application root), and the ``post_logout_path`` for any specific routing
+    once a logout has completed.
+    """
+    login_path: str = Field('/login/oauth', description="Path for initiating the AAD oauth call", env='FASTAPI_AUTH_LOGIN_ROUTE')
+    login_redirect_path: str = Field('/login/oauth/redirect', description="Path for handling the AAD redirect call", env='FASTAPI_AUTH_LOGIN_REDIRECT_ROUTE')
+    logout_path: str = Field('/logout', description="Path for processing a logout request", env='FASTAPI_AUTH_LOGOUT_ROUTE')
+    landing_path: str = Field('/login', description="Path for the login UI page", env='FASTAPI_AUTH_LOGIN_UI_ROUTE')
+    home_path: str = Field('/', description="Path for the application home page (default redirect if none provided)", 
+                           env='APP_HOME_ROUTE')
+    post_logout_path: str = Field(None, description="Path for the redirect post logout - defaults to the landing path if not provided",
+                                  env='FASTAPI_AUTH_POST_LOGOUT_ROUTE')
+
+    class Config:
+        env_file = '.env'
 
     @validator('post_logout_path', always=True, pre=True)
     def _validate_post_logout_path(cls, value, values):
@@ -34,52 +48,111 @@ class RoutingConfig(BaseSettings):
 
 
 class LoginUIConfig(BaseSettings):
-    app_name: str = Field(None, env='APP_NAME')
-    template_file: FilePath = Field(resource_filename('fastapi_aad_auth.ui', 'login.html'), env='FASTAPI_AUTH_LOGIN_TEMPLATE_FILE')
-    static_directory: DirectoryPath = Field(resource_filename('fastapi_aad_auth.ui', 'static'), env='FASTAPI_AUTH_LOGIN_STATIC_DIR')
-    static_path: str = Field('/static-login', env='FASTAPI_AUTH_LOGIN_STATIC_PATH')
-    context: Optional[Dict[str, str]] = Field(None)
+    """
+    Configuration for the application Login UI
+
+    Includes the application name, template file (needs to )
+    """
+    app_name: str = Field(None, description="Application name to show on the Login UI page", env='APP_NAME')
+    template_file: FilePath = Field(resource_filename('fastapi_aad_auth.ui', 'login.html'), 
+                                    description="The jinja2 template to use",
+                                    env='FASTAPI_AUTH_LOGIN_TEMPLATE_FILE')
+    static_directory: DirectoryPath = Field(resource_filename('fastapi_aad_auth.ui', 'static'),
+                                            description="Static path for the Login UI",
+                                            env='FASTAPI_AUTH_LOGIN_STATIC_DIR')
+    static_path: str = Field('/static-login',
+                             description="Path to mount the login static dir in",
+                             env='FASTAPI_AUTH_LOGIN_STATIC_PATH')
+    context: Optional[Dict[str, str]] = Field(None, description="Any additional context variables required for the template")
+
+    class Config:
+        env_file = '.env'
 
 
 class AADConfig(BaseSettings):
-    client_id: SecretStr = Field(..., env='AAD_CLIENT_ID')
-    tenant_id: SecretStr = Field(..., env='AAD_TENANT_ID')
-    client_secret: Optional[SecretStr] = Field(None, env='AAD_CLIENT_SECRET')
-    scopes: List[str] = ["Read"]
-    client_app_ids: Optional[List[str]] = Field(None, env='AAD_CLIENT_APP_IDS')
-    strict: bool = Field(True, env='AAD_STRICT_CLAIM_CHECK')
-    api_audience: Optional[str] = Field(None, env='AAD_API_AUDIENCE')
-    redirect_uri: Optional[HttpUrl] = Field(None, env='AAD_REDIRECT_URI')
-    prompt: Optional[str] = Field(None, env='AAD_PROMPT')
-    domain_hint: Optional[str] = Field(None, env='AAD_DOMAIN_HINT')
+    """
+    Configuration for the AAD application
+    
+    Includes expected claims, application registration, etc.
+
+    Can also provide additional client application ids to accept.
+
+    A list of roles can be provided to accept (requires configuring the
+    roles in the AAD application registration manifest)
+    """
+    client_id: SecretStr = Field(..., description="Application Registration Client ID", env='AAD_CLIENT_ID')
+    tenant_id: SecretStr = Field(..., description="Application Registration Tenant ID", env='AAD_TENANT_ID')
+    client_secret: Optional[SecretStr] = Field(None, description="Application Registration Client Secret (if required)", env='AAD_CLIENT_SECRET')
+    scopes: List[str] = Field(["Read"], description="Additional scopes requested")
+    client_app_ids: Optional[List[str]] = Field(None, description="Additional Client App IDs to accept tokens from (when running as a backend service)",
+                                                env='AAD_CLIENT_APP_IDS')
+    strict: bool = Field(True, description="Check that all claims are provided", env='AAD_STRICT_CLAIM_CHECK')
+    api_audience: Optional[str] = Field(None, description="Corresponds to the Application ID URI - used for token validation, defaults to api://{client_id}",
+                                        env='AAD_API_AUDIENCE')
+    redirect_uri: Optional[HttpUrl] = Field(None, description="The redirect URI to use - overwrites the default path handling etc",
+                                            env='AAD_REDIRECT_URI')
+    prompt: Optional[str] = Field(None, description="AAD prompt to request", env='AAD_PROMPT')
+    domain_hint: Optional[str] = Field(None, description="AAD domain hint", env='AAD_DOMAIN_HINT')
+    roles: Optional[List[str]] = Field(None, description="AAD roles required in claims", env='AAD_ROLES')
+
+    class Config:
+        env_file = '.env'
 
     _validate_strict = validator('strict', allow_reuse=True)(bool_from_env)
     _validate_client_app_ids = validator('client_app_ids', allow_reuse=True)(list_from_env)
+    _validate_roles = validator('roles', allow_reuse=True)(list_from_env)
 
 
 class AuthSessionConfig(BaseSettings):
-    secret: SecretStr = Field(str(uuid.uuid4()), env='SESSION_AUTH_SECRET')
-    salt: SecretStr = Field(str(uuid.uuid4()), env='SESSION_AUTH_SALT')
+    """
+    Authentication Session configuration
 
+    Contains secret and salt information (should be set as environment
+    variables in a multi-worker/multi-processing environment to enable
+    authentication across workers)
+    """
+    secret: SecretStr = Field(str(uuid.uuid4()), description="Secret used for encoding authentication information",
+                              env='SESSION_AUTH_SECRET')
+    salt: SecretStr = Field(str(uuid.uuid4()), description="Salt used for encoding authentication information",
+                            env='SESSION_AUTH_SALT')
+
+    class Config:
+        env_file = '.env'
 
 class SessionConfig(BaseSettings):
-    secret_key: SecretStr = Field(str(uuid.uuid4()), env='SESSION_SECRET')
-    session_cookie: str = Field('session', env='SESSION_COOKIE')
-    same_site: str = Field('lax', env='SESSION_SAME_SITE')
-    https_only: bool = Field(False, env='SESSION_HTTPS_ONLY')
-    max_age: int = Field(24*60*60, env='SESSION_MAX_AGE')
+    """
+    Configuration for session middleware
+
+    Contains the session secret (should be set as environment variables in
+    a multi-worker/multi-processing environment to enable authentication
+    across workers)
+
+    Provides configuration for the fastapi session middleware
+    """
+    secret_key: SecretStr = Field(str(uuid.uuid4()), description="Secret used for the session middleware",
+                                  env='SESSION_SECRET')
+    session_cookie: str = Field('session', description="Cookie name for the session information",
+                                env='SESSION_COOKIE')
+    same_site: str = Field('lax', description="Cookie validation mode for the session", env='SESSION_SAME_SITE')
+    https_only: bool = Field(False, description="Allow the sessions only with https connections", env='SESSION_HTTPS_ONLY')
+    max_age: int = Field(24*60*60, description="Maximum age for a session", env='SESSION_MAX_AGE')
+
+    class Config:
+        env_file = '.env'
 
     _validate_https_only = validator('https_only', allow_reuse=True)(bool_from_env)
 
 
 class Config(BaseSettings):
-
-    enabled: bool = Field(True, env='FASTAPI_AUTH_ENABLED')
-    aad: AADConfig = None
-    auth_session: AuthSessionConfig = None
-    routing: RoutingConfig = None
-    session: SessionConfig = None
-    login_ui: LoginUIConfig = None
+    """
+    The overall configuraton for the authentication
+    """
+    enabled: bool = Field(True, description="Enable authentication", env='FASTAPI_AUTH_ENABLED')
+    aad: AADConfig = Field(None, description="The AAD configuration to use")
+    auth_session: AuthSessionConfig = Field(None, description="The configuration for encoding the authentication information in the session")
+    routing: RoutingConfig = Field(None, description="Configuration for routing")
+    session: SessionConfig = Field(None, description="Configuration for the session middleware")
+    login_ui: LoginUIConfig = Field(None, description="Login UI Configuration")
 
     class Config:
         env_file = '.env'

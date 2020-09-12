@@ -57,6 +57,7 @@ kwargs = dict(name='fastapi_aad_auth',
               package_data={'': ['*.rst',
                                  'requirements.txt',
                                  '*.ini',
+                                 '*.html',
                                  '*.cfg']}
               )
 

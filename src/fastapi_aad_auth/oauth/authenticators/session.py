@@ -137,6 +137,9 @@ class AADSessionAuthenticator(SessionAuthenticator):
         # Let's build up the redirect_uri
         result = self.msal_application.acquire_token_by_authorization_code(code, scopes=[],
                                                                            redirect_uri=self._build_redirect_uri(request))
+        logger.debug(f'Result {result}')
+        if 'error' in result and result['error']:
+            raise 
         return result['id_token']
 
     def _get_user_from_token(self, token, options=None):
@@ -149,6 +152,7 @@ class AADSessionAuthenticator(SessionAuthenticator):
     def _get_authorization_url(self, request, session_state):
         return self.msal_application.get_authorization_request_url([],
                                                                    state=session_state,
+                                                                   claims_challenge='{"id_token": {"roles": {"essential": true} } }',
                                                                    redirect_uri=self._build_redirect_uri(request),
                                                                    prompt=self._prompt,
                                                                    domain_hint=self._domain_hint)

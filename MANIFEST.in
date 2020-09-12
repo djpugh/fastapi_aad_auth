@@ -1,3 +1,4 @@
 include requirements.txt
 include versioneer.py
 include src/fastapi_aad_auth/_version.py
+include src/*.html
