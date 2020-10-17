@@ -1,3 +1,4 @@
+msal
 aiofiles
 jinja2
 fastapi
@@ -7,3 +8,4 @@ cryptography
 python-multipart
 requests
 pydantic[dotenv]
+itsdangerous
