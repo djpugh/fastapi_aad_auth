@@ -1,4 +1,4 @@
-
+"""Validator for token based authentication."""
 import logging
 from typing import List, Optional
 
@@ -18,12 +18,14 @@ logger = logging.getLogger(__name__)
 
 
 class InitOAuth(BaseModel):
+    """OAuth information for openapi docs."""
     clientId: str
     scopes: str
     usePkceWithAuthorizationCodeGrant: bool
 
 
 class TokenValidator(OAuth2AuthorizationCodeBearer):
+    """Validator for token based authentication."""
 
     def __init__(
         self,
@@ -38,6 +40,7 @@ class TokenValidator(OAuth2AuthorizationCodeBearer):
         use_pkce: bool = True,
         user_klass: type = User
     ):
+        """Initialise validator for token based authentication."""
         super().__init__(authorizationUrl=authorizationUrl, tokenUrl=tokenUrl, refreshUrl=api_audience, scheme_name=scheme_name, scopes=scopes, auto_error=auto_error)
         self.client_id = client_id
         self.enabled = enabled
@@ -48,6 +51,7 @@ class TokenValidator(OAuth2AuthorizationCodeBearer):
         self._user_klass = user_klass
 
     def check(self, request):
+        """Check the authentication from the request."""
         token = self.get_token(request)
         if token is None:
             return AuthenticationState.as_unauthenticated(None, None)
@@ -56,6 +60,7 @@ class TokenValidator(OAuth2AuthorizationCodeBearer):
         return AuthenticationState.authenticate_as(user, None, None)
 
     def get_token(self, request):
+        """Get the token from the request."""
         authorization = request.headers.get("Authorization")
         scheme, param = get_authorization_scheme_param(authorization)
         if not authorization or scheme.lower() != "bearer":
@@ -71,6 +76,7 @@ class TokenValidator(OAuth2AuthorizationCodeBearer):
 
     @property
     def init_oauth(self):
+        """Get the openapi docs config."""
         return InitOAuth(clientId=self.client_id, scopes=f'{self.api_audience}/openid', usePkceWithAuthorizationCodeGrant=self._use_pkce).dict()
 
     def _validate_claims(self, claims, options=None):
@@ -106,6 +112,7 @@ class TokenValidator(OAuth2AuthorizationCodeBearer):
         raise NotImplementedError('Implement in base class')
 
     def validate_token(self, token, options=None):
+        """Validate provided token."""
         claims = self._decode_token(token)
         return self._validate_claims(claims, options)
 
@@ -118,6 +125,7 @@ class TokenValidator(OAuth2AuthorizationCodeBearer):
 
 
 class AADTokenValidator(TokenValidator):
+    """Validator for AAD token based authentication."""
 
     def __init__(self,
                  client_id: str,
@@ -131,6 +139,7 @@ class AADTokenValidator(TokenValidator):
                  strict: bool = True,
                  client_app_ids: Optional[List[str]] = None,
                  user_klass: type = User):
+        """Initialise validator for AAD token based authentication."""
         authorization_url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/authorize"
         token_url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token"
         self.key_url = f"https://login.microsoftonline.com/{tenant_id}/discovery/v2.0/keys"

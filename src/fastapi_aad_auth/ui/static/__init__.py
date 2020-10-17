@@ -1,0 +1,1 @@
+"""Static components for UI."""

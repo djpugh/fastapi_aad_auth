@@ -1,5 +1,10 @@
+"""AAD OAuth handlers."""
 import logging
+from typing import List, Optional
 
+from itsdangerous import URLSafeSerializer
+
+from fastapi_aad_auth.config import Config
 from fastapi_aad_auth.oauth._base import BaseOAuthBackend
 from fastapi_aad_auth.oauth.authenticators import AADSessionAuthenticator
 from fastapi_aad_auth.oauth.state import User
@@ -9,24 +14,44 @@ logger = logging.getLogger(__name__)
 
 
 class AADOAuthBackend(BaseOAuthBackend):
+    """fastapi auth backend for Azure Active Directory."""
 
     def __init__(
             self,
-            session_serializer,
-            client_id,
-            tenant_id,
-            redirect_path='/login/oauth/redirect',
-            prompt=None,
-            client_secret=None,
-            scopes=None,
-            enabled=True,
-            client_app_ids=None,
-            strict_token=True,
-            api_audience=None,
-            redirect_uri=None,
-            domain_hint=None,
-            user_klass=User):
+            session_serializer: URLSafeSerializer,
+            client_id: str,
+            tenant_id: str,
+            redirect_path: str = '/login/oauth/redirect',
+            prompt: Optional[str] = None,
+            client_secret: Optional[str] = None,
+            scopes: Optional[str] = None,
+            enabled: bool = True,
+            client_app_ids: Optional[List[str]] = None,
+            strict_token: bool = True,
+            api_audience: Optional[str] = None,
+            redirect_uri: Optional[str] = None,
+            domain_hint: Optional[str] = None,
+            user_klass: type = User):
+        """Initialise the auth backend.
 
+        Args:
+            session_serializer: Session serializer object
+            client_id: Client ID from Azure App Registration
+            tenant_id: Tenant ID to connect to for Azure App Registration
+
+        Keyword Args:
+            redirect_path: Path to redirect to on return
+            prompt: Prompt options for Azure AD
+            client_secret: Client secret value
+            scopes: Additional scopes requested
+            enabled: Boolean flag to enable this backend
+            client_app_ids: List of client apps to accept tokens from
+            strict_token: Strictly evaluate token
+            api_audience: Api Audience declared in Azure AD App registration
+            redirect_uri: Full URI for post authentication callbacks
+            domain_hint: Hint for the domain
+            user_klass: Class to use as a user.
+        """
         self.session_serializer = session_serializer
         self.enabled = enabled
         token_validator = AADTokenValidator(client_id=client_id, tenant_id=tenant_id, api_audience=api_audience,
@@ -40,7 +65,15 @@ class AADOAuthBackend(BaseOAuthBackend):
         super().__init__(token_validator, session_validator, authenticator=session_authenticator)
 
     @classmethod
-    def from_config(cls, config, user_klass=User):
+    def from_config(cls, config: Config, user_klass: type = User):
+        """Load the auth backend from a config.
+
+        Args:
+            config: Loaded configuration
+
+        Keyword Args:
+            user_klass: The class to use as a user
+        """
         auth_serializer = get_session_serializer(config.auth_session.secret.get_secret_value(),
                                                  config.auth_session.salt.get_secret_value())
         client_secret = config.aad.client_secret

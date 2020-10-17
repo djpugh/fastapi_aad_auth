@@ -1,3 +1,4 @@
+"""Authenticator for interactive (UI) sessions."""
 import base64
 import logging
 
@@ -5,19 +6,22 @@ import msal
 from pkg_resources import resource_string
 from starlette.responses import RedirectResponse
 
-from fastapi_aad_auth.oauth.state import AuthenticationState
 from fastapi_aad_auth.errors import ConfigurationError
+from fastapi_aad_auth.oauth.state import AuthenticationState
 
 logger = logging.getLogger(__name__)
 
 
 class SessionAuthenticator:
+    """Authenticator for interactive (UI) sessions."""
 
     def __init__(self, session_validator, token_validator):
+        """Initialise the session authenticator."""
         self._session_validator = session_validator
         self._token_validator = token_validator
 
     def redirect_if_authenticated(self, auth_state, redirect='/'):
+        """Redirect to a target if authenticated."""
         if auth_state.is_authenticated():
             logger.info(f'Logged in, redirecting to {redirect}')
         else:
@@ -25,6 +29,7 @@ class SessionAuthenticator:
         return RedirectResponse(redirect)
 
     def redirect_to_provider_login(self, auth_state, request):
+        """Redirect to the provider login."""
         logger.debug(f'state {auth_state}')
         auth_state.save_to_session(self._session_validator._session_serializer, request.session)
         authorization_url = self._get_authorization_url(request, auth_state.session_state)
@@ -34,6 +39,7 @@ class SessionAuthenticator:
         raise NotImplementedError('Implement in specific subclass')
 
     def process_login_request(self, request):
+        """Process the provider login request."""
         logger.debug(f'Logging in - request url {request.url}')
         auth_state = self._session_validator.get_state_from_session(request)
         if auth_state.is_authenticated():
@@ -47,6 +53,7 @@ class SessionAuthenticator:
         return response
 
     def process_login_callback(self, request):
+        """Process the provider login callback."""
         code = request.query_params.get('code', None)
         state = request.query_params.get('state', None)
         if state is None or code is None:
@@ -72,20 +79,25 @@ class SessionAuthenticator:
         return url
 
     def get_login_button(self, url, post_redirect='/'):
+        """Get a UI login button."""
         url = self._add_redirect_to_url(url, post_redirect)
         return f'<a class="btn btn-lg btn-primary btn-block col-8 offset-md-2" href="{url}">Sign in</a>'
 
     def logout(self, request):
+        """Process a logout request."""
         AuthenticationState.logout(self._session_validator._session_serializer, request.session)
 
     def pop_post_auth_redirect(self, *args, **kwargs):
+        """Clear post-authentication redirects."""
         return self._session_validator.pop_post_auth_redirect(*args, **kwargs)
 
     def set_post_auth_redirect(self, *args, **kwargs):
+        """Set post-authentication redirects."""
         self._session_validator.set_post_auth_redirect(*args, **kwargs)
 
 
 class AADSessionAuthenticator(SessionAuthenticator):
+    """AAD Authenticator for interactive (UI) sessions."""
 
     def __init__(
             self,
@@ -99,6 +111,7 @@ class AADSessionAuthenticator(SessionAuthenticator):
             scopes=None,
             redirect_uri=None,
             domain_hint=None):
+        """Initialise AAD Authenticator for interactive (UI) sessions."""
         super().__init__(session_validator, token_validator)
         self._redirect_path = redirect_path
         self._redirect_uri = redirect_uri
@@ -159,6 +172,7 @@ class AADSessionAuthenticator(SessionAuthenticator):
                                                                    domain_hint=self._domain_hint)
 
     def get_login_button(self, url, post_redirect='/'):
+        """Get the AAD Login Button."""
         url = self._add_redirect_to_url(url, post_redirect)
         logo = base64.b64encode(resource_string('fastapi_aad_auth.oauth', 'ms-logo.png')).decode()
         return f'<a class="btn btn-lg btn-light btn-ms" href="{url}"><div class="row align-items-center justify-center login-ms"><img alt="Microsoft Logo" class="rounded splash-ms" src="data:image/png;base64,{logo}" />Sign in with Microsoft Work Account</div></a>'

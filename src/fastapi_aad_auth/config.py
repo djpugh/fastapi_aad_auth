@@ -1,3 +1,4 @@
+"""fastapi_aad_auth configuration options."""
 from typing import Dict, List, Optional
 import uuid
 
@@ -6,20 +7,21 @@ from pydantic import BaseSettings, DirectoryPath, Field, FilePath, HttpUrl, Secr
 
 
 def bool_from_env(env_value):
+    """Convert environment variable to boolean."""
     if isinstance(env_value, str):
         env_value = env_value.lower() in ['true', '1']
     return env_value
 
 
 def list_from_env(env_value):
+    """Convert environment variable to list."""
     if isinstance(env_value, str):
         env_value = [u for u in env_value.split(',') if u]
     return env_value
 
 
 class RoutingConfig(BaseSettings):
-    """
-    Configuration for authentication related routing
+    """Configuration for authentication related routing.
 
     Includes ``logout_path``, ``login_path``, and ``login_redirect_path``(defaults should
     be fine for most use-cases).
@@ -32,12 +34,12 @@ class RoutingConfig(BaseSettings):
     login_redirect_path: str = Field('/login/oauth/redirect', description="Path for handling the AAD redirect call", env='FASTAPI_AUTH_LOGIN_REDIRECT_ROUTE')
     logout_path: str = Field('/logout', description="Path for processing a logout request", env='FASTAPI_AUTH_LOGOUT_ROUTE')
     landing_path: str = Field('/login', description="Path for the login UI page", env='FASTAPI_AUTH_LOGIN_UI_ROUTE')
-    home_path: str = Field('/', description="Path for the application home page (default redirect if none provided)", 
+    home_path: str = Field('/', description="Path for the application home page (default redirect if none provided)",
                            env='APP_HOME_ROUTE')
     post_logout_path: str = Field(None, description="Path for the redirect post logout - defaults to the landing path if not provided",
                                   env='FASTAPI_AUTH_POST_LOGOUT_ROUTE')
 
-    class Config:
+    class Config:  # noqa D106
         env_file = '.env'
 
     @validator('post_logout_path', always=True, pre=True)
@@ -48,13 +50,12 @@ class RoutingConfig(BaseSettings):
 
 
 class LoginUIConfig(BaseSettings):
-    """
-    Configuration for the application Login UI
+    """Configuration for the application Login UI.
 
     Includes the application name, template file (needs to )
     """
     app_name: str = Field(None, description="Application name to show on the Login UI page", env='APP_NAME')
-    template_file: FilePath = Field(resource_filename('fastapi_aad_auth.ui', 'login.html'), 
+    template_file: FilePath = Field(resource_filename('fastapi_aad_auth.ui', 'login.html'),
                                     description="The jinja2 template to use",
                                     env='FASTAPI_AUTH_LOGIN_TEMPLATE_FILE')
     static_directory: DirectoryPath = Field(resource_filename('fastapi_aad_auth.ui', 'static'),
@@ -65,14 +66,13 @@ class LoginUIConfig(BaseSettings):
                              env='FASTAPI_AUTH_LOGIN_STATIC_PATH')
     context: Optional[Dict[str, str]] = Field(None, description="Any additional context variables required for the template")
 
-    class Config:
+    class Config:  # noqa D106
         env_file = '.env'
 
 
 class AADConfig(BaseSettings):
-    """
-    Configuration for the AAD application
-    
+    """Configuration for the AAD application.
+
     Includes expected claims, application registration, etc.
 
     Can also provide additional client application ids to accept.
@@ -95,7 +95,7 @@ class AADConfig(BaseSettings):
     domain_hint: Optional[str] = Field(None, description="AAD domain hint", env='AAD_DOMAIN_HINT')
     roles: Optional[List[str]] = Field(None, description="AAD roles required in claims", env='AAD_ROLES')
 
-    class Config:
+    class Config:  # noqa D106
         env_file = '.env'
 
     _validate_strict = validator('strict', allow_reuse=True)(bool_from_env)
@@ -104,8 +104,7 @@ class AADConfig(BaseSettings):
 
 
 class AuthSessionConfig(BaseSettings):
-    """
-    Authentication Session configuration
+    """Authentication Session configuration.
 
     Contains secret and salt information (should be set as environment
     variables in a multi-worker/multi-processing environment to enable
@@ -116,12 +115,12 @@ class AuthSessionConfig(BaseSettings):
     salt: SecretStr = Field(str(uuid.uuid4()), description="Salt used for encoding authentication information",
                             env='SESSION_AUTH_SALT')
 
-    class Config:
+    class Config:  # noqa D106
         env_file = '.env'
 
+
 class SessionConfig(BaseSettings):
-    """
-    Configuration for session middleware
+    """Configuration for session middleware.
 
     Contains the session secret (should be set as environment variables in
     a multi-worker/multi-processing environment to enable authentication
@@ -137,16 +136,14 @@ class SessionConfig(BaseSettings):
     https_only: bool = Field(False, description="Allow the sessions only with https connections", env='SESSION_HTTPS_ONLY')
     max_age: int = Field(24*60*60, description="Maximum age for a session", env='SESSION_MAX_AGE')
 
-    class Config:
+    class Config:  # noqa D106
         env_file = '.env'
 
     _validate_https_only = validator('https_only', allow_reuse=True)(bool_from_env)
 
 
 class Config(BaseSettings):
-    """
-    The overall configuraton for the authentication
-    """
+    """The overall configuraton for the AAD authentication."""
     enabled: bool = Field(True, description="Enable authentication", env='FASTAPI_AUTH_ENABLED')
     aad: AADConfig = Field(None, description="The AAD configuration to use")
     auth_session: AuthSessionConfig = Field(None, description="The configuration for encoding the authentication information in the session")
@@ -154,7 +151,7 @@ class Config(BaseSettings):
     session: SessionConfig = Field(None, description="Configuration for the session middleware")
     login_ui: LoginUIConfig = Field(None, description="Login UI Configuration")
 
-    class Config:
+    class Config:  # noqa D106
         env_file = '.env'
 
     @validator('aad')
