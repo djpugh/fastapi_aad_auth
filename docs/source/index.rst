@@ -40,7 +40,7 @@ fastapi-aad-auth
 
 .. toctree::
     :maxdepth: 1
-    :numbered:1
+    
     Release Information <changelog>
 
 

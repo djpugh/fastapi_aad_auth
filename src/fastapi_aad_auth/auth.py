@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List
 
-import fastapi.app
+from fastapi import FastAPI
 from starlette.authentication import requires
 from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.sessions import SessionMiddleware
@@ -46,7 +46,7 @@ class AADAuth:
         if add_to_base_routes:
             self._add_to_base_routes = True
 
-    def app_routes_add_auth(self, app: fastapi.app.App, route_list: List[str], invert: bool = False):
+    def app_routes_add_auth(self, app: FastAPI, route_list: List[str], invert: bool = False):
         """Add authentication to specified routes in application router.
 
         Used for default routes (e.g. api/docs and api/redocs, openapi.json etc)
@@ -69,7 +69,7 @@ class AADAuth:
                 app.router.routes[i] = route
         return app
 
-    def configure_app(self, app: fastapi.app.App):
+    def configure_app(self, app: FastAPI):
         """Configure the fastapi application to use these authentication handlers.
 
         Adds authentication middleware, error handler and adds authnetication

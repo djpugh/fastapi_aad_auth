@@ -5,7 +5,8 @@ import logging
 from typing import List, Optional
 import uuid
 
-from itsdangerous.exc import BadSignature, URLSafeSerializer
+from itsdangerous import URLSafeSerializer
+from itsdangerous.exc import BadSignature
 from pydantic import BaseModel, root_validator
 from starlette.authentication import AuthCredentials, AuthenticationError, SimpleUser, UnauthenticatedUser
 
