@@ -1,0 +1,9 @@
+{
+    "extends": [
+        "config:base",
+        ":preserveSemverRanges"
+    ],  
+    "pip_requirements": {
+        "fileMatch": ["requirements.txt"]
+      }
+}
