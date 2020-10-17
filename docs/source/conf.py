@@ -40,8 +40,15 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'release_changelog'
+    'sphinx_github_changelog'
 ]
+
+extlinks = {
+    "issue": ("https://github.com/djpugh/azure_devops_artifacts_helpers/issues/%s", "#"),
+    "pull": ("https://github.com/djpugh/azure_devops_artifacts_helpers/pull/%s", "PR #"),
+    "user": ("https://github.com/%s", "@"),
+    "pypi": ("https://pypi.org/project/%s", ""),
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -361,7 +368,7 @@ epub_exclude_files = ['search.html']
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None}
+intersphinx_mapping = {'https://docs.python.org/': None}
 
 
 def setup(app):

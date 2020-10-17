@@ -1,0 +1,279 @@
+
+name: Pipeline
+
+on:
+  push:
+  pull_request:
+  release:
+    types: [published]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+      - name: Lint
+        run: tox -e lint
+
+  test:
+    name: Test Python ${{ matrix.py }} - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu
+          - windows
+          - macos
+        py: 
+          - 3.6
+          - 3.7
+          - 3.8
+          - 3.9
+      max-parallel: 4
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.py }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.py }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U tox setuptools
+    - name: Setup Test Suite
+      run: tox -e test -vv --notest
+    - name: Run Test Suite
+      run: tox -e test --skip-pkg-install
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        directory: ./reports/
+        flags: tests
+        name: ${{ matrix.py }} - ${{ matrix.os }}
+
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  license-scan:
+    if: github.event_name == 'pull_request' && contains(github.base_ref, 'master') || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || github.event_name == 'release'
+
+    name: Scan Licenses
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run FOSSA scan and upload build data
+        uses: fossa-contrib/fossa-action@v1
+        with:
+          fossa-api-key: ${{ secrets.FOSSA_API_KEY }}
+          github-token: ${{ github.token }}
+
+  codeql-analyze:
+    name: CodeQL Analyze
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: python
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
+
+  build:
+    if: github.event_name == 'pull_request' && contains(github.base_ref, 'master') || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || github.event_name == 'release'
+    name: Build Package
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        os:
+          - windows
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          clean: true
+      - name: Set up Python ${{ matrix.py }}
+        uses: actions/setup-python@v2
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+      
+      - name: Build fastapi_aad_auth
+        run: tox -e build -vvv
+
+      - name: Store build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: |
+            dist/*
+
+  docs:
+    if: github.event_name == 'pull_request' && contains(github.base_ref, 'master') || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || github.event_name == 'release'
+    name: Build docs
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.py }}
+        uses: actions/setup-python@v2
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+
+      - name: Build docs
+        run: tox -e docs
+        env:
+          SPHINX_GITHUB_CHANGELOG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Store build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: docs
+          path: |
+            docs/html/*
+
+  test-build:
+    if: github.event_name == 'pull_request' && contains(github.base_ref, 'master') || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || github.event_name == 'release'
+    name: Test Build Python ${{ matrix.py }} - ${{ matrix.os }}
+    needs:
+      - build
+      - test
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu
+          - windows
+          - macos
+        py: 
+          - 3.6
+          - 3.7
+          - 3.8
+          - 3.9
+      max-parallel: 4
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ./repo
+      - name: Set up Python ${{ matrix.py }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Download build
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: dist
+      - shell: bash
+        run: |
+          pip install $(ls -t dist/*.whl | head -n1)
+          pip install -r ./repo/requirements.txt
+          pip install -U tox pytest setuptools
+      - shell: bash
+        run: pytest ./repo/tests/functional
+
+  automerge:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    needs: 
+      - lint
+      - test
+      - build
+      - license-scan
+      - codeql-analyze
+      - sonarcloud
+      - test-build
+    steps:
+      - name: automerge
+        uses: "pascalgn/automerge-action@v0.12.0"
+        with:
+          args: "--trace"
+        env:
+          GITHUB_TOKEN: "${{ secrets.AUTOMERGE_TOKEN }}"
+          MERGE_LABELS: automerge,!nomerge
+          MERGE_FORKS: false
+          MERGE_DELETE_BRANCH: true
+
+  publish-package:
+    if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || github.event_name == 'release'
+    name: Publish Package
+    runs-on: ubuntu-latest
+    needs: 
+      - lint
+      - test
+      - build
+      - sonarcloud
+      - license-scan
+      - codeql-analyze
+      - test-build
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.py }}
+        uses: actions/setup-python@v2
+      - name: Download build
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: dist
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -U twine
+      - name: Upload Packages
+        run: |
+              twine upload dist/*.whl --verbose
+              twine upload dist/*.tar.gz --verbose
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        if: startsWith(github.ref, 'refs/tags')
+
+  publish-docs:
+    if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || github.event_name == 'release'
+    name: Publish Docs
+    runs-on: ubuntu-latest
+    needs: 
+      - docs
+      - publish-package
+    steps:
+      - name: Download docs
+        uses: actions/download-artifact@v2
+        with:
+          name: docs
+          path: ./docs/html
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/html
