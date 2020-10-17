@@ -15,10 +15,10 @@ fastapi-aad-auth
     :target: https://pypi.org/project/fastapi_aad_auth
 
 .. image:: https://img.shields.io/pypi/dm/fastapi_aad_auth?style=flat-square
-    :target: https://pypistats.org/packages/fastapi_aad_auth)
+    :target: https://pypistats.org/packages/fastapi_aad_auth
 
 .. image:: https://img.shields.io/pypi/l/fastapi_aad_auth?style=flat-square
-    :target: https://opensource.org/licenses/MIT)
+    :target: https://opensource.org/licenses/MIT
 
 .. image:: https://github.com/djpugh/fastapi_aad_auth/workflows/Pipeline/badge.svg?branch=master&event=push
     :target: https://github.com/djpugh/fastapi_aad_auth/actions?query=workflow%3APipeline
