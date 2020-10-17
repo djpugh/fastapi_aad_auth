@@ -6,12 +6,13 @@ from starlette.authentication import requires
 from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.requests import Request
-from starlette.responses import RedirectResponse
+from starlette.responses import JSONResponse, RedirectResponse
 from starlette.routing import request_response, Route, Mount
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
 from fastapi_aad_auth.config import Config
+from fastapi_aad_auth.errors import ConfigurationError
 from fastapi_aad_auth.oauth import AADOAuthBackend
 
 
@@ -85,6 +86,22 @@ class AADAuth:
             return RedirectResponse(self.config.routing.landing_path)
 
         app.add_middleware(AuthenticationMiddleware, backend=self.oauth_backend, on_error=on_auth_error)
+        
+        template_path = Path(self.config.login_ui.error_template_file)
+        templates = Jinja2Templates(directory=template_path.parent)
+
+        @app.exception_handler(ConfigurationError)
+        async def configuration_error_handler(request: Request, exc: ConfigurationError):
+            if any([u in request.headers['user-agent'] for u in ['Mozilla', 'Gecko', 'Trident', 'WebKit', 'Presto', 'Edge', 'Blink']]):
+                return templates.TemplateResponse(template_path.name,
+                                                  {exc: exc},
+                                                  status_code=500)
+            else:
+                return JSONResponse(
+                    status_code=500,
+                    content={"message": "Oops! It seems like the application has not been configured correctly, please contact an admin"}
+                )
+            
         # Check if session middleware is there
         if not any([SessionMiddleware in u.cls.__mro__ for u in app.user_middleware]):
             app.add_middleware(SessionMiddleware, **self.config.session.dict())
@@ -195,7 +212,7 @@ class AADAuth:
                 post_redirect = self.oauth_backend.authenticator.pop_post_auth_redirect(request)
                 context['login'] = self.oauth_backend.authenticator.get_login_button(self.config.routing.login_path, post_redirect)
             return templates.TemplateResponse(template_path.name, context)
-
+        
         routes = [Route(self.config.routing.landing_path, endpoint=login, methods=['GET'], name='login'),
                   Mount(self.config.login_ui.static_path, StaticFiles(directory=self.config.login_ui.static_directory), name='static-login')]
 

@@ -6,6 +6,7 @@ from pkg_resources import resource_string
 from starlette.responses import RedirectResponse
 
 from fastapi_aad_auth.oauth.state import AuthenticationState
+from fastapi_aad_auth.errors import ConfigurationError
 
 logger = logging.getLogger(__name__)
 
@@ -139,7 +140,7 @@ class AADSessionAuthenticator(SessionAuthenticator):
                                                                            redirect_uri=self._build_redirect_uri(request))
         logger.debug(f'Result {result}')
         if 'error' in result and result['error']:
-            raise 
+            raise ConfigurationError(result)
         return result['id_token']
 
     def _get_user_from_token(self, token, options=None):
