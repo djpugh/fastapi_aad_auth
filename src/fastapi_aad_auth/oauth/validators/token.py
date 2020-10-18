@@ -188,7 +188,7 @@ class AADTokenValidator(TokenValidator):
             options = self._claims_options
         # We need to do some 1.0/2.0 handling because it doesn't seem to work properly
         # TODO: validate whether we want this claim here?
-        # TODO: validate whether the 
+        # TODO: validate whether the user is approved for the app
         if 'appid' in options and 'azp' in options:
             if 'appid' not in claims:
                 options.pop('appid')
