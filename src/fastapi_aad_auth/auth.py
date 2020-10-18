@@ -93,7 +93,7 @@ class AADAuth:
         async def configuration_error_handler(request: Request, exc: ConfigurationError):
             if any([u in request.headers['user-agent'] for u in ['Mozilla', 'Gecko', 'Trident', 'WebKit', 'Presto', 'Edge', 'Blink']]):
                 return templates.TemplateResponse(template_path.name,
-                                                  {exc: exc},
+                                                  {'exc': exc, 'request': request},
                                                   status_code=500)
             else:
                 return JSONResponse(

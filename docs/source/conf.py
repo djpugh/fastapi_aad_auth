@@ -64,7 +64,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'fastapi-aad-auth'
-copyright = str(dt.datetime.now().year)+__author__
+copyright = str(dt.datetime.now().year)+' '+__author__
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

@@ -42,7 +42,8 @@ fastapi-aad-auth
     :maxdepth: 1
     
     Release Information <changelog>
-
+    Usage <usage>
+    Contributing <development>
 
 
 ---------------------------------------

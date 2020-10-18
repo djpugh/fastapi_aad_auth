@@ -25,3 +25,4 @@ reports/*-py*
 reports/*
 *.c
 .env
+.vscode

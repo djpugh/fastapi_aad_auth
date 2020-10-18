@@ -46,7 +46,7 @@ routes = [
               
 
 app = FastAPI(title='fastapi_aad_auth test app',
-              description='Adding Azure Active Directory Authentication for FastAPI',
+              description='Testapp for Adding Azure Active Directory Authentication for FastAPI',
               version=__version__,
               openapi_url=f"/api/v{API_VERSION}/openapi.json",
               docs_url='/api/docs',
