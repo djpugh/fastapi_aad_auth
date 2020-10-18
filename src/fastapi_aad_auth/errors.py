@@ -6,7 +6,9 @@ from starlette.responses import JSONResponse, Response
 
 logger = logging.getLogger(__name__)
 
-def base_error_handler(request, exception, error_type, error_message, templates, template_path, context=None, status_code=500):
+
+def base_error_handler(request, exception, error_type, error_message, templates, template_path, context=None, status_code=500) -> Response:
+    """Handle Error as JSON or HTML response depending on request type."""
     if context is None:
         context = {}
     logger.warning(f'Handling error {exception}')
@@ -16,13 +18,13 @@ def base_error_handler(request, exception, error_type, error_message, templates,
         logger.debug(f'Path: {template_path}')
         error_context = context.copy()
         error_context.update({'error': str(exception),
-                                'status_code': str(status_code),
-                                'error_type': error_type,
-                                'error_description': error_message,
-                                'request': request})  # type: ignore
+                              'status_code': str(status_code),
+                              'error_type': error_type,
+                              'error_description': error_message,
+                              'request': request})  # type: ignore
         response = templates.TemplateResponse(template_path.name,
-                                                error_context,
-                                                status_code=status_code)
+                                              error_context,
+                                              status_code=status_code)
     else:
         logger.info('Non-Interactive environment so returning JSON message')
 

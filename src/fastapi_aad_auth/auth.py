@@ -9,7 +9,7 @@ from starlette.authentication import requires
 from starlette.middleware.authentication import AuthenticationError, AuthenticationMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.requests import Request
-from starlette.responses import JSONResponse, RedirectResponse, Response
+from starlette.responses import RedirectResponse, Response
 from starlette.routing import Mount, request_response, Route
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
@@ -106,9 +106,8 @@ class AADAuth:
             status_code = 500
             return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=context.copy(), status_code=status_code)
 
-
         @app.exception_handler(AuthenticationError)
-        async def configuration_error_handler(request: Request, exc: AuthenticationError) -> Response:
+        async def authentication_error_handler(request: Request, exc: AuthenticationError) -> Response:
             error_message = "Oops! It seems like you cannot access this information. If this is an error, please contact an admin"
             error_type = 'Authentication Error'
             status_code = 403
