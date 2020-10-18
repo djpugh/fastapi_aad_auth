@@ -5,35 +5,41 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="/static-login/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/static-login/css/cover.css">
+        <link href="/{{static_path}}/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/{{static_path}}/css/cover.css">
         <link rel="icon" type="img/ipng" href="/static/img/favicon.png" />
         <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" >
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
     <body>
-        <div class='container'>
-            <div class="cover-container d-flex h-100 p-3 mx-auto flex-column text-center justify-content-center">
-                <main class="inner-cover">
-                    <p class="lead">
-                    {% if logo %}
-                        {{logo | safe }}
-                    {% endif %}
-                    {% if appname %}
-                        <h1 class="h1">{{appname}}</h1>
-                    {% endif %}
-                        <br><br>
+        <main class='container' role="main">
+            {% if logo %}
+                {{logo | safe }}
+            {% endif %}
+            {% if appname %}
+                <h1 class="h1">{{appname}}</h1>
+            {% endif %}
+            <h2>Server Error {{status_code}}:</h2>
+            <h3> {{error_type}}</h3>
+            <p class="lead">{{error_description}}</p>
+            <div class="card card-grey ">
+                <div class="card-header">
+                    <h7 class="card-title">
+                        Detailed Error Message:
+                    </h7>
+                </div>
+                <code class="language-json card-body">
                         {{ error | safe }}
-                    </p>
-                {% if copyright %}
-                    <p class="mt-5 mb-3 lead text-muted">© {{ copyright }}</p>
-                {% endif %}
-                {% if explanation %}
-                    <p class="mt-5 mb-3 lead text-muted">{{ explanation }}</p>
-                {% endif %}
-            
-                </main>
+                </code>
             </div>
+            {% if copyright %}
+                <p class="mt-5 mb-3 lead text-muted">© {{ copyright }}</p>
+            {% endif %}
+            {% if explanation %}
+                <p class="mt-5 mb-3 lead text-muted">{{ explanation }}</p>
+            {% endif %}
+        
+            </main>
         </div><!-- /.container-fluid -->
     </body>
 </html>

@@ -19,11 +19,41 @@ def list_from_env(env_value):
         env_value = [u for u in env_value.split(',') if u]
     return env_value
 
+from typing import Any, List, Dict
 
+
+def expand_doc(klass):
+    """Expand pydantic model documentation to enable autodoc"""
+    docs = ['', '', 'Keyword Args:']
+    for name, field in klass.__fields__.items():
+        default_str = ''
+        if field.default:
+            default_str = f' [default: ``{field.default}``]'
+        module = field.outer_type_.__module__
+        if module != 'builtins':
+            if hasattr(field.outer_type_, '__origin__'):
+                    type_ = f' ({field.outer_type_.__origin__.__name__}) '
+            elif not hasattr(field.outer_type_, '__name__'):
+                type_ = ''
+            else:
+                type_ = f' ({module}.{field.outer_type_.__name__}) '
+        else:
+            type_ = f' ({field.outer_type_.__name__}) '
+        env_var = ''
+        if 'env' in field.field_info.extra:
+            env_var = f' (Can be set by ``{field.field_info.extra["env"]}`` environment variable)'
+        docs.append(f'    {name}{type_}: {field.field_info.description}{default_str}{env_var}')
+    if klass.__doc__ is None:
+        klass.__doc__ = ''
+    klass.__doc__ += '\n'.join(docs)
+    return klass
+
+
+@expand_doc
 class RoutingConfig(BaseSettings):
     """Configuration for authentication related routing.
 
-    Includes ``logout_path``, ``login_path``, and ``login_redirect_path``(defaults should
+    Includes ``logout_path``, ``login_path``, and ``login_redirect_path`` (defaults should
     be fine for most use-cases).
 
     There are also the ``landing_path`` for the login page, as well as the ``home_path`` for the home
@@ -49,10 +79,12 @@ class RoutingConfig(BaseSettings):
         return value
 
 
+@expand_doc
 class LoginUIConfig(BaseSettings):
     """Configuration for the application Login UI.
 
-    Includes the application name, template file (needs to )
+    Includes the application name, template file, error template file,
+    static directory, path to mount the login static information to, and the context.
     """
     app_name: str = Field(None, description="Application name to show on the Login UI page", env='APP_NAME')
     template_file: FilePath = Field(resource_filename('fastapi_aad_auth.ui', 'login.html'),
@@ -73,6 +105,7 @@ class LoginUIConfig(BaseSettings):
         env_file = '.env'
 
 
+@expand_doc
 class AADConfig(BaseSettings):
     """Configuration for the AAD application.
 
@@ -106,6 +139,7 @@ class AADConfig(BaseSettings):
     _validate_roles = validator('roles', allow_reuse=True)(list_from_env)
 
 
+@expand_doc
 class AuthSessionConfig(BaseSettings):
     """Authentication Session configuration.
 
@@ -122,6 +156,7 @@ class AuthSessionConfig(BaseSettings):
         env_file = '.env'
 
 
+@expand_doc
 class SessionConfig(BaseSettings):
     """Configuration for session middleware.
 
@@ -145,6 +180,7 @@ class SessionConfig(BaseSettings):
     _validate_https_only = validator('https_only', allow_reuse=True)(bool_from_env)
 
 
+@expand_doc
 class Config(BaseSettings):
     """The overall configuraton for the AAD authentication."""
     enabled: bool = Field(True, description="Enable authentication", env='FASTAPI_AUTH_ENABLED')

@@ -5,12 +5,14 @@ Using fastapi_aad_auth
 the application to authenticate against), and these parameters should then be set in environment variables
 (or a ``.env`` environment file) within the environment that fastapi is being served from.
 
+.. _config-aad-appreg:
+
 Configuring the Azure Active Directory App Registration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 There are several parts of the App Registration to Configure
 
-In the Authentication Tab you need to configure the callback urls:
+In the "Authentication Tab" you need to configure the callback urls:
 
 For the openapi/redoc authentication, configure a Single-page application eligible
 for the Authorization Code Flow with PKCE for::
@@ -36,12 +38,21 @@ Youu also need to decide whether the application is multi-tenant or single-tenan
    
    An example configuration for rediredt URIs for testing an application
 
-On the expose an API tab, you need to set the Application ID URI
+On the "Expose an API tab", you need to set the Application ID URI
 
 .. figure:: figures/App-Registration-App-ID.PNG
    :alt: Overview of redirect URI configuration for local testing
    
    An example configuration for api Scopes for testing an application
+
+and add scopes as configured for the application (e.g. the default ``openid`` scope is needed)
+
+.. figure:: figures/App-Registration-Scopes.PNG
+   :alt: Overview of redirect URI configuration for local testing
+   
+   An example configuration for api Scopes for testing an application
+
+.. _config-fastapi_aad_auth-env:
 
 Configuring the fastapi environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,10 +60,22 @@ Configuring the fastapi environment
 The configuration is defined in ``src/fastapi_aad_auth/config.py``, and includes options for configuring
 the AAD config, the login UI and the routes.
 
-There are several key parameters::
+There are several key parameters:
 
-    AAD_CLIENT_ID="***"
-    AAD_TENANT_ID="***"
+ - ``AAD_CLIENT_ID``: The Azure Active Directory App Registration Client ID
+ - ``AAD_TENANT_ID``: The Azure Active Directory App Registration Client ID
+
+The ``AAD_CLIENT_SECRET`` parameter is needed if your application is not a public client (Generated
+from the certificates and secrets section of the app registration)
+
+.. figure:: figures/App-Registration-Client-Type.PNG
+   :alt: Overview of client type on Azure AD App Registration Authentication Tab
+
+These can be set in a ``.env`` file (e.g. for a private client)::
+
+    AAD_CLIENT_ID="<enter-your-client-id-here>"
+    AAD_TENANT_ID="<enter-your-tenant-id-here>"
+    AAD_CLIENT_SECRET="<enter-your-client-secret-here>"
 
 
 You can initialise it with::
@@ -63,6 +86,7 @@ You can initialise it with::
     # If you had a config that wasn't set in the environment, you could use 
     # auth_provider = AADAuth(Config(<my config kwargs>)
 
+The full set of configuration options is documented in :doc:`config`
 
 
 Including fastapi_aad_auth in your code

@@ -38,7 +38,7 @@ Running tests
 ~~~~~~~~~~~~~
 
 ``fastapi_aad_auth`` tests are written using the :pypi:`pytest` test framework. :pypi:`tox` is used to automate the setup
-and execution of ``fastapi_aad_auth`` tests. This requires populating the wheels (see above).
+and execution of ``fastapi_aad_auth`` tests.
 
 To run tests locally execute:
 
@@ -52,13 +52,14 @@ Integration tests
 ~~~~~~~~~~~~~~~~~
 
 ``fastapi_aad_auth`` is very tightly coupled to Azure Active Directory, so most of the full tests follow manual testing
-of the testapp once configured with Azure Active Directory App Registrations
+of the testapp. This needs configuring with Azure Active Directory App Registrations (see :ref:`config-aad-appreg`) and
+the testapp environment using a ``.env`` file (see :ref:`config-fastapi_aad_auth-env`).
 
-To run tests locally execute:
+To run the testapp use tox (or directly with ``python tests/testapp/server.py``:
 
 .. code-block:: console
 
-    tox -e test
+    tox -e testapp
 
 This will run the test suite for the same Python version as under which ``tox`` is installed.
 

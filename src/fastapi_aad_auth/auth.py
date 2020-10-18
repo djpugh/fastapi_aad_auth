@@ -89,24 +89,6 @@ class AADAuth:
         template_path = Path(self.config.login_ui.error_template_file)
         templates = Jinja2Templates(directory=template_path.parent)
 
-        @app.exception_handler(ConfigurationError)
-        async def configuration_error_handler(request: Request, exc: ConfigurationError):
-            if any([u in request.headers['user-agent'] for u in ['Mozilla', 'Gecko', 'Trident', 'WebKit', 'Presto', 'Edge', 'Blink']]):
-                return templates.TemplateResponse(template_path.name,
-                                                  {'exc': exc, 'request': request},
-                                                  status_code=500)
-            else:
-                return JSONResponse(
-                    status_code=500,
-                    content={"message": "Oops! It seems like the application has not been configured correctly, please contact an admin"}
-                )
-
-        # Check if session middleware is there
-        if not any([SessionMiddleware in u.cls.__mro__ for u in app.user_middleware]):
-            app.add_middleware(SessionMiddleware, **self.config.session.dict())
-        if self._add_to_base_routes:
-            self.app_routes_add_auth(app, _BASE_ROUTES)
-        app.routes.extend(self.auth_routes)
         if self.config.login_ui.context:
             context = self.config.login_ui.context
         else:
@@ -115,6 +97,39 @@ class AADAuth:
             context['appname'] = self.config.login_ui.app_name
         else:
             context['appname'] = app.title
+        context['static_path'] = self.config.login_ui.static_path
+        @app.exception_handler(ConfigurationError)
+        async def configuration_error_handler(request: Request, exc: ConfigurationError):
+            logger.warning(f'Handling configuration error {exc}')
+            status_code = 500
+            if any([u in request.headers['user-agent'] for u in ['Mozilla', 'Gecko', 'Trident', 'WebKit', 'Presto', 'Edge', 'Blink']]):
+                logger.info('Interactive environment so returning error template')
+                logger.debug(f'Path: {template_path}')
+                error_context = context.copy()
+                error_context.update({'error': exc,
+                                      'status_code': status_code,
+                                      'error_type': 'Authentication Configuration Error',
+                                      'error_description': 'The server has been misconfigured for authentication, please pass this on to the application owner',
+                                      'request': request})
+                response = templates.TemplateResponse(template_path.name,
+                                                      error_context,
+                                                      status_code=status_code)
+            else:
+                logger.info('Non-Interactive environment so returning JSON message')
+
+                response = JSONResponse(
+                    status_code=status_code,
+                    content={"message": "Oops! It seems like the application has not been configured correctly, please contact an admin"}
+                )
+            logger.debug(f'Response {response}')
+            return response
+
+        # Check if session middleware is there
+        if not any([SessionMiddleware in u.cls.__mro__ for u in app.user_middleware]):
+            app.add_middleware(SessionMiddleware, **self.config.session.dict())
+        if self._add_to_base_routes:
+            self.app_routes_add_auth(app, _BASE_ROUTES)
+        app.routes.extend(self.auth_routes)
         app.routes.extend(self.build_auth_ui(context))
 
     def auth_required(self, scopes: str = 'authenticated', redirect: str = 'login'):
@@ -171,7 +186,7 @@ class AADAuth:
                 return RedirectResponse(self.config.home_path)
 
         async def login_callback(request: Request):
-            logger.info('Processing login callback')
+            logger.info('Processing login callback from Azure AD')
             logger.debug(f'request url {request.url}')
             if self.oauth_backend.enabled:
                 return self.oauth_backend.authenticator.process_login_callback(request)

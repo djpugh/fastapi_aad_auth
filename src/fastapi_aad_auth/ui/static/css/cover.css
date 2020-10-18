@@ -46,7 +46,15 @@ body {
   max-width: 42em;
 }
 
+.card-header{
+  background-color: #666;
+}
 
+code{
+  color: #b10909;
+  background-color: #eee;
+  text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
 /*
  * Header
  */
