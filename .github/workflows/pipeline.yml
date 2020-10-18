@@ -200,7 +200,7 @@ jobs:
           pip install -r ./repo/requirements.txt
           pip install -U tox pytest setuptools
       - shell: bash
-        run: pytest ./repo/tests/functional
+        run: pytest ./repo/tests/unit
 
   automerge:
     if: github.event_name == 'pull_request'

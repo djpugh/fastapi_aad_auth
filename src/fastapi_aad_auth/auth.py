@@ -6,16 +6,16 @@ from typing import Any, Dict, List
 
 from fastapi import FastAPI
 from starlette.authentication import requires
-from starlette.middleware.authentication import AuthenticationMiddleware
+from starlette.middleware.authentication import AuthenticationError, AuthenticationMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.requests import Request
-from starlette.responses import JSONResponse, RedirectResponse
+from starlette.responses import JSONResponse, RedirectResponse, Response
 from starlette.routing import Mount, request_response, Route
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
 from fastapi_aad_auth.config import Config
-from fastapi_aad_auth.errors import ConfigurationError
+from fastapi_aad_auth.errors import base_error_handler, ConfigurationError
 from fastapi_aad_auth.oauth import AADOAuthBackend
 
 
@@ -63,9 +63,9 @@ class AADAuth:
             routes = app.router.routes
             for i, route in enumerate(routes):
                 # Can use allow list or block list (i.e. invert = True sets all except the route list to have auth
-                if (route.name in route_list and not invert) or (route.name not in route_list and invert):
-                    route.endpoint = self.auth_required()(route.endpoint)
-                    route.app = request_response(route.endpoint)
+                if (route.name in route_list and not invert) or (route.name not in route_list and invert):  # type: ignore
+                    route.endpoint = self.auth_required()(route.endpoint)  # type: ignore
+                    route.app = request_response(route.endpoint)  # type: ignore
                 app.router.routes[i] = route
         return app
 
@@ -86,8 +86,8 @@ class AADAuth:
 
         app.add_middleware(AuthenticationMiddleware, backend=self.oauth_backend, on_error=on_auth_error)
 
-        template_path = Path(self.config.login_ui.error_template_file)
-        templates = Jinja2Templates(directory=template_path.parent)
+        error_template_path = Path(self.config.login_ui.error_template_file)
+        error_templates = Jinja2Templates(directory=str(error_template_path.parent))
 
         if self.config.login_ui.context:
             context = self.config.login_ui.context
@@ -98,31 +98,21 @@ class AADAuth:
         else:
             context['appname'] = app.title
         context['static_path'] = self.config.login_ui.static_path
-        @app.exception_handler(ConfigurationError)
-        async def configuration_error_handler(request: Request, exc: ConfigurationError):
-            logger.warning(f'Handling configuration error {exc}')
-            status_code = 500
-            if any([u in request.headers['user-agent'] for u in ['Mozilla', 'Gecko', 'Trident', 'WebKit', 'Presto', 'Edge', 'Blink']]):
-                logger.info('Interactive environment so returning error template')
-                logger.debug(f'Path: {template_path}')
-                error_context = context.copy()
-                error_context.update({'error': exc,
-                                      'status_code': status_code,
-                                      'error_type': 'Authentication Configuration Error',
-                                      'error_description': 'The server has been misconfigured for authentication, please pass this on to the application owner',
-                                      'request': request})
-                response = templates.TemplateResponse(template_path.name,
-                                                      error_context,
-                                                      status_code=status_code)
-            else:
-                logger.info('Non-Interactive environment so returning JSON message')
 
-                response = JSONResponse(
-                    status_code=status_code,
-                    content={"message": "Oops! It seems like the application has not been configured correctly, please contact an admin"}
-                )
-            logger.debug(f'Response {response}')
-            return response
+        @app.exception_handler(ConfigurationError)
+        async def configuration_error_handler(request: Request, exc: ConfigurationError) -> Response:
+            error_message = "Oops! It seems like the application has not been configured correctly, please contact an admin"
+            error_type = 'Authentication Configuration Error'
+            status_code = 500
+            return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=context.copy(), status_code=status_code)
+
+
+        @app.exception_handler(AuthenticationError)
+        async def configuration_error_handler(request: Request, exc: AuthenticationError) -> Response:
+            error_message = "Oops! It seems like you cannot access this information. If this is an error, please contact an admin"
+            error_type = 'Authentication Error'
+            status_code = 403
+            return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=context.copy(), status_code=status_code)
 
         # Check if session middleware is there
         if not any([SessionMiddleware in u.cls.__mro__ for u in app.user_middleware]):
@@ -183,7 +173,7 @@ class AADAuth:
                 return self.oauth_backend.authenticator.process_login_request(request)
             else:
                 logger.debug('Auth not enabled')
-                return RedirectResponse(self.config.home_path)
+                return RedirectResponse(self.config.routing.home_path)
 
         async def login_callback(request: Request):
             logger.info('Processing login callback from Azure AD')
@@ -192,7 +182,7 @@ class AADAuth:
                 return self.oauth_backend.authenticator.process_login_callback(request)
             else:
                 logger.debug('Auth not enabled')
-                return RedirectResponse(self.config.landing_path)
+                return RedirectResponse(self.config.routing.landing_path)
 
         routes = [Route(self.config.routing.logout_path, endpoint=logout, methods=['GET'], name='logout'),
                   Route(self.config.routing.login_path, endpoint=login, methods=['GET'], name='login_oauth'),
@@ -212,20 +202,20 @@ class AADAuth:
         if context is None:
             context = {}
         template_path = Path(self.config.login_ui.template_file)
-        templates = Jinja2Templates(directory=template_path.parent)
+        templates = Jinja2Templates(directory=str(template_path.parent))
 
         async def login(request: Request, *args, **kwargs):
             if not self.oauth_backend.enabled or request.user.is_authenticated:
                 # This is authenticated so go straight to the homepage
                 return RedirectResponse(self.config.routing.home_path)
-            context['request'] = request
-            if 'login' not in context or context['login'] is None:
+            context['request'] = request  # type: ignore
+            if 'login' not in context or context['login'] is None:  # type: ignore
                 post_redirect = self.oauth_backend.authenticator.pop_post_auth_redirect(request)
-                context['login'] = self.oauth_backend.authenticator.get_login_button(self.config.routing.login_path, post_redirect)
-            return templates.TemplateResponse(template_path.name, context)
+                context['login'] = self.oauth_backend.authenticator.get_login_button(self.config.routing.login_path, post_redirect)  # type: ignore
+            return templates.TemplateResponse(template_path.name, context)  # type: ignore
 
         routes = [Route(self.config.routing.landing_path, endpoint=login, methods=['GET'], name='login'),
-                  Mount(self.config.login_ui.static_path, StaticFiles(directory=self.config.login_ui.static_directory), name='static-login')]
+                  Mount(self.config.login_ui.static_path, StaticFiles(directory=str(self.config.login_ui.static_directory)), name='static-login')]
 
         return routes
 

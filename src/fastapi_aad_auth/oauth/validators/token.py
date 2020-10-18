@@ -153,6 +153,7 @@ class AADTokenValidator(TokenValidator):
 
     def _get_ms_jwk(self, token):
         try:
+            logger.info(f'Getting signing keys from {self.key_url}')
             jwks = requests.get(self.key_url).json()
             token_header = token.split(".")[0].encode()
             unverified_header = extract_header(token_header, jwt_errors.DecodeError)
@@ -167,10 +168,15 @@ class AADTokenValidator(TokenValidator):
     def _decode_token(self, token):
         jwk_ = self._get_ms_jwk(token)
         claims = None
+        logger.debug(f'Key is {jwk_}')
         try:
+            if hasattr(jwk, 'public_bytes'):
+                public_bytes = jwk_.public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.PKCS1)
+            else:
+                public_bytes = jwk_.raw_key.public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.PKCS1)
             claims = jwt.decode(
                 token,
-                jwk_.public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.PKCS1),
+                public_bytes,
             )
         except Exception:
             logger.exception('Unable to parse error')
@@ -182,6 +188,7 @@ class AADTokenValidator(TokenValidator):
             options = self._claims_options
         # We need to do some 1.0/2.0 handling because it doesn't seem to work properly
         # TODO: validate whether we want this claim here?
+        # TODO: validate whether the 
         if 'appid' in options and 'azp' in options:
             if 'appid' not in claims:
                 options.pop('appid')

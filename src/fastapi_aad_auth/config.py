@@ -19,11 +19,9 @@ def list_from_env(env_value):
         env_value = [u for u in env_value.split(',') if u]
     return env_value
 
-from typing import Any, List, Dict
-
 
 def expand_doc(klass):
-    """Expand pydantic model documentation to enable autodoc"""
+    """Expand pydantic model documentation to enable autodoc."""
     docs = ['', '', 'Keyword Args:']
     for name, field in klass.__fields__.items():
         default_str = ''
@@ -32,7 +30,7 @@ def expand_doc(klass):
         module = field.outer_type_.__module__
         if module != 'builtins':
             if hasattr(field.outer_type_, '__origin__'):
-                    type_ = f' ({field.outer_type_.__origin__.__name__}) '
+                type_ = f' ({field.outer_type_.__origin__.__name__}) '
             elif not hasattr(field.outer_type_, '__name__'):
                 type_ = ''
             else:

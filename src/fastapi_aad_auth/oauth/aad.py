@@ -24,7 +24,7 @@ class AADOAuthBackend(BaseOAuthBackend):
             redirect_path: str = '/login/oauth/redirect',
             prompt: Optional[str] = None,
             client_secret: Optional[str] = None,
-            scopes: Optional[str] = None,
+            scopes: Optional[List[str]] = None,
             enabled: bool = True,
             client_app_ids: Optional[List[str]] = None,
             strict_token: bool = True,
@@ -78,12 +78,12 @@ class AADOAuthBackend(BaseOAuthBackend):
                                                  config.auth_session.salt.get_secret_value())
         client_secret = config.aad.client_secret
         if client_secret is not None:
-            client_secret = client_secret.get_secret_value()
+            client_secret = client_secret.get_secret_value()  # type: ignore
 
         return cls(session_serializer=auth_serializer, client_id=config.aad.client_id.get_secret_value(),
                    tenant_id=config.aad.tenant_id.get_secret_value(),
                    redirect_path=config.routing.login_redirect_path,
-                   client_secret=client_secret, enabled=config.enabled,
+                   client_secret=client_secret, enabled=config.enabled,   # type: ignore
                    scopes=config.aad.scopes, client_app_ids=config.aad.client_app_ids,
                    strict_token=config.aad.strict, api_audience=config.aad.api_audience,
                    prompt=config.aad.prompt, domain_hint=config.aad.domain_hint,

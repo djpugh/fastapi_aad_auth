@@ -26,3 +26,6 @@ reports/*
 *.c
 .env
 .vscode
+reports/*
+test-reports/*
+Pipfile
