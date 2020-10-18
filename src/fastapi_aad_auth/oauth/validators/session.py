@@ -22,7 +22,7 @@ class SessionValidator:
     def __init__(self, session_serializer: URLSafeSerializer, *args, **kwargs):
         """Initialise validator for session based authentication."""
         self._session_serializer = session_serializer
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)  # type: ignore
 
     def get_state_from_session(self, request):
         """Get the session from the request."""

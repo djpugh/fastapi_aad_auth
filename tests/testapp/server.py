@@ -46,7 +46,7 @@ routes = [
               
 
 app = FastAPI(title='fastapi_aad_auth test app',
-              description='Adding Azure Active Directory Authentication for FastAPI',
+              description='Testapp for Adding Azure Active Directory Authentication for FastAPI',
               version=__version__,
               openapi_url=f"/api/v{API_VERSION}/openapi.json",
               docs_url='/api/docs',
@@ -61,4 +61,4 @@ auth_provider.configure_app(app)
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host='0.0.0.0', debug=True, port=8000)
+    uvicorn.run(app, host='0.0.0.0', debug=True, port=8000, log_level='debug')
