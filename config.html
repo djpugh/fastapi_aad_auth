@@ -1,0 +1,366 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="English" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configuration Options &mdash; fastapi-aad-auth documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/style.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Development" href="development.html" />
+    <link rel="prev" title="Using fastapi_aad_auth" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> fastapi-aad-auth
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Release Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fastapi-aad-auth</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Configuration Options</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/config.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-fastapi_aad_auth.config">
+<span id="configuration-options"></span><h1>Configuration Options<a class="headerlink" href="#module-fastapi_aad_auth.config" title="Permalink to this headline">¶</a></h1>
+<p>fastapi_aad_auth configuration options.</p>
+<dl class="py class">
+<dt id="fastapi_aad_auth.config.AADConfig">
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.config.</code><code class="sig-name descname">AADConfig</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">_env_file</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'&lt;object object&gt;'</span></em>, <em class="sig-param"><span class="n">_env_file_encoding</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">client_id</span><span class="p">:</span> <span class="n">pydantic.types.SecretStr</span></em>, <em class="sig-param"><span class="n">tenant_id</span><span class="p">:</span> <span class="n">pydantic.types.SecretStr</span></em>, <em class="sig-param"><span class="n">client_secret</span><span class="p">:</span> <span class="n">pydantic.types.SecretStr</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scopes</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">['Read']</span></em>, <em class="sig-param"><span class="n">client_app_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">strict</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">api_audience</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">redirect_uri</span><span class="p">:</span> <span class="n">pydantic.networks.HttpUrl</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">prompt</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">domain_hint</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">roles</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastapi_aad_auth/config.html#AADConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.config.AADConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configuration for the AAD application.</p>
+<blockquote>
+<div><p>Includes expected claims, application registration, etc.</p>
+<p>Can also provide additional client application ids to accept.</p>
+<p>A list of roles can be provided to accept (requires configuring the
+roles in the AAD application registration manifest)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client_id</strong> (<em>pydantic.types.SecretStr</em>) -- Application Registration Client ID (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_ID</span></code> environment variable)</p></li>
+<li><p><strong>tenant_id</strong> (<em>pydantic.types.SecretStr</em>) -- Application Registration Tenant ID (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_TENANT_ID</span></code> environment variable)</p></li>
+<li><p><strong>client_secret</strong> (<em>pydantic.types.SecretStr</em>) -- Application Registration Client Secret (if required) (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_SECRET</span></code> environment variable)</p></li>
+<li><p><strong>scopes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) -- Additional scopes requested [default: <code class="docutils literal notranslate"><span class="pre">['Read']</span></code>]</p></li>
+<li><p><strong>client_app_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) -- Additional Client App IDs to accept tokens from (when running as a backend service) (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_APP_IDS</span></code> environment variable)</p></li>
+<li><p><strong>strict</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- Check that all claims are provided [default: <code class="docutils literal notranslate"><span class="pre">True</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_STRICT_CLAIM_CHECK</span></code> environment variable)</p></li>
+<li><p><strong>api_audience</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Corresponds to the Application ID URI - used for token validation, defaults to api://{client_id} (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_API_AUDIENCE</span></code> environment variable)</p></li>
+<li><p><strong>redirect_uri</strong> (<em>pydantic.networks.HttpUrl</em>) -- The redirect URI to use - overwrites the default path handling etc (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_REDIRECT_URI</span></code> environment variable)</p></li>
+<li><p><strong>prompt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- AAD prompt to request (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_PROMPT</span></code> environment variable)</p></li>
+<li><p><strong>domain_hint</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- AAD domain hint (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_DOMAIN_HINT</span></code> environment variable)</p></li>
+<li><p><strong>roles</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) -- AAD roles required in claims (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_ROLES</span></code> environment variable)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fastapi_aad_auth.config.AuthSessionConfig">
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.config.</code><code class="sig-name descname">AuthSessionConfig</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">_env_file</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'&lt;object object&gt;'</span></em>, <em class="sig-param"><span class="n">_env_file_encoding</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">secret</span><span class="p">:</span> <span class="n">pydantic.types.SecretStr</span> <span class="o">=</span> <span class="default_value">'d02110ea-cd88-4874-ac45-b56d42ec6bfb'</span></em>, <em class="sig-param"><span class="n">salt</span><span class="p">:</span> <span class="n">pydantic.types.SecretStr</span> <span class="o">=</span> <span class="default_value">'823e7b3e-bf75-43c4-84b5-32e46147f8b4'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastapi_aad_auth/config.html#AuthSessionConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.config.AuthSessionConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authentication Session configuration.</p>
+<blockquote>
+<div><p>Contains secret and salt information (should be set as environment
+variables in a multi-worker/multi-processing environment to enable
+authentication across workers)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>secret</strong> (<em>pydantic.types.SecretStr</em>) -- Secret used for encoding authentication information [default: <code class="docutils literal notranslate"><span class="pre">d02110ea-cd88-4874-ac45-b56d42ec6bfb</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_AUTH_SECRET</span></code> environment variable)</p></li>
+<li><p><strong>salt</strong> (<em>pydantic.types.SecretStr</em>) -- Salt used for encoding authentication information [default: <code class="docutils literal notranslate"><span class="pre">823e7b3e-bf75-43c4-84b5-32e46147f8b4</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_AUTH_SALT</span></code> environment variable)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fastapi_aad_auth.config.Config">
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.config.</code><code class="sig-name descname">Config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">_env_file</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'&lt;object object&gt;'</span></em>, <em class="sig-param"><span class="n">_env_file_encoding</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">enabled</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">aad</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#fastapi_aad_auth.config.AADConfig" title="fastapi_aad_auth.config.AADConfig">fastapi_aad_auth.config.AADConfig</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">auth_session</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#fastapi_aad_auth.config.AuthSessionConfig" title="fastapi_aad_auth.config.AuthSessionConfig">fastapi_aad_auth.config.AuthSessionConfig</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">routing</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#fastapi_aad_auth.config.RoutingConfig" title="fastapi_aad_auth.config.RoutingConfig">fastapi_aad_auth.config.RoutingConfig</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">session</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#fastapi_aad_auth.config.SessionConfig" title="fastapi_aad_auth.config.SessionConfig">fastapi_aad_auth.config.SessionConfig</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">login_ui</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#fastapi_aad_auth.config.LoginUIConfig" title="fastapi_aad_auth.config.LoginUIConfig">fastapi_aad_auth.config.LoginUIConfig</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastapi_aad_auth/config.html#Config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.config.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>The overall configuraton for the AAD authentication.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>enabled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- Enable authentication [default: <code class="docutils literal notranslate"><span class="pre">True</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_ENABLED</span></code> environment variable)</p></li>
+<li><p><strong>aad</strong> (<a class="reference internal" href="#fastapi_aad_auth.config.AADConfig" title="fastapi_aad_auth.config.AADConfig"><em>fastapi_aad_auth.config.AADConfig</em></a>) -- The AAD configuration to use</p></li>
+<li><p><strong>auth_session</strong> (<a class="reference internal" href="#fastapi_aad_auth.config.AuthSessionConfig" title="fastapi_aad_auth.config.AuthSessionConfig"><em>fastapi_aad_auth.config.AuthSessionConfig</em></a>) -- The configuration for encoding the authentication information in the session</p></li>
+<li><p><strong>routing</strong> (<a class="reference internal" href="#fastapi_aad_auth.config.RoutingConfig" title="fastapi_aad_auth.config.RoutingConfig"><em>fastapi_aad_auth.config.RoutingConfig</em></a>) -- Configuration for routing</p></li>
+<li><p><strong>session</strong> (<a class="reference internal" href="#fastapi_aad_auth.config.SessionConfig" title="fastapi_aad_auth.config.SessionConfig"><em>fastapi_aad_auth.config.SessionConfig</em></a>) -- Configuration for the session middleware</p></li>
+<li><p><strong>login_ui</strong> (<a class="reference internal" href="#fastapi_aad_auth.config.LoginUIConfig" title="fastapi_aad_auth.config.LoginUIConfig"><em>fastapi_aad_auth.config.LoginUIConfig</em></a>) -- Login UI Configuration</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fastapi_aad_auth.config.LoginUIConfig">
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.config.</code><code class="sig-name descname">LoginUIConfig</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">_env_file</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'&lt;object object&gt;'</span></em>, <em class="sig-param"><span class="n">_env_file_encoding</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">app_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">template_file</span><span class="p">:</span> <span class="n">pydantic.types.FilePath</span> <span class="o">=</span> <span class="default_value">'D:\\a\\fastapi_aad_auth\\fastapi_aad_auth\\.tox\\docs\\lib\\site-packages\\fastapi_aad_auth\\ui\\login.html'</span></em>, <em class="sig-param"><span class="n">error_template_file</span><span class="p">:</span> <span class="n">pydantic.types.FilePath</span> <span class="o">=</span> <span class="default_value">'D:\\a\\fastapi_aad_auth\\fastapi_aad_auth\\.tox\\docs\\lib\\site-packages\\fastapi_aad_auth\\ui\\error.html'</span></em>, <em class="sig-param"><span class="n">static_directory</span><span class="p">:</span> <span class="n">pydantic.types.DirectoryPath</span> <span class="o">=</span> <span class="default_value">'D:\\a\\fastapi_aad_auth\\fastapi_aad_auth\\.tox\\docs\\lib\\site-packages\\fastapi_aad_auth\\ui\\static'</span></em>, <em class="sig-param"><span class="n">static_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'/static-login'</span></em>, <em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastapi_aad_auth/config.html#LoginUIConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.config.LoginUIConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configuration for the application Login UI.</p>
+<blockquote>
+<div><p>Includes the application name, template file, error template file,
+static directory, path to mount the login static information to, and the context.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>app_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Application name to show on the Login UI page (Can be set by <code class="docutils literal notranslate"><span class="pre">APP_NAME</span></code> environment variable)</p></li>
+<li><p><strong>template_file</strong> (<em>pydantic.types.FilePath</em>) -- The jinja2 template to use [default: <code class="docutils literal notranslate"><span class="pre">D:\a\fastapi_aad_auth\fastapi_aad_auth\.tox\docs\lib\site-packages\fastapi_aad_auth\ui\login.html</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_TEMPLATE_FILE</span></code> environment variable)</p></li>
+<li><p><strong>error_template_file</strong> (<em>pydantic.types.FilePath</em>) -- The jinja2 template to use [default: <code class="docutils literal notranslate"><span class="pre">D:\a\fastapi_aad_auth\fastapi_aad_auth\.tox\docs\lib\site-packages\fastapi_aad_auth\ui\error.html</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_ERROR_TEMPLATE_FILE</span></code> environment variable)</p></li>
+<li><p><strong>static_directory</strong> (<em>pydantic.types.DirectoryPath</em>) -- Static path for the Login UI [default: <code class="docutils literal notranslate"><span class="pre">D:\a\fastapi_aad_auth\fastapi_aad_auth\.tox\docs\lib\site-packages\fastapi_aad_auth\ui\static</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_STATIC_DIR</span></code> environment variable)</p></li>
+<li><p><strong>static_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Path to mount the login static dir in [default: <code class="docutils literal notranslate"><span class="pre">/static-login</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_STATIC_PATH</span></code> environment variable)</p></li>
+<li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) -- Any additional context variables required for the template</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fastapi_aad_auth.config.RoutingConfig">
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.config.</code><code class="sig-name descname">RoutingConfig</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">_env_file</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'&lt;object object&gt;'</span></em>, <em class="sig-param"><span class="n">_env_file_encoding</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">login_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'/login/oauth'</span></em>, <em class="sig-param"><span class="n">login_redirect_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'/login/oauth/redirect'</span></em>, <em class="sig-param"><span class="n">logout_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'/logout'</span></em>, <em class="sig-param"><span class="n">landing_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'/login'</span></em>, <em class="sig-param"><span class="n">home_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'/'</span></em>, <em class="sig-param"><span class="n">post_logout_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastapi_aad_auth/config.html#RoutingConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.config.RoutingConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configuration for authentication related routing.</p>
+<blockquote>
+<div><p>Includes <code class="docutils literal notranslate"><span class="pre">logout_path</span></code>, <code class="docutils literal notranslate"><span class="pre">login_path</span></code>, and <code class="docutils literal notranslate"><span class="pre">login_redirect_path</span></code> (defaults should
+be fine for most use-cases).</p>
+<p>There are also the <code class="docutils literal notranslate"><span class="pre">landing_path</span></code> for the login page, as well as the <code class="docutils literal notranslate"><span class="pre">home_path</span></code> for the home
+page (defaults to the application root), and the <code class="docutils literal notranslate"><span class="pre">post_logout_path</span></code> for any specific routing
+once a logout has completed.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>login_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Path for initiating the AAD oauth call [default: <code class="docutils literal notranslate"><span class="pre">/login/oauth</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_ROUTE</span></code> environment variable)</p></li>
+<li><p><strong>login_redirect_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Path for handling the AAD redirect call [default: <code class="docutils literal notranslate"><span class="pre">/login/oauth/redirect</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_REDIRECT_ROUTE</span></code> environment variable)</p></li>
+<li><p><strong>logout_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Path for processing a logout request [default: <code class="docutils literal notranslate"><span class="pre">/logout</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGOUT_ROUTE</span></code> environment variable)</p></li>
+<li><p><strong>landing_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Path for the login UI page [default: <code class="docutils literal notranslate"><span class="pre">/login</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_UI_ROUTE</span></code> environment variable)</p></li>
+<li><p><strong>home_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Path for the application home page (default redirect if none provided) [default: <code class="docutils literal notranslate"><span class="pre">/</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">APP_HOME_ROUTE</span></code> environment variable)</p></li>
+<li><p><strong>post_logout_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Path for the redirect post logout - defaults to the landing path if not provided (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_POST_LOGOUT_ROUTE</span></code> environment variable)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fastapi_aad_auth.config.SessionConfig">
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.config.</code><code class="sig-name descname">SessionConfig</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">_env_file</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'&lt;object object&gt;'</span></em>, <em class="sig-param"><span class="n">_env_file_encoding</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">secret_key</span><span class="p">:</span> <span class="n">pydantic.types.SecretStr</span> <span class="o">=</span> <span class="default_value">'0c5de382-20c7-484e-a410-0b7374ceb63c'</span></em>, <em class="sig-param"><span class="n">session_cookie</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'session'</span></em>, <em class="sig-param"><span class="n">same_site</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'lax'</span></em>, <em class="sig-param"><span class="n">https_only</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">max_age</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">86400</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastapi_aad_auth/config.html#SessionConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.config.SessionConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configuration for session middleware.</p>
+<blockquote>
+<div><p>Contains the session secret (should be set as environment variables in
+a multi-worker/multi-processing environment to enable authentication
+across workers)</p>
+<p>Provides configuration for the fastapi session middleware</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>secret_key</strong> (<em>pydantic.types.SecretStr</em>) -- Secret used for the session middleware [default: <code class="docutils literal notranslate"><span class="pre">0c5de382-20c7-484e-a410-0b7374ceb63c</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_SECRET</span></code> environment variable)</p></li>
+<li><p><strong>session_cookie</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Cookie name for the session information [default: <code class="docutils literal notranslate"><span class="pre">session</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_COOKIE</span></code> environment variable)</p></li>
+<li><p><strong>same_site</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Cookie validation mode for the session [default: <code class="docutils literal notranslate"><span class="pre">lax</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_SAME_SITE</span></code> environment variable)</p></li>
+<li><p><strong>https_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- Allow the sessions only with https connections (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_HTTPS_ONLY</span></code> environment variable)</p></li>
+<li><p><strong>max_age</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- Maximum age for a session [default: <code class="docutils literal notranslate"><span class="pre">86400</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_MAX_AGE</span></code> environment variable)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fastapi_aad_auth.config.expand_doc">
+<code class="sig-prename descclassname">fastapi_aad_auth.config.</code><code class="sig-name descname">expand_doc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">klass</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fastapi_aad_auth/config.html#expand_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.config.expand_doc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expand pydantic model documentation to enable autodoc.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="development.html" class="btn btn-neutral float-right" title="Development" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="usage.html" class="btn btn-neutral float-left" title="Using fastapi_aad_auth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020 David Pugh
+      <span class="lastupdated">
+        Last updated on Oct 18, 2020 (version 0.1.1).
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

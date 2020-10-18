@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="English" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Using fastapi_aad_auth &mdash; fastapi-aad-auth documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/style.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration Options" href="config.html" />
+    <link rel="prev" title="What&#39;s Changed" href="changelog.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> fastapi-aad-auth
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Release Information</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuring-the-azure-active-directory-app-registration">Configuring the Azure Active Directory App Registration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuring-the-fastapi-environment">Configuring the fastapi environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#including-fastapi-aad-auth-in-your-code">Including fastapi_aad_auth in your code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fastapi-aad-auth</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Using fastapi_aad_auth</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="using-fastapi-aad-auth">
+<h1>Using fastapi_aad_auth<a class="headerlink" href="#using-fastapi-aad-auth" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth</span></code> requires an Azure Active Directory App Registration (from the Azure Active Directory you want
+the application to authenticate against), and these parameters should then be set in environment variables
+(or a <code class="docutils literal notranslate"><span class="pre">.env</span></code> environment file) within the environment that fastapi is being served from.</p>
+<div class="section" id="configuring-the-azure-active-directory-app-registration">
+<span id="config-aad-appreg"></span><h2>Configuring the Azure Active Directory App Registration<a class="headerlink" href="#configuring-the-azure-active-directory-app-registration" title="Permalink to this headline">¶</a></h2>
+<p>There are several parts of the App Registration to Configure</p>
+<p>In the &quot;Authentication Tab&quot; you need to configure the callback urls:</p>
+<p>For the openapi/redoc authentication, configure a Single-page application eligible
+for the Authorization Code Flow with PKCE for:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">hostname</span><span class="o">&gt;/</span><span class="n">docs</span><span class="o">/</span><span class="n">oauth2</span><span class="o">-</span><span class="n">redirect</span>
+</pre></div>
+</div>
+<p>e.g. for local development:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">docs</span><span class="o">/</span><span class="n">oauth2</span><span class="o">-</span><span class="n">redirect</span>
+</pre></div>
+</div>
+<p>Configure a web platform for the UI based redirection (or whatever else is set in the config for the redirect path):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">hostname</span><span class="o">&gt;/</span><span class="n">login</span><span class="o">/</span><span class="n">oauth</span><span class="o">/</span><span class="n">redirect</span>
+</pre></div>
+</div>
+<p>e.g. for local development:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">login</span><span class="o">/</span><span class="n">oauth</span><span class="o">/</span><span class="n">redirect</span>
+</pre></div>
+</div>
+<p>Youu also need to decide whether the application is multi-tenant or single-tenant</p>
+<div class="figure align-default" id="id1">
+<img alt="Overview of redirect URI configuration for local testing" src="_images/App-Registration-Redirect-URIs.PNG" />
+<p class="caption"><span class="caption-text">An example configuration for rediredt URIs for testing an application</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>On the &quot;Expose an API tab&quot;, you need to set the Application ID URI</p>
+<div class="figure align-default" id="id2">
+<img alt="Overview of redirect URI configuration for local testing" src="_images/App-Registration-App-ID.PNG" />
+<p class="caption"><span class="caption-text">An example configuration for api Scopes for testing an application</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<p>and add scopes as configured for the application (e.g. the default <code class="docutils literal notranslate"><span class="pre">openid</span></code> scope is needed)</p>
+<div class="figure align-default" id="id3">
+<img alt="Overview of redirect URI configuration for local testing" src="_images/App-Registration-Scopes.PNG" />
+<p class="caption"><span class="caption-text">An example configuration for api Scopes for testing an application</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="configuring-the-fastapi-environment">
+<span id="config-fastapi-aad-auth-env"></span><h2>Configuring the fastapi environment<a class="headerlink" href="#configuring-the-fastapi-environment" title="Permalink to this headline">¶</a></h2>
+<p>The configuration is defined in <code class="docutils literal notranslate"><span class="pre">src/fastapi_aad_auth/config.py</span></code>, and includes options for configuring
+the AAD config, the login UI and the routes.</p>
+<p>There are several key parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_ID</span></code>: The Azure Active Directory App Registration Client ID</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AAD_TENANT_ID</span></code>: The Azure Active Directory App Registration Client ID</p></li>
+</ul>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_SECRET</span></code> parameter is needed if your application is not a public client (Generated
+from the certificates and secrets section of the app registration)</p>
+<div class="figure align-default">
+<img alt="Overview of client type on Azure AD App Registration Authentication Tab" src="_images/App-Registration-Client-Type.PNG" />
+</div>
+<p>These can be set in a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file (e.g. for a private client):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AAD_CLIENT_ID</span><span class="o">=</span><span class="s2">&quot;&lt;enter-your-client-id-here&gt;&quot;</span>
+<span class="n">AAD_TENANT_ID</span><span class="o">=</span><span class="s2">&quot;&lt;enter-your-tenant-id-here&gt;&quot;</span>
+<span class="n">AAD_CLIENT_SECRET</span><span class="o">=</span><span class="s2">&quot;&lt;enter-your-client-secret-here&gt;&quot;</span>
+</pre></div>
+</div>
+<p>You can initialise it with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi_aad_auth</span> <span class="kn">import</span> <span class="n">AADAuth</span><span class="p">,</span> <span class="n">AuthenticationState</span><span class="p">,</span> <span class="n">Config</span>
+<span class="n">auth_provider</span> <span class="o">=</span> <span class="n">AADAuth</span><span class="p">()</span>
+
+<span class="c1"># If you had a config that wasn&#39;t set in the environment, you could use</span>
+<span class="c1"># auth_provider = AADAuth(Config(&lt;my config kwargs&gt;)</span>
+</pre></div>
+</div>
+<p>The full set of configuration options is documented in <a class="reference internal" href="config.html"><span class="doc">Configuration Options</span></a></p>
+</div>
+<div class="section" id="including-fastapi-aad-auth-in-your-code">
+<h2>Including fastapi_aad_auth in your code<a class="headerlink" href="#including-fastapi-aad-auth-in-your-code" title="Permalink to this headline">¶</a></h2>
+<p>You can use it for fastapi routes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Depends</span>
+
+
+<span class="c1"># Use the auth_provider.api_auth_scheme for fastapi authentication</span>
+
+<span class="n">router</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">()</span>
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/hello&#39;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">auth_state</span><span class="p">:</span> <span class="n">AuthenticationState</span> <span class="o">=</span><span class="n">D</span> <span class="n">epends</span><span class="p">(</span><span class="n">auth_provider</span><span class="o">.</span><span class="n">api_auth_scheme</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">auth_state</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;hello&#39;</span><span class="p">:</span> <span class="s1">&#39;world&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>For starlette routes (i.e. interactive/HTML pages), use the auth_provider.auth_required for authentication:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">starlette.responses</span> <span class="kn">import</span> <span class="n">PlainTextResponse</span>
+
+<span class="nd">@auth_provider</span><span class="o">.</span><span class="n">auth_required</span><span class="p">()</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">PlainTextResponse</span><span class="p">(</span><span class="s1">&#39;Hello, &#39;</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">display_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This middleware will set the request.user object and request.credentials object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">homepage</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">PlainTextResponse</span><span class="p">(</span><span class="s1">&#39;Hello, &#39;</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">display_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">PlainTextResponse</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Hello, you&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can set the swagger_ui_init_oauth using auth_provider.api_auth_scheme.init_oauth:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span><span class="o">...</span>
+              <span class="n">swagger_ui_init_oauth</span><span class="o">=</span><span class="n">auth_provider</span><span class="o">.</span><span class="n">api_auth_scheme</span><span class="o">.</span><span class="n">init_oauth</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To add the required middleware to the fastapi app use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">auth_provider</span><span class="o">.</span><span class="n">configure_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="config.html" class="btn btn-neutral float-right" title="Configuration Options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="changelog.html" class="btn btn-neutral float-left" title="What&#39;s Changed" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020 David Pugh
+      <span class="lastupdated">
+        Last updated on Oct 18, 2020 (version 0.1.1).
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

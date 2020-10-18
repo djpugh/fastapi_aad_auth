@@ -1,0 +1,433 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="English" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fastapi_aad_auth.config &mdash; fastapi-aad-auth documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> fastapi-aad-auth
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Release Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fastapi-aad-auth</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>fastapi_aad_auth.config</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fastapi_aad_auth.config</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;fastapi_aad_auth configuration options.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+
+<span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="kn">import</span> <span class="n">resource_filename</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseSettings</span><span class="p">,</span> <span class="n">DirectoryPath</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">FilePath</span><span class="p">,</span> <span class="n">HttpUrl</span><span class="p">,</span> <span class="n">SecretStr</span><span class="p">,</span> <span class="n">validator</span>
+
+
+<span class="k">def</span> <span class="nf">bool_from_env</span><span class="p">(</span><span class="n">env_value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert environment variable to boolean.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env_value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">env_value</span> <span class="o">=</span> <span class="n">env_value</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">env_value</span>
+
+
+<span class="k">def</span> <span class="nf">list_from_env</span><span class="p">(</span><span class="n">env_value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert environment variable to list.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env_value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">env_value</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">env_value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">u</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">env_value</span>
+
+
+<div class="viewcode-block" id="expand_doc"><a class="viewcode-back" href="../../config.html#fastapi_aad_auth.config.expand_doc">[docs]</a><span class="k">def</span> <span class="nf">expand_doc</span><span class="p">(</span><span class="n">klass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Expand pydantic model documentation to enable autodoc.&quot;&quot;&quot;</span>
+    <span class="n">docs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;Keyword Args:&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">klass</span><span class="o">.</span><span class="n">__fields__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">default_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">default</span><span class="p">:</span>
+            <span class="n">default_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; [default: ``</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">default</span><span class="si">}</span><span class="s1">``]&#39;</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">outer_type_</span><span class="o">.</span><span class="vm">__module__</span>
+        <span class="k">if</span> <span class="n">module</span> <span class="o">!=</span> <span class="s1">&#39;builtins&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">outer_type_</span><span class="p">,</span> <span class="s1">&#39;__origin__&#39;</span><span class="p">):</span>
+                <span class="n">type_</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; (</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">outer_type_</span><span class="o">.</span><span class="n">__origin__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">) &#39;</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">outer_type_</span><span class="p">,</span> <span class="s1">&#39;__name__&#39;</span><span class="p">):</span>
+                <span class="n">type_</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">type_</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; (</span><span class="si">{</span><span class="n">module</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">outer_type_</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">) &#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">type_</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; (</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">outer_type_</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">) &#39;</span>
+        <span class="n">env_var</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="s1">&#39;env&#39;</span> <span class="ow">in</span> <span class="n">field</span><span class="o">.</span><span class="n">field_info</span><span class="o">.</span><span class="n">extra</span><span class="p">:</span>
+            <span class="n">env_var</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; (Can be set by ``</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">field_info</span><span class="o">.</span><span class="n">extra</span><span class="p">[</span><span class="s2">&quot;env&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">`` environment variable)&#39;</span>
+        <span class="n">docs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;    </span><span class="si">{</span><span class="n">name</span><span class="si">}{</span><span class="n">type_</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">field_info</span><span class="o">.</span><span class="n">description</span><span class="si">}{</span><span class="n">default_str</span><span class="si">}{</span><span class="n">env_var</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">klass</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">klass</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">klass</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">docs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">klass</span></div>
+
+
+<div class="viewcode-block" id="RoutingConfig"><a class="viewcode-back" href="../../config.html#fastapi_aad_auth.config.RoutingConfig">[docs]</a><span class="nd">@expand_doc</span>
+<span class="k">class</span> <span class="nc">RoutingConfig</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Configuration for authentication related routing.</span>
+
+<span class="sd">    Includes ``logout_path``, ``login_path``, and ``login_redirect_path`` (defaults should</span>
+<span class="sd">    be fine for most use-cases).</span>
+
+<span class="sd">    There are also the ``landing_path`` for the login page, as well as the ``home_path`` for the home</span>
+<span class="sd">    page (defaults to the application root), and the ``post_logout_path`` for any specific routing</span>
+<span class="sd">    once a logout has completed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">login_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s1">&#39;/login/oauth&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path for initiating the AAD oauth call&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;FASTAPI_AUTH_LOGIN_ROUTE&#39;</span><span class="p">)</span>
+    <span class="n">login_redirect_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s1">&#39;/login/oauth/redirect&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path for handling the AAD redirect call&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;FASTAPI_AUTH_LOGIN_REDIRECT_ROUTE&#39;</span><span class="p">)</span>
+    <span class="n">logout_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s1">&#39;/logout&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path for processing a logout request&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;FASTAPI_AUTH_LOGOUT_ROUTE&#39;</span><span class="p">)</span>
+    <span class="n">landing_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path for the login UI page&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;FASTAPI_AUTH_LOGIN_UI_ROUTE&#39;</span><span class="p">)</span>
+    <span class="n">home_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path for the application home page (default redirect if none provided)&quot;</span><span class="p">,</span>
+                           <span class="n">env</span><span class="o">=</span><span class="s1">&#39;APP_HOME_ROUTE&#39;</span><span class="p">)</span>
+    <span class="n">post_logout_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path for the redirect post logout - defaults to the landing path if not provided&quot;</span><span class="p">,</span>
+                                  <span class="n">env</span><span class="o">=</span><span class="s1">&#39;FASTAPI_AUTH_POST_LOGOUT_ROUTE&#39;</span><span class="p">)</span>
+    <span class="c1"># TODO: Add an API Token Route to get a bearer token interactively.</span>
+
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># noqa D106</span>
+        <span class="n">env_file</span> <span class="o">=</span> <span class="s1">&#39;.env&#39;</span>
+
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;post_logout_path&#39;</span><span class="p">,</span> <span class="n">always</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_validate_post_logout_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;landing_path&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="LoginUIConfig"><a class="viewcode-back" href="../../config.html#fastapi_aad_auth.config.LoginUIConfig">[docs]</a><span class="nd">@expand_doc</span>
+<span class="k">class</span> <span class="nc">LoginUIConfig</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Configuration for the application Login UI.</span>
+
+<span class="sd">    Includes the application name, template file, error template file,</span>
+<span class="sd">    static directory, path to mount the login static information to, and the context.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">app_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Application name to show on the Login UI page&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;APP_NAME&#39;</span><span class="p">)</span>
+    <span class="n">template_file</span><span class="p">:</span> <span class="n">FilePath</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">resource_filename</span><span class="p">(</span><span class="s1">&#39;fastapi_aad_auth.ui&#39;</span><span class="p">,</span> <span class="s1">&#39;login.html&#39;</span><span class="p">),</span>
+                                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The jinja2 template to use&quot;</span><span class="p">,</span>
+                                    <span class="n">env</span><span class="o">=</span><span class="s1">&#39;FASTAPI_AUTH_LOGIN_TEMPLATE_FILE&#39;</span><span class="p">)</span>
+    <span class="n">error_template_file</span><span class="p">:</span> <span class="n">FilePath</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">resource_filename</span><span class="p">(</span><span class="s1">&#39;fastapi_aad_auth.ui&#39;</span><span class="p">,</span> <span class="s1">&#39;error.html&#39;</span><span class="p">),</span>
+                                          <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The jinja2 template to use&quot;</span><span class="p">,</span>
+                                          <span class="n">env</span><span class="o">=</span><span class="s1">&#39;FASTAPI_AUTH_LOGIN_ERROR_TEMPLATE_FILE&#39;</span><span class="p">)</span>
+    <span class="n">static_directory</span><span class="p">:</span> <span class="n">DirectoryPath</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">resource_filename</span><span class="p">(</span><span class="s1">&#39;fastapi_aad_auth.ui&#39;</span><span class="p">,</span> <span class="s1">&#39;static&#39;</span><span class="p">),</span>
+                                            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Static path for the Login UI&quot;</span><span class="p">,</span>
+                                            <span class="n">env</span><span class="o">=</span><span class="s1">&#39;FASTAPI_AUTH_LOGIN_STATIC_DIR&#39;</span><span class="p">)</span>
+    <span class="n">static_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s1">&#39;/static-login&#39;</span><span class="p">,</span>
+                             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path to mount the login static dir in&quot;</span><span class="p">,</span>
+                             <span class="n">env</span><span class="o">=</span><span class="s1">&#39;FASTAPI_AUTH_LOGIN_STATIC_PATH&#39;</span><span class="p">)</span>
+    <span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Any additional context variables required for the template&quot;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># noqa D106</span>
+        <span class="n">env_file</span> <span class="o">=</span> <span class="s1">&#39;.env&#39;</span></div>
+
+
+<div class="viewcode-block" id="AADConfig"><a class="viewcode-back" href="../../config.html#fastapi_aad_auth.config.AADConfig">[docs]</a><span class="nd">@expand_doc</span>
+<span class="k">class</span> <span class="nc">AADConfig</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Configuration for the AAD application.</span>
+
+<span class="sd">    Includes expected claims, application registration, etc.</span>
+
+<span class="sd">    Can also provide additional client application ids to accept.</span>
+
+<span class="sd">    A list of roles can be provided to accept (requires configuring the</span>
+<span class="sd">    roles in the AAD application registration manifest)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">client_id</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Application Registration Client ID&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;AAD_CLIENT_ID&#39;</span><span class="p">)</span>
+    <span class="n">tenant_id</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Application Registration Tenant ID&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;AAD_TENANT_ID&#39;</span><span class="p">)</span>
+    <span class="n">client_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SecretStr</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Application Registration Client Secret (if required)&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;AAD_CLIENT_SECRET&#39;</span><span class="p">)</span>
+    <span class="n">scopes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">([</span><span class="s2">&quot;Read&quot;</span><span class="p">],</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Additional scopes requested&quot;</span><span class="p">)</span>
+    <span class="n">client_app_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Additional Client App IDs to accept tokens from (when running as a backend service)&quot;</span><span class="p">,</span>
+                                                <span class="n">env</span><span class="o">=</span><span class="s1">&#39;AAD_CLIENT_APP_IDS&#39;</span><span class="p">)</span>
+    <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Check that all claims are provided&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;AAD_STRICT_CLAIM_CHECK&#39;</span><span class="p">)</span>
+    <span class="n">api_audience</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Corresponds to the Application ID URI - used for token validation, defaults to api://</span><span class="si">{client_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                        <span class="n">env</span><span class="o">=</span><span class="s1">&#39;AAD_API_AUDIENCE&#39;</span><span class="p">)</span>
+    <span class="n">redirect_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">HttpUrl</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The redirect URI to use - overwrites the default path handling etc&quot;</span><span class="p">,</span>
+                                            <span class="n">env</span><span class="o">=</span><span class="s1">&#39;AAD_REDIRECT_URI&#39;</span><span class="p">)</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;AAD prompt to request&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;AAD_PROMPT&#39;</span><span class="p">)</span>
+    <span class="n">domain_hint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;AAD domain hint&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;AAD_DOMAIN_HINT&#39;</span><span class="p">)</span>
+    <span class="n">roles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;AAD roles required in claims&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;AAD_ROLES&#39;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># noqa D106</span>
+        <span class="n">env_file</span> <span class="o">=</span> <span class="s1">&#39;.env&#39;</span>
+
+    <span class="n">_validate_strict</span> <span class="o">=</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;strict&#39;</span><span class="p">,</span> <span class="n">allow_reuse</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">bool_from_env</span><span class="p">)</span>
+    <span class="n">_validate_client_app_ids</span> <span class="o">=</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;client_app_ids&#39;</span><span class="p">,</span> <span class="n">allow_reuse</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">list_from_env</span><span class="p">)</span>
+    <span class="n">_validate_roles</span> <span class="o">=</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;roles&#39;</span><span class="p">,</span> <span class="n">allow_reuse</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">list_from_env</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AuthSessionConfig"><a class="viewcode-back" href="../../config.html#fastapi_aad_auth.config.AuthSessionConfig">[docs]</a><span class="nd">@expand_doc</span>
+<span class="k">class</span> <span class="nc">AuthSessionConfig</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Authentication Session configuration.</span>
+
+<span class="sd">    Contains secret and salt information (should be set as environment</span>
+<span class="sd">    variables in a multi-worker/multi-processing environment to enable</span>
+<span class="sd">    authentication across workers)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">secret</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Secret used for encoding authentication information&quot;</span><span class="p">,</span>
+                              <span class="n">env</span><span class="o">=</span><span class="s1">&#39;SESSION_AUTH_SECRET&#39;</span><span class="p">)</span>
+    <span class="n">salt</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Salt used for encoding authentication information&quot;</span><span class="p">,</span>
+                            <span class="n">env</span><span class="o">=</span><span class="s1">&#39;SESSION_AUTH_SALT&#39;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># noqa D106</span>
+        <span class="n">env_file</span> <span class="o">=</span> <span class="s1">&#39;.env&#39;</span></div>
+
+
+<div class="viewcode-block" id="SessionConfig"><a class="viewcode-back" href="../../config.html#fastapi_aad_auth.config.SessionConfig">[docs]</a><span class="nd">@expand_doc</span>
+<span class="k">class</span> <span class="nc">SessionConfig</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Configuration for session middleware.</span>
+
+<span class="sd">    Contains the session secret (should be set as environment variables in</span>
+<span class="sd">    a multi-worker/multi-processing environment to enable authentication</span>
+<span class="sd">    across workers)</span>
+
+<span class="sd">    Provides configuration for the fastapi session middleware</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">secret_key</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Secret used for the session middleware&quot;</span><span class="p">,</span>
+                                  <span class="n">env</span><span class="o">=</span><span class="s1">&#39;SESSION_SECRET&#39;</span><span class="p">)</span>
+    <span class="n">session_cookie</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s1">&#39;session&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Cookie name for the session information&quot;</span><span class="p">,</span>
+                                <span class="n">env</span><span class="o">=</span><span class="s1">&#39;SESSION_COOKIE&#39;</span><span class="p">)</span>
+    <span class="n">same_site</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s1">&#39;lax&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Cookie validation mode for the session&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;SESSION_SAME_SITE&#39;</span><span class="p">)</span>
+    <span class="n">https_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Allow the sessions only with https connections&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;SESSION_HTTPS_ONLY&#39;</span><span class="p">)</span>
+    <span class="n">max_age</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Maximum age for a session&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;SESSION_MAX_AGE&#39;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># noqa D106</span>
+        <span class="n">env_file</span> <span class="o">=</span> <span class="s1">&#39;.env&#39;</span>
+
+    <span class="n">_validate_https_only</span> <span class="o">=</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;https_only&#39;</span><span class="p">,</span> <span class="n">allow_reuse</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">bool_from_env</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Config"><a class="viewcode-back" href="../../config.html#fastapi_aad_auth.config.Config">[docs]</a><span class="nd">@expand_doc</span>
+<span class="k">class</span> <span class="nc">Config</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The overall configuraton for the AAD authentication.&quot;&quot;&quot;</span>
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Enable authentication&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;FASTAPI_AUTH_ENABLED&#39;</span><span class="p">)</span>
+    <span class="n">aad</span><span class="p">:</span> <span class="n">AADConfig</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The AAD configuration to use&quot;</span><span class="p">)</span>
+    <span class="n">auth_session</span><span class="p">:</span> <span class="n">AuthSessionConfig</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The configuration for encoding the authentication information in the session&quot;</span><span class="p">)</span>
+    <span class="n">routing</span><span class="p">:</span> <span class="n">RoutingConfig</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Configuration for routing&quot;</span><span class="p">)</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">SessionConfig</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Configuration for the session middleware&quot;</span><span class="p">)</span>
+    <span class="n">login_ui</span><span class="p">:</span> <span class="n">LoginUIConfig</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Login UI Configuration&quot;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># noqa D106</span>
+        <span class="n">env_file</span> <span class="o">=</span> <span class="s1">&#39;.env&#39;</span>
+
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;aad&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_validate_aad</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">AADConfig</span><span class="p">(</span><span class="n">_env_file</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">env_file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;auth_session&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_validate_auth_session</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">AuthSessionConfig</span><span class="p">(</span><span class="n">_env_file</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">env_file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;routing&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_validate_routing</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">RoutingConfig</span><span class="p">(</span><span class="n">_env_file</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">env_file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;session&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_validate_session</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">SessionConfig</span><span class="p">(</span><span class="n">_env_file</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">env_file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;login_ui&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_validate_login_ui</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">LoginUIConfig</span><span class="p">(</span><span class="n">_env_file</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">env_file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="n">_validate_enabled</span> <span class="o">=</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;enabled&#39;</span><span class="p">,</span> <span class="n">allow_reuse</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">bool_from_env</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020 David Pugh
+      <span class="lastupdated">
+        Last updated on Oct 18, 2020 (version 0.1.1).
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
