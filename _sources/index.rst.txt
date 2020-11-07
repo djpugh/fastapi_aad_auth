@@ -38,23 +38,32 @@ fastapi-aad-auth
 .. image:: https://img.shields.io/github/issues-pr-raw/djpugh/fastapi_aad_auth
     :target: https://github.com/djpugh/fastapi_aad_auth/pulls
 
-Provide Azure Active Directory Authentication for both the API and associated interactive pages (documents, openapi etc).
+Provide Azure Active Directory Authentication for `FastAPI <https://fastapi.tiangolo.com>`_. Adds authentication for both the API and associated interactive pages (documents, openapi etc).
 
 The repository is open source (MIT Licensed) on |github| `Github <https://github.com/djpugh/fastapi_aad_auth>`_
 
-.. |github| image:: https://api.iconify.design/logos-github-icon.svg
-    :target: https://github.com/djpugh/fastapi_aad_auth
+
+.. toctree::
+    :caption: Basic Use
+    :maxdepth: 1
+    
+    Usage <usage>
+    Configuration Options <config>
 
 
 .. toctree::
+    :caption: Changes and Contributing
     :maxdepth: 1
-    
+
     Release Information <changelog>
-    Usage <usage>
-    Configuration Options <config>
     Contributing <development>
 
 
 ---------------------------------------
 
 | :ref:`genindex` | :ref:`search` |
+
+
+
+.. |github| image:: https://api.iconify.design/logos-github-icon.svg
+    :target: https://github.com/djpugh/fastapi_aad_auth
