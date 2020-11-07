@@ -15,6 +15,8 @@
 import os
 import datetime as dt
 
+import sphinx_material
+
 
 from fastapi_aad_auth import __version__
 __author__ = 'David Pugh'
@@ -41,7 +43,8 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx_github_changelog'
+    'sphinx_github_changelog',
+    'sphinx_material'
 ]
 
 extlinks = {
@@ -64,7 +67,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'fastapi-aad-auth'
+project = u'fastapi_aad_auth'
 copyright = str(dt.datetime.now().year)+' '+__author__
 
 # The version info for the project you're documenting, acts as replacement for
@@ -110,7 +113,7 @@ rst_epilog = """
 #show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+# pygments_style = 'sphinx'
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
@@ -123,12 +126,69 @@ autoclass_content='both'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
-if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+# Required theme setup
+html_theme = 'sphinx_material'
+
+# Set link name generated in the top bar.
+html_title = 'FastAPI AAD Authentication'
+
+html_theme_path = sphinx_material.html_theme_path()
+html_context = sphinx_material.get_html_context()
+# Material theme options (see theme.conf for more information)
+html_theme_options = {
+
+    # Set the name of the project to appear in the navigation.
+    'nav_title': html_title,
+
+    # Specify a base_url used to generate sitemap.xml. If not
+    # specified, then no sitemap will be built.
+    'base_url': 'https://djpugh.github.io/fastapi_aad_auth',
+
+    # Set the repo location to get a badge with stats
+    'repo_url': 'https://github.com/djpugh/fastapi_aad_auth/',
+    'repo_name': 'fastapi_aad_auth',
+
+    # Visible levels of the global TOC; -1 means unlimited
+    'globaltoc_depth': -1,
+    # If False, expand all TOC entries
+    'globaltoc_collapse': False,
+    # If True, show hidden TOC entries
+    'globaltoc_includehidden': False,
+    "logo_icon": "lock",
+    "repo_type": "github",
+    "globaltoc_depth": 2,
+    "color_primary": "cyan",
+    "color_accent": "teal",
+    "touch_icon": "images/apple-icon-152x152.png",
+    "theme_color": "#2196f3",
+    "master_doc": False,
+    "nav_links": [
+        {
+            "href": "https://fastapi.tiangolo.com/",
+            "internal": False,
+            "title": "FastAPI",
+        },
+        {
+            "href": "https://azure.microsoft.com/en-gb/services/active-directory/",
+            "internal": False,
+            "title": "Azure Active Directory",
+        }
+    ],
+    "heroes": {
+        "index": "Adding Azure Active Directory Authentical for fastAPI",
+    },
+    "version_dropdown": False,
+}
+html_sidebars = {
+    "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+}
+# on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
+# if not on_rtd:  # only import and set the theme if we're building docs locally
+#     import sphinx_rtd_theme
+#     html_theme = 'sphinx_rtd_theme'
+#     html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
