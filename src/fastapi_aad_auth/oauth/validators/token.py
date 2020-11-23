@@ -10,8 +10,8 @@ from fastapi.security import OAuth2AuthorizationCodeBearer
 from fastapi.security.utils import get_authorization_scheme_param
 from pydantic import BaseModel
 import requests
-from starlette.requests import Request
 from starlette.middleware.authentication import AuthenticationError
+from starlette.requests import Request
 from starlette.status import HTTP_401_UNAUTHORIZED
 
 from fastapi_aad_auth.oauth.state import AuthenticationState, User
@@ -125,7 +125,8 @@ class TokenValidator(OAuth2AuthorizationCodeBearer):
     def _get_user_from_claims(self, claims):
         raise NotImplementedError('Implement in sub class')
 
-    async def __call__(self, request: Request) -> Optional[str]:
+    async def __call__(self, request: Request) -> Optional[AuthenticationState]:
+        """Validate the request authentication"""
         result = self.check(request)
         logger.info(f'Identified state {result}')
         if not result.is_authenticated():
