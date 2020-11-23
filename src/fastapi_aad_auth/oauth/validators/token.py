@@ -12,7 +12,7 @@ from pydantic import BaseModel
 import requests
 from starlette.requests import Request
 from starlette.middleware.authentication import AuthenticationError
-from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
+from starlette.status import HTTP_401_UNAUTHORIZED
 
 from fastapi_aad_auth.oauth.state import AuthenticationState, User
 
