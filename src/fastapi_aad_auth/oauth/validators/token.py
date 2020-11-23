@@ -125,8 +125,12 @@ class TokenValidator(OAuth2AuthorizationCodeBearer):
     def _get_user_from_claims(self, claims):
         raise NotImplementedError('Implement in sub class')
 
-    async def __call__(self, request: Request) -> Optional[AuthenticationState]:
-        """Validate the request authentication"""
+    # TODO change pattern to better depend on alternate method
+    async def __call__(self, request: Request) -> AuthenticationState:  # type: ignore
+        """Validate the request authentication.
+        
+        Returns an AuthenticationState object or raises an Unauthorized eror
+        """
         result = self.check(request)
         logger.info(f'Identified state {result}')
         if not result.is_authenticated():
