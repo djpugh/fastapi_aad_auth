@@ -128,7 +128,7 @@ class TokenValidator(OAuth2AuthorizationCodeBearer):
     # TODO change pattern to better depend on alternate method
     async def __call__(self, request: Request) -> AuthenticationState:  # type: ignore
         """Validate the request authentication.
-        
+
         Returns an AuthenticationState object or raises an Unauthorized eror
         """
         result = self.check(request)
