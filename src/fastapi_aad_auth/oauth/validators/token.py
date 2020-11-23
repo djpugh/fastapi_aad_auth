@@ -10,7 +10,9 @@ from fastapi.security import OAuth2AuthorizationCodeBearer
 from fastapi.security.utils import get_authorization_scheme_param
 from pydantic import BaseModel
 import requests
+from starlette.requests import Request
 from starlette.middleware.authentication import AuthenticationError
+from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 
 from fastapi_aad_auth.oauth.state import AuthenticationState, User
 
@@ -123,6 +125,17 @@ class TokenValidator(OAuth2AuthorizationCodeBearer):
     def _get_user_from_claims(self, claims):
         raise NotImplementedError('Implement in sub class')
 
+    async def __call__(self, request: Request) -> Optional[str]:
+        result = self.check(request)
+        logger.info(f'Identified state {result}')
+        if not result.is_authenticated():
+            raise HTTPException(
+                status_code=HTTP_401_UNAUTHORIZED,
+                detail="Not authenticated",
+                headers={"WWW-Authenticate": "Bearer"},
+                )
+        return result
+
 
 class AADTokenValidator(TokenValidator):
     """Validator for AAD token based authentication."""
@@ -192,7 +205,7 @@ class AADTokenValidator(TokenValidator):
         if 'appid' in options and 'azp' in options:
             if 'appid' not in claims:
                 options.pop('appid')
-            if 'appid'not in claims:  # should this be an elif - i.e. we require it?
+            elif 'azp'not in claims:
                 options.pop('azp')
             if not ('appid' in claims or 'azp' in claims):
                 if self.strict:
@@ -214,4 +227,7 @@ class AADTokenValidator(TokenValidator):
 
     def _get_user_from_claims(self, claims):
         logger.debug(f'Processing claims: {claims}')
-        return self._user_klass(name=claims['name'], email=claims['preferred_username'], username=claims['preferred_username'], groups=claims.get('groups', []), roles=claims.get('roles', []))
+        username_key = 'preferred_username'
+        if username_key not in claims:
+            username_key = 'unique_name'
+        return self._user_klass(name=claims['name'], email=claims[username_key], username=claims[username_key], groups=claims.get('groups', []), roles=claims.get('roles', []))
