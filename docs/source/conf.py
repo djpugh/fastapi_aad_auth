@@ -128,7 +128,6 @@ autoclass_content='both'
 # a list of builtin themes.
 
 # Required theme setup
-html_theme = 'sphinx_material'
 
 # Set link name generated in the top bar.
 html_title = 'FastAPI AAD Authentication'
