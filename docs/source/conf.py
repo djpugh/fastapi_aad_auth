@@ -132,6 +132,7 @@ autoclass_content='both'
 # Set link name generated in the top bar.
 html_title = 'FastAPI AAD Authentication'
 
+html_theme = 'sphinx_material'
 html_theme_path = sphinx_material.html_theme_path()
 html_context = sphinx_material.get_html_context()
 # Material theme options (see theme.conf for more information)
