@@ -2,6 +2,7 @@
 name: Pipeline
 
 on:
+  workflow_dispatch:
   push:
     branches-ignore:
       - gh-pages
@@ -9,7 +10,7 @@ on:
       - docs-*
   pull_request:
   release:
-    types: [published]
+    types: [published, edited]
 
 jobs:
   lint:
