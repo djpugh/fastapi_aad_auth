@@ -10,7 +10,7 @@ on:
       - docs-*
   pull_request:
   release:
-    types: [published, edited]
+    types: [published]
 
 jobs:
   lint:
