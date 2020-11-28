@@ -59,6 +59,5 @@ app.include_router(router)
 auth_provider.configure_app(app)
 
 
-
 if __name__ == "__main__":
-    uvicorn.run(app, host='0.0.0.0', debug=True, port=8000, log_level='debug')
+    uvicorn.run('server:app', host='0.0.0.0', debug=True, port=8000, log_level='debug', reload=True)
