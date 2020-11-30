@@ -40,7 +40,7 @@ class SessionValidator:
 
     def pop_post_auth_redirect(self, request):
         """Clear post-authentication redirects."""
-        return request.session.pop(REDIRECT_KEY, '/')
+        return request.session.pop(REDIRECT_KEY, request.query_params.get('redirect', '/'))
 
     def set_post_auth_redirect(self, request, redirect='/'):
         """Set post-authentication redirects."""
