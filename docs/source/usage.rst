@@ -136,3 +136,77 @@ To add the required middleware to the fastapi app use::
     auth_provider.configure_app(app)
 
  
+Authenticating a client
+~~~~~~~~~~~~~~~~~~~~~~~
+
+If you are authenticating an e.g. console client, you need to get an access token via the Azure active directory configuration, there are examples of this (developed from the 
+`Azure Docs <https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-desktop-acquire-token?tabs=python#command-line-tool-without-a-web-browser>`_), e.g.::
+
+    """Device Code authenticator for a target client"""
+    import json
+    import sys
+
+    import msal
+    import requests
+
+
+    class AADDeviceCodeTokenRequester:
+        """AAD Device Code requester"""
+
+        def __init__(
+                self,
+                client_id,
+                tenant_id,
+                scopes=None):
+            """Initialise AAD App for device code authentication."""
+            self.client_id = client_id
+            if scopes is None:
+                scopes = []
+            elif isinstance(scopes, str):
+                scopes = [scopes]
+            self._scopes = scopes
+            self._authority = f'https://login.microsoftonline.com/{tenant_id}'
+            self.msal_application = msal.PublicClientApplication(
+                client_id,
+                authority=self._authority)
+        
+        def get_token(self):
+            """Authenticate via device code flow""" 
+            # From https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-desktop-acquire-token?tabs=python#command-line-tool-without-a-web-browser
+            flow = self.msal_application.initiate_device_flow(scopes=self._scopes)
+            if "user_code" not in flow:
+                raise ValueError(
+                    "Fail to create device flow. Err: %s" % json.dumps(flow, indent=4))
+
+            print(flow["message"])
+            sys.stdout.flush()  # Some terminal needs this to ensure the message is shown
+            result = self.msal_application.acquire_token_by_device_flow(flow)
+            return result
+        
+        def get_session(self):
+            tokens = self.get_token()
+            access_token = tokens['access_token']
+            session = requests.sessions.Session()
+            session.headers.update({'Authorization': f'Bearer {access_token}'})
+            return session
+
+
+There are alternative approaches for different languages, and note that this relies on the app being a Public Application when registered/configured.
+
+For web apps/api's that are calling other web apis, the On-behalf-of flow is recomended - see the
+`Azure Docs <https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-web-api-call-api-app-configuration?tabs=python>`_.
+
+Alternatively you can request a permission using the ``Request API permissions`` part of the ``API permissions`` tab in the App Registration configuration, and adding that to the requested scope.
+
+If you are authenticating from an app registration (e.g. a daemon application or other), you should use the client credentials flow - see the
+`Azure Samples <https://github.com/Azure-Samples/ms-identity-python-daemon/blob/master/1-Call-MsGraph-WithSecret/confidential_client_secret_sample.py>`_.
+
+Postman
+-------
+
+Tools like Postman allow you to configure authentication via oauth - this shows the example for the test server.
+
+.. figure:: figures/Postman-Auth-Config.PNG
+   :alt: Overview of authenticating for postman
+   
+   An example of how to configure client credentials (using another app registration) for postman - replace the {tenant} and {appid} info, along with the client id and client secret
