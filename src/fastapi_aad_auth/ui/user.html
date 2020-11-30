@@ -96,7 +96,7 @@
               $('#expires').text("");
               $("#loadToken").click(function(e){          
                 if (!e.currentTarget.classList.contains("active")){
-                  $.ajax("/token/get").done(function(data){
+                  $.ajax("/me/token").done(function(data){
                     $('#tokenText').val(data['access_token']);
                     var expires = new Date();
                     console.log(expires);

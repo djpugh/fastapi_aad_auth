@@ -16,7 +16,7 @@ from starlette.templating import Jinja2Templates
 
 from fastapi_aad_auth.config import Config
 from fastapi_aad_auth.errors import base_error_handler, ConfigurationError
-from fastapi_aad_auth.oauth import AADOAuthBackend
+from fastapi_aad_auth.oauth import AADOAuthBackend, AuthenticationState
 
 
 logger = logging.getLogger(__name__)
@@ -200,9 +200,9 @@ class AADAuth:
         """
         template_path = Path(self.config.login_ui.template_file)
         login_template_path = Path(self.config.login_ui.template_file)
-        token_template_path = Path(self.config.login_ui.token_template_file)
+        user_template_path = Path(self.config.login_ui.user_template_file)
         login_templates = Jinja2Templates(directory=str(login_template_path.parent))
-        token_templates = Jinja2Templates(directory=str(token_template_path.parent))
+        user_templates = Jinja2Templates(directory=str(user_template_path.parent))
         if context is None:
             context ={}
 
@@ -219,7 +219,7 @@ class AADAuth:
             return login_templates.TemplateResponse(login_template_path.name, view_context)  # type: ignore
 
         @self.auth_required()
-        async def get_token_ui(request: Request):
+        async def get_user(request: Request):
             nonlocal context
             view_context = context.copy()
             logger.debug(f'Getting token for {request.user}')
@@ -234,20 +234,24 @@ class AADAuth:
             else:
                 logger.debug('Auth not enabled')
                 view_context['token'] = None
-            return token_templates.TemplateResponse(token_template_path.name, view_context)
+            return user_templates.TemplateResponse(user_template_path.name, view_context)
 
-        def get_token(auth_state=Depends(self.api_auth_scheme)):
-            if hasattr(auth_state.user, 'username'):
+        def get_token(request: Request, auth_state: AuthenticationState = Depends(self.api_auth_scheme)):
+            if isinstance(auth_state, AuthenticationState):
+                user = auth_state.user
+            else:
+                user = request.user
+            if hasattr(user, 'username'):
                 try:
-                    return JSONResponse(self.oauth_backend.authenticator.get_access_token(auth_state.user))
+                    return JSONResponse(self.oauth_backend.authenticator.get_access_token(user))
                 except ValueError:
-                    pass
-            return RedirectResponse(f'{self.config.routing.landing_path}?redirect=/token/get')
+                    return self.oauth_backend.authenticator.process_login_request(request, force=True, redirect=request.url.path)
+            return RedirectResponse(f'{self.config.routing.landing_path}?redirect=/me/token')
 
 
         routes = [Route(self.config.routing.landing_path, endpoint=login, methods=['GET'], name='login'),
-                  Route(self.config.routing.token_path, endpoint=get_token_ui, methods=['GET'], name='token'),
-                  Route(f'{self.config.routing.token_path}/get', endpoint=get_token, methods=['GET'], name='get-token'),
+                  Route(self.config.routing.user_path, endpoint=get_user, methods=['GET'], name='user'),
+                  Route(f'{self.config.routing.user_path}/token', endpoint=get_token, methods=['GET'], name='get-token'),
                   Mount(self.config.login_ui.static_path, StaticFiles(directory=str(self.config.login_ui.static_directory)), name='static-login')]
 
         return routes
