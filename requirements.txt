@@ -3,7 +3,7 @@ aiofiles
 jinja2
 fastapi
 authlib
-cryptography
+cryptography>3.2
 python-multipart
 requests
 pydantic[dotenv]

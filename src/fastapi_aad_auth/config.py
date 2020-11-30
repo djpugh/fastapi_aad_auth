@@ -93,8 +93,8 @@ class LoginUIConfig(BaseSettings):
                                           description="The jinja2 template to use",
                                           env='FASTAPI_AUTH_LOGIN_ERROR_TEMPLATE_FILE')
     user_template_file: FilePath = Field(resource_filename('fastapi_aad_auth.ui', 'user.html'),
-                                          description="The jinja2 template to use",
-                                          env='FASTAPI_AUTH_USER_TEMPLATE_FILE')
+                                         description="The jinja2 template to use",
+                                         env='FASTAPI_AUTH_USER_TEMPLATE_FILE')
     static_directory: DirectoryPath = Field(resource_filename('fastapi_aad_auth.ui', 'static'),
                                             description="Static path for the Login UI",
                                             env='FASTAPI_AUTH_LOGIN_STATIC_DIR')

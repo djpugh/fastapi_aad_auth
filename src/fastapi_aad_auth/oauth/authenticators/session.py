@@ -4,6 +4,7 @@ import logging
 
 import msal
 from pkg_resources import resource_string
+from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
 from fastapi_aad_auth.errors import ConfigurationError
@@ -70,15 +71,18 @@ class SessionAuthenticator:
         raise NotImplementedError('Implement in subclass')
 
     def get_access_token(self, user):
+        """Get the access token for the user."""
         raise NotImplementedError('Implement in subclass')
 
-    def get_access_token_from_request(self, request):
+    def get_access_token_from_request(self, request: Request):
+        """Get the access token from a request object."""
         auth_state = self._session_validator.get_state_from_session(request)
         if auth_state.is_authenticated():
             return self.get_access_token(auth_state.user)['access_token']
         return None
 
-    def get_user_from_request(self, request):
+    def get_user_from_request(self, request: Request):
+        """Get the user from a request object."""
         auth_state = self._session_validator.get_state_from_session(request)
         return auth_state.user
 
@@ -192,6 +196,7 @@ class AADSessionAuthenticator(SessionAuthenticator):
         return f'<a class="btn btn-lg btn-light btn-ms" href="{url}"><div class="row align-items-center justify-center login-ms"><img alt="Microsoft Logo" class="rounded splash-ms" src="data:image/png;base64,{logo}" />Sign in with Microsoft Work Account</div></a>'
 
     def get_access_token(self, user):
+        """Get the access token for the user."""
         result = None
         account = None
         if user.username:
