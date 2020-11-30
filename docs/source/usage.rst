@@ -221,3 +221,5 @@ The ``/me/token`` endpoint provides that same token (for the logged in user) in 
 .. warning::
 
     To get the token, this is primarily an interactive method, as it requires caching the token through the UI session based login approach, so it can fail intermittently depending on if the user has logged in recently.
+
+This can be disabled by setting the ``config.routing.user_path`` to ``None`` or ``''``. 

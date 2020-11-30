@@ -218,45 +218,48 @@ class AADAuth:
                 view_context['login'] = self.oauth_backend.authenticator.get_login_button(self.config.routing.login_path, post_redirect)  # type: ignore
             return login_templates.TemplateResponse(login_template_path.name, view_context)  # type: ignore
 
-        @self.auth_required()
-        async def get_user(request: Request):
-            nonlocal context
-            view_context = context.copy()
-            logger.debug(f'Getting token for {request.user}')
-            view_context['request'] = request
-            if self.oauth_backend.enabled:
-                logger.debug(f'Auth {request.auth}')
-                try:
-                    view_context['user'] = self.oauth_backend.authenticator.get_user_from_request(request)
-                    view_context['token'] = self.oauth_backend.authenticator.get_access_token(view_context['user'])
-                except ValueError:
-                    return self.oauth_backend.authenticator.process_login_request(request, force=True, redirect=request.url.path)
-            else:
-                logger.debug('Auth not enabled')
-                view_context['token'] = None
-            return user_templates.TemplateResponse(user_template_path.name, view_context)
-
-        async def get_token(request: Request, auth_state: AuthenticationState = Depends(self.api_auth_scheme)):
-            if not isinstance(auth_state, AuthenticationState):
-                if hasattr(request.user, 'username'):
-                    user = request.user
-                else:
-                    auth_state = await self.api_auth_scheme(request)
-                    user = auth_state.user
-            if hasattr(user, 'username'):
-                try:
-                    return JSONResponse(self.oauth_backend.authenticator.get_access_token(user))
-                except ValueError:
-                    if any([u in request.headers['user-agent'] for u in ['Mozilla', 'Gecko', 'Trident', 'WebKit', 'Presto', 'Edge', 'Blink']]):
-                        return self.oauth_backend.authenticator.process_login_request(request, force=True, redirect=request.url.path)
-                    else:
-                        return JSONResponse('Unable to access token as user has not authenticated via session')
-            return RedirectResponse(f'{self.config.routing.landing_path}?redirect=/me/token')
-
         routes = [Route(self.config.routing.landing_path, endpoint=login, methods=['GET'], name='login'),
-                  Route(self.config.routing.user_path, endpoint=get_user, methods=['GET'], name='user'),
-                  Route(f'{self.config.routing.user_path}/token', endpoint=get_token, methods=['GET'], name='get-token'),
                   Mount(self.config.login_ui.static_path, StaticFiles(directory=str(self.config.login_ui.static_directory)), name='static-login')]
+
+        if self.config.routing.user_path:
+
+            @self.auth_required()
+            async def get_user(request: Request):
+                nonlocal context
+                view_context = context.copy()
+                logger.debug(f'Getting token for {request.user}')
+                view_context['request'] = request
+                if self.oauth_backend.enabled:
+                    logger.debug(f'Auth {request.auth}')
+                    try:
+                        view_context['user'] = self.oauth_backend.authenticator.get_user_from_request(request)
+                        view_context['token'] = self.oauth_backend.authenticator.get_access_token(view_context['user'])
+                    except ValueError:
+                        return self.oauth_backend.authenticator.process_login_request(request, force=True, redirect=request.url.path)
+                else:
+                    logger.debug('Auth not enabled')
+                    view_context['token'] = None
+                return user_templates.TemplateResponse(user_template_path.name, view_context)
+
+            async def get_token(request: Request, auth_state: AuthenticationState = Depends(self.api_auth_scheme)):
+                if not isinstance(auth_state, AuthenticationState):
+                    if hasattr(request.user, 'username'):
+                        user = request.user
+                    else:
+                        auth_state = await self.api_auth_scheme(request)
+                        user = auth_state.user
+                if hasattr(user, 'username'):
+                    try:
+                        return JSONResponse(self.oauth_backend.authenticator.get_access_token(user))
+                    except ValueError:
+                        if any([u in request.headers['user-agent'] for u in ['Mozilla', 'Gecko', 'Trident', 'WebKit', 'Presto', 'Edge', 'Blink']]):
+                            return self.oauth_backend.authenticator.process_login_request(request, force=True, redirect=request.url.path)
+                        else:
+                            return JSONResponse('Unable to access token as user has not authenticated via session')
+                return RedirectResponse(f'{self.config.routing.landing_path}?redirect=/me/token')
+            
+            routes += [Route(self.config.routing.user_path, endpoint=get_user, methods=['GET'], name='user'),
+                    Route(f'{self.config.routing.user_path}/token', endpoint=get_token, methods=['GET'], name='get-token')]
 
         return routes
 
