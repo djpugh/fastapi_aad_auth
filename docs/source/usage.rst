@@ -200,3 +200,13 @@ Alternatively you can request a permission using the ``Request API permissions``
 
 If you are authenticating from an app registration (e.g. a daemon application or other), you should use the client credentials flow - see the
 `Azure Samples <https://github.com/Azure-Samples/ms-identity-python-daemon/blob/master/1-Call-MsGraph-WithSecret/confidential_client_secret_sample.py>`_.
+
+Postman
+-------
+
+Tools like Postman allow you to configure authentication via oauth - this shows the example for the test server.
+
+.. figure:: figures/Postman-Auth-Config.PNG
+   :alt: Overview of authenticating for postman
+   
+   An example of how to configure client credentials (using another app registration) for postman - replace the {tenant} and {appid} info, along with the client id and client secret
