@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{app_name}}</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{{static_path}}/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{static_path}}/css/cover.css">
+        <link href="{{static_path}}/css/open-iconic-bootstrap.css" rel="stylesheet">
+        <link rel="icon" type="img/ipng" href="/static/img/favicon.png" />
+        <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" >
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class='container'>
+            <div class="cover-container d-flex h-5 p-3 mx-auto flex-column text-center justify-content-center">
+                <main class="inner-cover">
+                    <p class="lead">
+                        {% if logo %}
+                        {{logo | safe }}
+                        {% endif %}
+                        {% if appname %}
+                        <h1 class="h1">{{appname}}</h1>
+                        {% endif %}
+                        
+                    </p>
+                </main>
+            </div>
+            <div class="row mb-md-3">
+                <h2>Current User</h2>
+            </div>
+            <div class="row">
+                <table class="table">
+                    <tbody>
+                        <tr class="d-flex">
+                        <th class="col-2" scope="row">Username</th>
+                        <td class="col-10">{{user.username}}</td>
+                        </tr>
+                        
+                        <tr class="d-flex">
+                        <th class="col-2" scope="row">Name</th>
+                        <td class="col-10">{{user.name}}</td>
+                        </tr>
+                        
+                        <tr class="d-flex">
+                        <th class="col-2" scope="row">Email</th>
+                        <td class="col-10">{{user.email}}</td>
+                        </tr>
+                        
+                        <tr class="d-flex">
+                        <th class="col-2" scope="row">Roles</th>
+                        <td class="col-10">{{user.roles|join(", ")}}</td>
+                        </tr>
+                        
+                        <tr class="d-flex">
+                        <th class="col-2" scope="row">Groups</th>
+                        <td class="col-10">{{user.groups|join(", ")}}</td>
+                        </tr>
+                        <tr class="d-flex bg-success">
+                        <th class="col-2" scope="row">Permissions</th>
+                        <td class="col-10"><i>{{user.permissions | join("</i>, <i>") | safe}}</i></td>
+                        </tr>
+                        
+                        <tr class="d-flex">
+                        <th class="col-2" scope="row">Bearer Token</th>
+                        <td class="col-10">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                <button type="button" class="btn btn-success" id="loadToken" data-toggle="button">
+                                    <span class="oi oi-key" title="This token is valid for this application" aria-hidden="true"></span>
+                                </button>
+                                </div>
+                                <input type="text" id="tokenText" class="form-control" value="*********" aria-label="" aria-describedby="token" readonly>
+                            </div>
+                            <span id="expires"></span>
+                        </td>
+                        </tr>
+                    
+                    
+                    
+                    </tbody>
+                </table>
+            </div>
+            {% if copyright %}
+                <p class="mt-5 mb-3 lead text-muted">© {{ copyright }}</p>
+            {% endif %}
+            {% if explanation %}
+                <p class="mt-5 mb-3 lead text-muted">{{ explanation }}</p>
+            {% endif %}
+        </div>
+
+        <script>
+            $(document).ready(function(){
+              $('#tokenText').val('*********');
+              $('#expires').text("");
+              $("#loadToken").click(function(e){          
+                if (!e.currentTarget.classList.contains("active")){
+                  $.ajax("/me/token").done(function(data){
+                    $('#tokenText').val(data['access_token']);
+                    var expires = new Date();
+                    console.log(expires);
+                    console.log(expires);
+
+                    expires.setSeconds(expires.getSeconds()+data['expires_in']);
+                    console.log(expires);
+                    console.log(expires.toISOString());
+                    $('#expires').text("Expires: "+expires.toString())
+                  });
+                  e.currentTarget.className += " active"}
+                else{
+                  $('#tokenText').val('*********');
+                  e.currentTarget.className = e.currentTarget.className.replace(" active", "");
+                  $('#expires').text("")
+                }})});
+
+          </script>
+
+    </body>
+</html>

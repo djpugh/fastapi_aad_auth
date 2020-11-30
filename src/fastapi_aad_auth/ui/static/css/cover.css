@@ -140,3 +140,10 @@ code{
   padding-left: 12px;
   padding-right: 12px;
 }
+
+.table {
+  color: #fff;
+}
+#expires{
+  text-shadow: none;
+} 

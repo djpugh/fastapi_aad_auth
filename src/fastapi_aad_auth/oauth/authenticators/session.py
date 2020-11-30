@@ -4,6 +4,7 @@ import logging
 
 import msal
 from pkg_resources import resource_string
+from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
 from fastapi_aad_auth.errors import ConfigurationError
@@ -38,16 +39,16 @@ class SessionAuthenticator:
     def _get_authorization_url(self, request, session_state):
         raise NotImplementedError('Implement in specific subclass')
 
-    def process_login_request(self, request):
+    def process_login_request(self, request, force=False, redirect='/'):
         """Process the provider login request."""
         logger.debug(f'Logging in - request url {request.url}')
         auth_state = self._session_validator.get_state_from_session(request)
-        if auth_state.is_authenticated():
+        if auth_state.is_authenticated() and not force:
             logger.debug(f'Authenticated - redirecting {auth_state}')
             response = self.redirect_if_authenticated(auth_state)
         else:
             # Set the redirect parameter here
-            self._session_validator.set_post_auth_redirect(request, request.query_params.get('redirect', '/'))
+            self._session_validator.set_post_auth_redirect(request, request.query_params.get('redirect', redirect))
             logger.debug(f'No Auth state - redirecting to provider login {auth_state}')
             response = self.redirect_to_provider_login(auth_state, request)
         return response
@@ -68,6 +69,22 @@ class SessionAuthenticator:
 
     def _process_code(self, request, auth_state, code):
         raise NotImplementedError('Implement in subclass')
+
+    def get_access_token(self, user):
+        """Get the access token for the user."""
+        raise NotImplementedError('Implement in subclass')
+
+    def get_access_token_from_request(self, request: Request):
+        """Get the access token from a request object."""
+        auth_state = self._session_validator.get_state_from_session(request)
+        if auth_state.is_authenticated():
+            return self.get_access_token(auth_state.user)['access_token']
+        return None
+
+    def get_user_from_request(self, request: Request):
+        """Get the user from a request object."""
+        auth_state = self._session_validator.get_state_from_session(request)
+        return auth_state.user
 
     def _get_user_from_token(self, token, options=None):
         validated_claims = self._token_validator.validate_token(token, options=options)
@@ -117,6 +134,7 @@ class AADSessionAuthenticator(SessionAuthenticator):
         self._redirect_uri = redirect_uri
         self._domain_hint = domain_hint
         self._prompt = prompt
+        self.client_id = client_id
         if scopes is None:
             scopes = [f'api://{self.client_id}']
         elif isinstance(scopes, str):
@@ -176,3 +194,22 @@ class AADSessionAuthenticator(SessionAuthenticator):
         url = self._add_redirect_to_url(url, post_redirect)
         logo = base64.b64encode(resource_string('fastapi_aad_auth.oauth', 'ms-logo.png')).decode()
         return f'<a class="btn btn-lg btn-light btn-ms" href="{url}"><div class="row align-items-center justify-center login-ms"><img alt="Microsoft Logo" class="rounded splash-ms" src="data:image/png;base64,{logo}" />Sign in with Microsoft Work Account</div></a>'
+
+    def get_access_token(self, user):
+        """Get the access token for the user."""
+        result = None
+        account = None
+        if user.username:
+            account = self.msal_application.get_accounts(user.username)
+        if account:
+            account = account[0]
+            logger.info(account)
+            # This needs you to register the openid api
+            result = self.msal_application.acquire_token_silent_with_error(scopes=[f'api://{self.client_id}/openid'], account=account)
+            logger.info(result)
+        if result is None:
+            raise ValueError('Token not found')
+        else:
+            return {'token_type': result['token_type'],
+                    'expires_in': result['expires_in'],
+                    'access_token': result['access_token']}

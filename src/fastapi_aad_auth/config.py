@@ -62,11 +62,11 @@ class RoutingConfig(BaseSettings):
     login_redirect_path: str = Field('/login/oauth/redirect', description="Path for handling the AAD redirect call", env='FASTAPI_AUTH_LOGIN_REDIRECT_ROUTE')
     logout_path: str = Field('/logout', description="Path for processing a logout request", env='FASTAPI_AUTH_LOGOUT_ROUTE')
     landing_path: str = Field('/login', description="Path for the login UI page", env='FASTAPI_AUTH_LOGIN_UI_ROUTE')
+    user_path: Optional[str] = Field('/me', description="Path for getting the user view", env='FASTAPI_AUTH_USER_ROUTE')
     home_path: str = Field('/', description="Path for the application home page (default redirect if none provided)",
                            env='APP_HOME_ROUTE')
     post_logout_path: str = Field(None, description="Path for the redirect post logout - defaults to the landing path if not provided",
                                   env='FASTAPI_AUTH_POST_LOGOUT_ROUTE')
-    # TODO: Add an API Token Route to get a bearer token interactively.
 
     class Config:  # noqa D106
         env_file = '.env'
@@ -92,6 +92,9 @@ class LoginUIConfig(BaseSettings):
     error_template_file: FilePath = Field(resource_filename('fastapi_aad_auth.ui', 'error.html'),
                                           description="The jinja2 template to use",
                                           env='FASTAPI_AUTH_LOGIN_ERROR_TEMPLATE_FILE')
+    user_template_file: FilePath = Field(resource_filename('fastapi_aad_auth.ui', 'user.html'),
+                                         description="The jinja2 template to use",
+                                         env='FASTAPI_AUTH_USER_TEMPLATE_FILE')
     static_directory: DirectoryPath = Field(resource_filename('fastapi_aad_auth.ui', 'static'),
                                             description="Static path for the Login UI",
                                             env='FASTAPI_AUTH_LOGIN_STATIC_DIR')
