@@ -210,3 +210,14 @@ Tools like Postman allow you to configure authentication via oauth - this shows 
    :alt: Overview of authenticating for postman
    
    An example of how to configure client credentials (using another app registration) for postman - replace the {tenant} and {appid} info, along with the client id and client secret
+
+
+Accessing User Tokens/View
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There are two routes that are automatically added to this, the ``/me`` and ``/me/getToken`` routes. The ``/me`` route provides a summary of the current user, and enables them to get a bearer token from Azure AD.
+The ``/me/token`` endpoint provides that same token (for the logged in user) in a JSON object
+
+.. warning::
+
+    To get the token, this is primarily an interactive method, as it requires caching the token through the UI session based login approach, so it can fail intermittently depending on if the user has logged in recently.
