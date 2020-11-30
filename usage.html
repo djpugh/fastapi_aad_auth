@@ -227,6 +227,14 @@
         <li class="md-nav__item"><a href="#configuring-the-fastapi-environment" class="md-nav__link">Configuring the fastapi environment</a>
         </li>
         <li class="md-nav__item"><a href="#including-fastapi-aad-auth-in-your-code" class="md-nav__link">Including fastapi_aad_auth in your code</a>
+        </li>
+        <li class="md-nav__item"><a href="#authenticating-a-client" class="md-nav__link">Authenticating a client</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#postman" class="md-nav__link">Postman</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#accessing-user-tokens-view" class="md-nav__link">Accessing User Tokens/View</a>
         </li></ul>
             </nav>
         </li>
@@ -256,6 +264,20 @@
       <a href="#including-fastapi-aad-auth-in-your-code" class="md-nav__link">Including fastapi_aad_auth in your code</a>
       
     
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#authenticating-a-client" class="md-nav__link">Authenticating a client</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#accessing-user-tokens-view" class="md-nav__link">Accessing User Tokens/View</a>
+      
+    
     </li></ul>
     
     </li>
@@ -276,6 +298,13 @@
     
       <a href="changelog.html" class="md-nav__link">Release Information</a>
       <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="changelog.html#release-0-1-5" class="md-nav__link">0.1.5</a>
+      
+    
+    </li>
     <li class="md-nav__item">
     
     
@@ -362,6 +391,14 @@
         <li class="md-nav__item"><a href="#configuring-the-fastapi-environment" class="md-nav__link">Configuring the fastapi environment</a>
         </li>
         <li class="md-nav__item"><a href="#including-fastapi-aad-auth-in-your-code" class="md-nav__link">Including fastapi_aad_auth in your code</a>
+        </li>
+        <li class="md-nav__item"><a href="#authenticating-a-client" class="md-nav__link">Authenticating a client</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#postman" class="md-nav__link">Postman</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#accessing-user-tokens-view" class="md-nav__link">Accessing User Tokens/View</a>
         </li></ul>
             </nav>
         </li>
@@ -406,19 +443,19 @@ for the Authorization Code Flow with PKCE for:</p>
 </pre></div>
 </div>
 <p>Youu also need to decide whether the application is multi-tenant or single-tenant</p>
-<div class="figure align-default" id="id1">
+<div class="figure align-default" id="id2">
 <img alt="Overview of redirect URI configuration for local testing" src="_images/App-Registration-Redirect-URIs.PNG"/>
-<p class="caption"><span class="caption-text">An example configuration for rediredt URIs for testing an application</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">An example configuration for rediredt URIs for testing an application</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <p>On the "Expose an API tab", you need to set the Application ID URI</p>
-<div class="figure align-default" id="id2">
+<div class="figure align-default" id="id3">
 <img alt="Overview of redirect URI configuration for local testing" src="_images/App-Registration-App-ID.PNG"/>
-<p class="caption"><span class="caption-text">An example configuration for api Scopes for testing an application</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">An example configuration for api Scopes for testing an application</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
 <p>and add scopes as configured for the application (e.g. the default <code class="docutils literal notranslate"><span class="pre">openid</span></code> scope is needed)</p>
-<div class="figure align-default" id="id3">
+<div class="figure align-default" id="id4">
 <img alt="Overview of redirect URI configuration for local testing" src="_images/App-Registration-Scopes.PNG"/>
-<p class="caption"><span class="caption-text">An example configuration for api Scopes for testing an application</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">An example configuration for api Scopes for testing an application</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
 
 
@@ -497,6 +534,84 @@ from the certificates and secrets section of the app registration)</p>
 </div>
 
 
+<h2 id="authenticating-a-client">Authenticating a client<a class="headerlink" href="#authenticating-a-client" title="Permalink to this headline">¶</a></h2>
+<p>If you are authenticating an e.g. console client, you need to get an access token via the Azure active directory configuration, there are examples of this (developed from the
+<a class="reference external" href="https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-desktop-acquire-token?tabs=python#command-line-tool-without-a-web-browser">Azure Docs</a>), e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Device Code authenticator for a target client"""</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">msal</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+
+<span class="k">class</span> <span class="nc">AADDeviceCodeTokenRequester</span><span class="p">:</span>
+    <span class="sd">"""AAD Device Code requester"""</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">client_id</span><span class="p">,</span>
+            <span class="n">tenant_id</span><span class="p">,</span>
+            <span class="n">scopes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">"""Initialise AAD App for device code authentication."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client_id</span> <span class="o">=</span> <span class="n">client_id</span>
+        <span class="k">if</span> <span class="n">scopes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">scopes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scopes</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">scopes</span> <span class="o">=</span> <span class="p">[</span><span class="n">scopes</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scopes</span> <span class="o">=</span> <span class="n">scopes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_authority</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'https://login.microsoftonline.com/</span><span class="si">{</span><span class="n">tenant_id</span><span class="si">}</span><span class="s1">'</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msal_application</span> <span class="o">=</span> <span class="n">msal</span><span class="o">.</span><span class="n">PublicClientApplication</span><span class="p">(</span>
+            <span class="n">client_id</span><span class="p">,</span>
+            <span class="n">authority</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_authority</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_token</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""Authenticate via device code flow"""</span>
+        <span class="c1"># From https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-desktop-acquire-token?tabs=python#command-line-tool-without-a-web-browser</span>
+        <span class="n">flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">msal_application</span><span class="o">.</span><span class="n">initiate_device_flow</span><span class="p">(</span><span class="n">scopes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_scopes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"user_code"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">flow</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"Fail to create device flow. Err: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">flow</span><span class="p">[</span><span class="s2">"message"</span><span class="p">])</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>  <span class="c1"># Some terminal needs this to ensure the message is shown</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">msal_application</span><span class="o">.</span><span class="n">acquire_token_by_device_flow</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">get_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_token</span><span class="p">()</span>
+        <span class="n">access_token</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="s1">'access_token'</span><span class="p">]</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">sessions</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">'Authorization'</span><span class="p">:</span> <span class="sa">f</span><span class="s1">'Bearer </span><span class="si">{</span><span class="n">access_token</span><span class="si">}</span><span class="s1">'</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">session</span>
+</pre></div>
+</div>
+<p>There are alternative approaches for different languages, and note that this relies on the app being a Public Application when registered/configured.</p>
+<p>For web apps/api's that are calling other web apis, the On-behalf-of flow is recomended - see the
+<a class="reference external" href="https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-web-api-call-api-app-configuration?tabs=python">Azure Docs</a>.</p>
+<p>Alternatively you can request a permission using the <code class="docutils literal notranslate"><span class="pre">Request</span> <span class="pre">API</span> <span class="pre">permissions</span></code> part of the <code class="docutils literal notranslate"><span class="pre">API</span> <span class="pre">permissions</span></code> tab in the App Registration configuration, and adding that to the requested scope.</p>
+<p>If you are authenticating from an app registration (e.g. a daemon application or other), you should use the client credentials flow - see the
+<a class="reference external" href="https://github.com/Azure-Samples/ms-identity-python-daemon/blob/master/1-Call-MsGraph-WithSecret/confidential_client_secret_sample.py">Azure Samples</a>.</p>
+
+<h3 id="postman">Postman<a class="headerlink" href="#postman" title="Permalink to this headline">¶</a></h3>
+<p>Tools like Postman allow you to configure authentication via oauth - this shows the example for the test server.</p>
+<div class="figure align-default" id="id5">
+<img alt="Overview of authenticating for postman" src="_images/Postman-Auth-Config.PNG"/>
+<p class="caption"><span class="caption-text">An example of how to configure client credentials (using another app registration) for postman - replace the {tenant} and {appid} info, along with the client id and client secret</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+
+
+
+<h2 id="accessing-user-tokens-view">Accessing User Tokens/View<a class="headerlink" href="#accessing-user-tokens-view" title="Permalink to this headline">¶</a></h2>
+<p>There are two routes that are automatically added to this, the <code class="docutils literal notranslate"><span class="pre">/me</span></code> and <code class="docutils literal notranslate"><span class="pre">/me/getToken</span></code> routes. The <code class="docutils literal notranslate"><span class="pre">/me</span></code> route provides a summary of the current user, and enables them to get a bearer token from Azure AD.
+The <code class="docutils literal notranslate"><span class="pre">/me/token</span></code> endpoint provides that same token (for the logged in user) in a JSON object</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>To get the token, this is primarily an interactive method, as it requires caching the token through the UI session based login approach, so it can fail intermittently depending on if the user has logged in recently.</p>
+</div>
+<p>This can be disabled by setting the <code class="docutils literal notranslate"><span class="pre">config.routing.user_path</span></code> to <code class="docutils literal notranslate"><span class="pre">None</span></code> or <code class="docutils literal notranslate"><span class="pre">''</span></code>.</p>
+
+
 
 
           </article>
@@ -545,7 +660,7 @@ from the certificates and secrets section of the app registration)</p>
               
           </div>
             Last updated on
-              Nov 28, 2020 (version 0.1.4).
+              Nov 30, 2020 (version 0.1.5).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

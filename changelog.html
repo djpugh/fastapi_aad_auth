@@ -233,6 +233,20 @@
       <a href="usage.html#including-fastapi-aad-auth-in-your-code" class="md-nav__link">Including fastapi_aad_auth in your code</a>
       
     
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="usage.html#authenticating-a-client" class="md-nav__link">Authenticating a client</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="usage.html#accessing-user-tokens-view" class="md-nav__link">Accessing User Tokens/View</a>
+      
+    
     </li></ul>
     
     </li>
@@ -262,6 +276,8 @@
   <ul class="md-nav__list" data-md-scrollfix="">
         <li class="md-nav__item"><a href="#changelog--page-root" class="md-nav__link">What's Changed</a><nav class="md-nav">
               <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#release-0-1-5" class="md-nav__link">0.1.5</a>
+        </li>
         <li class="md-nav__item"><a href="#release-0-1-4" class="md-nav__link">0.1.4</a>
         </li>
         <li class="md-nav__item"><a href="#release-0-1-3" class="md-nav__link">0.1.3</a>
@@ -282,6 +298,13 @@
   </ul>
 </nav>
       <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="#release-0-1-5" class="md-nav__link">0.1.5</a>
+      
+    
+    </li>
     <li class="md-nav__item">
     
     
@@ -363,6 +386,8 @@
   <ul class="md-nav__list" data-md-scrollfix="">
         <li class="md-nav__item"><a href="#changelog--page-root" class="md-nav__link">What's Changed</a><nav class="md-nav">
               <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#release-0-1-5" class="md-nav__link">0.1.5</a>
+        </li>
         <li class="md-nav__item"><a href="#release-0-1-4" class="md-nav__link">0.1.4</a>
         </li>
         <li class="md-nav__item"><a href="#release-0-1-3" class="md-nav__link">0.1.3</a>
@@ -393,6 +418,24 @@
             
   
 <h1 id="changelog--page-root">What's Changed<a class="headerlink" href="#changelog--page-root" title="Permalink to this headline">¶</a></h1>
+
+<h2 id="release-0-1-5">0.1.5<a class="headerlink" href="#release-0-1-5" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on 2020-11-30 - <a class="reference external" href="https://github.com/djpugh/fastapi_aad_auth/releases/tag/0.1.5">GitHub</a> - <a class="reference external" href="https://pypi.org/project/fastapi_aad_auth/0.1.5/">PyPI</a></em></p>
+<h2>Changes</h2>
+<h2><g-emoji alias="rocket" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png">🚀</g-emoji> Features</h2>
+<ul>
+<li>Added <code>/me</code> and <code>/me/token</code> default routes to get access token for signed in user <a class="user-mention" data-hovercard-type="user" data-hovercard-url="/users/djpugh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/djpugh">@djpugh</a> (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-hovercard-type="pull_request" data-hovercard-url="/djpugh/fastapi_aad_auth/pull/27/hovercard" data-id="753660532" data-permission-text="Title is private" data-url="https://github.com/djpugh/fastapi_aad_auth/issues/27" href="https://github.com/djpugh/fastapi_aad_auth/pull/27">#27</a>)</li>
+<li>Added documentation on authenticating from clients/apps <a class="user-mention" data-hovercard-type="user" data-hovercard-url="/users/djpugh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/djpugh">@djpugh</a> (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-hovercard-type="pull_request" data-hovercard-url="/djpugh/fastapi_aad_auth/pull/25/hovercard" data-id="753482751" data-permission-text="Title is private" data-url="https://github.com/djpugh/fastapi_aad_auth/issues/25" href="https://github.com/djpugh/fastapi_aad_auth/pull/25">#25</a>)</li>
+</ul>
+<h2><g-emoji alias="bug" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f41b.png">🐛</g-emoji> Bug Fixes</h2>
+<ul>
+<li>Fixed issue with service principal/app registration authentication <a class="user-mention" data-hovercard-type="user" data-hovercard-url="/users/djpugh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/djpugh">@djpugh</a> (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-hovercard-type="pull_request" data-hovercard-url="/djpugh/fastapi_aad_auth/pull/25/hovercard" data-id="753482751" data-permission-text="Title is private" data-url="https://github.com/djpugh/fastapi_aad_auth/issues/25" href="https://github.com/djpugh/fastapi_aad_auth/pull/25">#25</a>)</li>
+</ul>
+<h2><g-emoji alias="toolbox" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f9f0.png">🧰</g-emoji> Maintenance</h2>
+<ul>
+<li>Removing release edit <a class="user-mention" data-hovercard-type="user" data-hovercard-url="/users/djpugh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/djpugh">@djpugh</a> (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-hovercard-type="pull_request" data-hovercard-url="/djpugh/fastapi_aad_auth/pull/23/hovercard" data-id="752684417" data-permission-text="Title is private" data-url="https://github.com/djpugh/fastapi_aad_auth/issues/23" href="https://github.com/djpugh/fastapi_aad_auth/pull/23">#23</a>)</li>
+<li>Bumped <code>cryptography</code> minimum to <code>&gt;3.2</code> (<a data-hovercard-type="advisory" data-hovercard-url="/advisories/GHSA-hggm-jpg3-v476/hovercard" href="https://github.com/advisories/GHSA-hggm-jpg3-v476" title="CVE-2020-25659">CVE-2020-25659</a>) <a class="user-mention" data-hovercard-type="user" data-hovercard-url="/users/djpugh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/djpugh">@djpugh</a> (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-hovercard-type="pull_request" data-hovercard-url="/djpugh/fastapi_aad_auth/pull/23/hovercard" data-id="752684417" data-permission-text="Title is private" data-url="https://github.com/djpugh/fastapi_aad_auth/issues/23" href="https://github.com/djpugh/fastapi_aad_auth/pull/23">#23</a>)</li>
+</ul>
 
 <h2 id="release-0-1-4">0.1.4<a class="headerlink" href="#release-0-1-4" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on 2020-11-28 - <a class="reference external" href="https://github.com/djpugh/fastapi_aad_auth/releases/tag/0.1.4">GitHub</a> - <a class="reference external" href="https://pypi.org/project/fastapi_aad_auth/0.1.4/">PyPI</a></em></p>
@@ -496,7 +539,7 @@
               
           </div>
             Last updated on
-              Nov 28, 2020 (version 0.1.4).
+              Nov 30, 2020 (version 0.1.5).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
