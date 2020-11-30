@@ -67,7 +67,6 @@ class RoutingConfig(BaseSettings):
                            env='APP_HOME_ROUTE')
     post_logout_path: str = Field(None, description="Path for the redirect post logout - defaults to the landing path if not provided",
                                   env='FASTAPI_AUTH_POST_LOGOUT_ROUTE')
-    # TODO: Add an API Token Route to get a bearer token interactively.
 
     class Config:  # noqa D106
         env_file = '.env'

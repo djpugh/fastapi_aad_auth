@@ -236,18 +236,22 @@ class AADAuth:
                 view_context['token'] = None
             return user_templates.TemplateResponse(user_template_path.name, view_context)
 
-        def get_token(request: Request, auth_state: AuthenticationState = Depends(self.api_auth_scheme)):
-            if isinstance(auth_state, AuthenticationState):
-                user = auth_state.user
-            else:
-                user = request.user
+        async def get_token(request: Request, auth_state: AuthenticationState = Depends(self.api_auth_scheme)):
+            if not isinstance(auth_state, AuthenticationState):
+                if hasattr(request.user, 'username'):
+                    user = request.user
+                else:
+                    auth_state = await self.api_auth_scheme(request)
+                    user = auth_state.user
             if hasattr(user, 'username'):
                 try:
                     return JSONResponse(self.oauth_backend.authenticator.get_access_token(user))
                 except ValueError:
-                    return self.oauth_backend.authenticator.process_login_request(request, force=True, redirect=request.url.path)
+                    if any([u in request.headers['user-agent'] for u in ['Mozilla', 'Gecko', 'Trident', 'WebKit', 'Presto', 'Edge', 'Blink']]):
+                        return self.oauth_backend.authenticator.process_login_request(request, force=True, redirect=request.url.path)
+                    else:
+                        return JSONResponse('Unable to access token as user has not authenticated via session')
             return RedirectResponse(f'{self.config.routing.landing_path}?redirect=/me/token')
-
 
         routes = [Route(self.config.routing.landing_path, endpoint=login, methods=['GET'], name='login'),
                   Route(self.config.routing.user_path, endpoint=get_user, methods=['GET'], name='user'),
