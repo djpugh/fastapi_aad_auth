@@ -2,7 +2,7 @@
 from functools import wraps
 import logging
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from fastapi import Depends, FastAPI
 from starlette.authentication import requires

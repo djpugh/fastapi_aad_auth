@@ -1,11 +1,9 @@
 Configuration Options
 *********************
 
+Many of the configuration options can be set using environment variables (or a ``.env`` file).
 
-.. contents:: Table of Contents
-   :depth: 2
+This section describes the overall configuration object and it's (nested) options, defined in:
 
-   
-.. automodule:: fastapi_aad_auth.config
-    :members:
-    :exclude-members: bool_from_env,list_from_env
+.. autoconfig:: fastapi_aad_auth.config.Config
+    :noindex:

@@ -48,6 +48,8 @@ To run tests locally execute:
 
 This will run the test suite for the same Python version as under which ``tox`` is installed.
 
+.. _testing:
+
 Integration tests
 ~~~~~~~~~~~~~~~~~
 
@@ -61,12 +63,17 @@ To run the testapp use tox (or directly with ``python tests/testapp/server.py``:
 
     tox -e testapp
 
-This will run the test suite for the same Python version as under which ``tox`` is installed.
+This will run the test app for the same Python version as under which ``tox`` is installed.
 
 
 Configuring the testApp
 #######################
 
+The testapp requires configuring (see :ref:`config-aad-appreg`) for how to configure an appropriate App Registration on Azure.
+The app provides a really simple set of tests - the home page has no authentication, but if you have logged in, it will say "hello <email>",
+with your logged in email.
+
+The api docs (swagger UI) is authentication limited, as is the simple api endpoint '/hello'.
 
 
 
@@ -104,8 +111,8 @@ Release
 
 We release through GitHub using an automated process to collate and test the releases. 
 
-Contributing
--------------
+Developing
+------------
 
 Submitting pull requests
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -133,3 +140,16 @@ All pull requests and merges to ``master`` branch are tested using
 Github actions (configured by ``.github/workflows/pipeline.yml`` file. You can find the status and results to the CI runs for your
 PR on GitHub's Web UI for the pull request. You can also find links to the CI services' pages for the specific builds in
 the form of "Details" links, in case the CI run fails and you wish to view the output.
+
+.. _compatibility-requirements:
+
+Compatibility Requirements
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We endeavour to support (and test) on multiple python versions, across the following matrix of os and python versions:
+
+.. literalinclude:: ../../.github/workflows/pipeline.yml
+    :language: yaml
+    :start-after: matrix:
+    :end-before: max-parallel
+    :dedent: 8

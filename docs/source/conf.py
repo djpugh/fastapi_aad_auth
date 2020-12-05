@@ -14,8 +14,13 @@
 
 import os
 import datetime as dt
+from pathlib import Path
+from typing import Any
+import uuid
 
+from pydantic import BaseModel, SecretStr
 import sphinx_material
+from sphinx.ext.autodoc import ALL, ClassDocumenter
 
 
 from fastapi_aad_auth import __version__
@@ -157,7 +162,7 @@ html_theme_options = {
     'globaltoc_includehidden': False,
     "logo_icon": "lock",
     "repo_type": "github",
-    "globaltoc_depth": 2,
+    # "globaltoc_depth": 2,
     "color_primary": "cyan",
     "color_accent": "teal",
     "touch_icon": "images/apple-icon-152x152.png",
@@ -432,6 +437,78 @@ epub_exclude_files = ['search.html']
 intersphinx_mapping = {'https://docs.python.org/': None}
 
 
+class ConfigDocumenter(ClassDocumenter):
+
+    objtype = 'config'
+    directivetype = 'data'
+    domain = 'py'
+    priority = -1000
+
+    def generate(self, *args, **kwargs) -> None:
+        """Generate reST for the object given by *self.name*, and possibly for
+        its members.
+        If *more_content* is given, include that content. If *real_modname* is
+        given, use that module name to find attribute docs. If *check_module* is
+        True, only generate if the object is defined in the module name it is
+        imported from. If *all_members* is True, document all members.
+        """
+        if not self.parse_name():
+            return
+        # now, import the module and get object to document
+        if not self.import_object():
+            return
+        sourcename = self.get_sourcename()
+        config_vars = self._process_variables(self.object, '<Config>')
+
+        # e.g. the module directive doesn't have content
+        self.indent = ''
+        # add all content (from docstrings, attribute docs etc.)
+        self.analyzer = None
+        self.add_directive_header('')
+        self.add_line('**Options:**', sourcename)
+        for line in config_vars:
+            self.add_line(line, sourcename)
+
+    @classmethod
+    def can_document_member(cls, member: Any, membername: str, isattr: bool, parent: Any
+                            ) -> bool:
+        return hasattr(member, '__mro__') and BaseModel in member.__mro__
+
+    def _process_variables(self, object, path):
+        config_vars = []
+        config_nested = {}
+        for field_name, field in object.__fields__.items():
+            if BaseModel in field.type_.__mro__:
+                # This is recursive here
+                config_nested[field_name] = self._process_variables(field.type_, f'{path}.{field_name}')
+            else:
+                default_str = ''
+                if field.default and not SecretStr in field.type_.__mro__:
+                    if Path in field.type_.__mro__:
+                        field.default = Path(field.default).relative_to(Path(__file__).parents[3])
+                    default_str = f' [default: ``{field.default}``]'
+                module = field.outer_type_.__module__
+                if module != 'builtins':
+                    if hasattr(field.outer_type_, '__origin__'):
+                        type_ = f' (:class:`{field.outer_type_.__origin__.__name__}`) '
+                    elif not hasattr(field.outer_type_, '__name__'):
+                        type_ = ''
+                    else:
+                        type_ = f' (:class:`{module}.{field.outer_type_.__name__}`) '
+                else:
+                    type_ = f' (``{field.outer_type_.__name__}``) '
+                env_var = ''
+                if 'env' in field.field_info.extra:
+                    env_var = f' (Can be set by ``{field.field_info.extra["env"]}`` environment variable)'
+                config_vars.append(f'  * ``{path}.{field_name}``{type_}: {field.field_info.description}{default_str}{env_var}')
+        for field_name in sorted(config_nested.keys()):
+            config_vars.append(f'  ``{path}.{field_name}``:')
+            for var in config_nested[field_name]:              
+                config_vars.append(f'  {var}')
+        return config_vars
+
+
 def setup(app):
     from sphinx.util.texescape import tex_replacements
     tex_replacements += [(u'£', u"\\")]
+    app.add_autodocumenter(ConfigDocumenter)

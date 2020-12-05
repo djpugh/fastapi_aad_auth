@@ -65,7 +65,7 @@ class AADOAuthBackend(BaseOAuthBackend):
         super().__init__(token_validator, session_validator, authenticator=session_authenticator)
 
     @classmethod
-    def from_config(cls, config: Config, user_klass: type = User):
+    def from_config(cls, config: Config):
         """Load the auth backend from a config.
 
         Args:
@@ -87,4 +87,4 @@ class AADOAuthBackend(BaseOAuthBackend):
                    scopes=config.aad.scopes, client_app_ids=config.aad.client_app_ids,
                    strict_token=config.aad.strict, api_audience=config.aad.api_audience,
                    prompt=config.aad.prompt, domain_hint=config.aad.domain_hint,
-                   redirect_uri=config.aad.redirect_uri, user_klass=user_klass)
+                   redirect_uri=config.aad.redirect_uri, user_klass=config.user_klass)
