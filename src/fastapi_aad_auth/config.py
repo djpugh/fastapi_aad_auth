@@ -194,8 +194,8 @@ class Config(BaseSettings):
     session: SessionConfig = Field(None, description="Configuration for the session middleware")
     login_ui: LoginUIConfig = Field(None, description="Login UI Configuration")
     user_klass: type = Field('fastapi_aad_auth.oauth.state:User',
-                               description="User class to use within the AADOAuthBackend, this will be treated as an import path "  \
-                                           "if provided as a string, with the last part the class to load", env='FASTAPI_AUTH_USER_KLASS')
+                             description="User class to use within the AADOAuthBackend, this will be treated as an import path "
+                             "if provided as a string, with the last part the class to load", env='FASTAPI_AUTH_USER_KLASS')
 
     class Config:  # noqa D106
         env_file = '.env'

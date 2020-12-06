@@ -1,6 +1,6 @@
 """UI Components and templates.
 
-Includes: 
+Includes:
 
     * ``static``: static content (css/js/fonts) for the ui components
     * ``error.html``: Template for error messages
