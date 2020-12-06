@@ -66,7 +66,7 @@ To run the testapp use tox (or directly with ``python tests/testapp/server.py``:
 This will run the test app for the same Python version as under which ``tox`` is installed.
 
 
-Configuring the testApp
+Configuring the testapp
 #######################
 
 The testapp requires configuring (see :ref:`config-aad-appreg`) for how to configure an appropriate App Registration on Azure.

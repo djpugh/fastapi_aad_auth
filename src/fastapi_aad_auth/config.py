@@ -186,15 +186,16 @@ class SessionConfig(BaseSettings):
 @expand_doc
 class Config(BaseSettings):
     """The overall configuration for the AAD authentication."""
+
     enabled: bool = Field(True, description="Enable authentication", env='FASTAPI_AUTH_ENABLED')
     aad: AADConfig = Field(None, description="The AAD configuration to use")
     auth_session: AuthSessionConfig = Field(None, description="The configuration for encoding the authentication information in the session")
     routing: RoutingConfig = Field(None, description="Configuration for routing")
     session: SessionConfig = Field(None, description="Configuration for the session middleware")
     login_ui: LoginUIConfig = Field(None, description="Login UI Configuration")
-    user_klass: object = Field('fastapi_aad_auth.oauth.state:User',
+    user_klass: type = Field('fastapi_aad_auth.oauth.state:User',
                                description="User class to use within the AADOAuthBackend, this will be treated as an import path "  \
-                               "if provided as a string, with the last part the class to load", env='FASTAPI_AUTH_USER_KLASS')
+                                           "if provided as a string, with the last part the class to load", env='FASTAPI_AUTH_USER_KLASS')
 
     class Config:  # noqa D106
         env_file = '.env'

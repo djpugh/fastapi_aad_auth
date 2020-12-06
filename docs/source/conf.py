@@ -483,10 +483,16 @@ class ConfigDocumenter(ClassDocumenter):
                 config_nested[field_name] = self._process_variables(field.type_, f'{path}.{field_name}')
             else:
                 default_str = ''
-                if field.default and not SecretStr in field.type_.__mro__:
-                    if Path in field.type_.__mro__:
-                        field.default = Path(field.default).relative_to(Path(__file__).parents[3])
-                    default_str = f' [default: ``{field.default}``]'
+                if field.default:
+                    if not SecretStr in field.type_.__mro__:
+                        if Path in field.type_.__mro__:
+                            field.default = Path(field.default).relative_to(Path(field.default).parents[2])
+                        if field_name == 'user_klass':
+                            default_str = f' [default: :class:`{field.default.replace("`", "").replace(":", ".")}`]'
+                        else:
+                            default_str = f' [default: ``{field.default}``]'
+                    else:
+                        default_str = ' [default: ``uuid.uuid4()``]'
                 module = field.outer_type_.__module__
                 if module != 'builtins':
                     if hasattr(field.outer_type_, '__origin__'):
