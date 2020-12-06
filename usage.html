@@ -58,8 +58,8 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Configuration Options" href="config.html" />
-    <link rel="prev" title="fastapi-aad-auth" href="index.html" />
+    <link rel="next" title="Using fastapi_aad_auth" href="advanced.html" />
+    <link rel="prev" title="Configuration Options" href="config.html" />
   
     <link rel="apple-touch-icon" href="_static/images/apple-icon-152x152.png"/>
   
@@ -205,16 +205,23 @@
   <ul class="md-nav__list">
     <li class="md-nav__item">
     
-      <span class="md-nav__link caption"><span class="caption-text">Basic Use</span></span>
+      <span class="md-nav__link caption"><span class="caption-text">Usage</span></span>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="config.html" class="md-nav__link">Configuration Options</a>
+      
     
     </li>
     <li class="md-nav__item">
     
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    <label class="md-nav__link md-nav__link--active" for="__toc"> Usage </label>
+    <label class="md-nav__link md-nav__link--active" for="__toc"> Basic Usage </label>
     
-      <a href="#" class="md-nav__link md-nav__link--active">Usage</a>
+      <a href="#" class="md-nav__link md-nav__link--active">Basic Usage</a>
       
         
 <nav class="md-nav md-nav--secondary">
@@ -233,8 +240,6 @@
         <li class="md-nav__item"><a href="#postman" class="md-nav__link">Postman</a>
         </li></ul>
             </nav>
-        </li>
-        <li class="md-nav__item"><a href="#accessing-user-tokens-view" class="md-nav__link">Accessing User Tokens/View</a>
         </li></ul>
             </nav>
         </li>
@@ -269,13 +274,93 @@
     
     
       <a href="#authenticating-a-client" class="md-nav__link">Authenticating a client</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="#postman" class="md-nav__link">Postman</a>
+      
+    
+    </li></ul>
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="advanced.html" class="md-nav__link">Advanced Usage</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="advanced.html#accessing-user-tokens-view" class="md-nav__link">Accessing User Tokens/View</a>
       
     
     </li>
     <li class="md-nav__item">
     
     
-      <a href="#accessing-user-tokens-view" class="md-nav__link">Accessing User Tokens/View</a>
+      <a href="advanced.html#customising-the-user-model" class="md-nav__link">Customising the User Model</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+      <span class="md-nav__link caption"><span class="caption-text">API</span></span>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="module/fastapi_aad_auth.auth.html" class="md-nav__link">fastapi_aad_auth.auth</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="module/fastapi_aad_auth.config.html" class="md-nav__link">fastapi_aad_auth.config</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="module/fastapi_aad_auth.errors.html" class="md-nav__link">fastapi_aad_auth.errors</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="module/fastapi_aad_auth.oauth.html" class="md-nav__link">fastapi_aad_auth.oauth</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="module/fastapi_aad_auth.oauth._base.html" class="md-nav__link">fastapi_aad_auth.oauth._base</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="module/fastapi_aad_auth.oauth.aad.html" class="md-nav__link">fastapi_aad_auth.oauth.aad</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="module/fastapi_aad_auth.oauth.authenticators.html" class="md-nav__link">fastapi_aad_auth.oauth.authenticators</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="module/fastapi_aad_auth.oauth.authenticators.session.html" class="md-nav__link">fastapi_aad_auth.oauth.authenticators.session</a>
       
     
     </li></ul>
@@ -284,7 +369,37 @@
     <li class="md-nav__item">
     
     
-      <a href="config.html" class="md-nav__link">Configuration Options</a>
+      <a href="module/fastapi_aad_auth.oauth.state.html" class="md-nav__link">fastapi_aad_auth.oauth.state</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="module/fastapi_aad_auth.oauth.validators.html" class="md-nav__link">fastapi_aad_auth.oauth.validators</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="module/fastapi_aad_auth.oauth.validators.session.html" class="md-nav__link">fastapi_aad_auth.oauth.validators.session</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="module/fastapi_aad_auth.oauth.validators.token.html" class="md-nav__link">fastapi_aad_auth.oauth.validators.token</a>
+      
+    
+    </li></ul>
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="module/fastapi_aad_auth.ui.html" class="md-nav__link">fastapi_aad_auth.ui</a>
       
     
     </li>
@@ -298,6 +413,13 @@
     
       <a href="changelog.html" class="md-nav__link">Release Information</a>
       <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="changelog.html#release-0-1-6" class="md-nav__link">0.1.6</a>
+      
+    
+    </li>
     <li class="md-nav__item">
     
     
@@ -358,14 +480,84 @@
     
     
       <a href="development.html#getting-started" class="md-nav__link">Getting started</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="development.html#setup" class="md-nav__link">Setup</a>
       
     
     </li>
     <li class="md-nav__item">
     
     
-      <a href="development.html#contributing" class="md-nav__link">Contributing</a>
+      <a href="development.html#running-tests" class="md-nav__link">Running tests</a>
       
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="development.html#integration-tests" class="md-nav__link">Integration tests</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="development.html#configuring-the-testapp" class="md-nav__link">Configuring the testapp</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="development.html#running-linters" class="md-nav__link">Running linters</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="development.html#building-documentation" class="md-nav__link">Building documentation</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="development.html#release" class="md-nav__link">Release</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="development.html#developing" class="md-nav__link">Developing</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="development.html#submitting-pull-requests" class="md-nav__link">Submitting pull requests</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="development.html#automated-testing" class="md-nav__link">Automated testing</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="development.html#compatibility-requirements" class="md-nav__link">Compatibility Requirements</a>
+      
+    
+    </li></ul>
     
     </li></ul>
     
@@ -397,8 +589,6 @@
         <li class="md-nav__item"><a href="#postman" class="md-nav__link">Postman</a>
         </li></ul>
             </nav>
-        </li>
-        <li class="md-nav__item"><a href="#accessing-user-tokens-view" class="md-nav__link">Accessing User Tokens/View</a>
         </li></ul>
             </nav>
         </li>
@@ -602,16 +792,6 @@ from the certificates and secrets section of the app registration)</p>
 
 
 
-<h2 id="accessing-user-tokens-view">Accessing User Tokens/View<a class="headerlink" href="#accessing-user-tokens-view" title="Permalink to this headline">¶</a></h2>
-<p>There are two routes that are automatically added to this, the <code class="docutils literal notranslate"><span class="pre">/me</span></code> and <code class="docutils literal notranslate"><span class="pre">/me/getToken</span></code> routes. The <code class="docutils literal notranslate"><span class="pre">/me</span></code> route provides a summary of the current user, and enables them to get a bearer token from Azure AD.
-The <code class="docutils literal notranslate"><span class="pre">/me/token</span></code> endpoint provides that same token (for the logged in user) in a JSON object</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>To get the token, this is primarily an interactive method, as it requires caching the token through the UI session based login approach, so it can fail intermittently depending on if the user has logged in recently.</p>
-</div>
-<p>This can be disabled by setting the <code class="docutils literal notranslate"><span class="pre">config.routing.user_path</span></code> to <code class="docutils literal notranslate"><span class="pre">None</span></code> or <code class="docutils literal notranslate"><span class="pre">''</span></code>.</p>
-
-
 
 
           </article>
@@ -623,7 +803,7 @@ The <code class="docutils literal notranslate"><span class="pre">/me/token</span
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
           
-            <a href="index.html" title="fastapi-aad-auth"
+            <a href="config.html" title="Configuration Options"
                class="md-flex md-footer-nav__link md-footer-nav__link--prev"
                rel="prev">
               <div class="md-flex__cell md-flex__cell--shrink">
@@ -632,17 +812,17 @@ The <code class="docutils literal notranslate"><span class="pre">/me/token</span
               <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
                 <span class="md-flex__ellipsis">
                   <span
-                      class="md-footer-nav__direction"> Previous </span> fastapi-aad-auth </span>
+                      class="md-footer-nav__direction"> Previous </span> Configuration Options </span>
               </div>
             </a>
           
           
-            <a href="config.html" title="Configuration Options"
+            <a href="advanced.html" title="Using fastapi_aad_auth"
                class="md-flex md-footer-nav__link md-footer-nav__link--next"
                rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
                 class="md-flex__ellipsis"> <span
-                class="md-footer-nav__direction"> Next </span> Configuration Options </span>
+                class="md-footer-nav__direction"> Next </span> Using fastapi_aad_auth </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink"><i
                 class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
@@ -660,7 +840,7 @@ The <code class="docutils literal notranslate"><span class="pre">/me/token</span
               
           </div>
             Last updated on
-              Nov 30, 2020 (version 0.1.5).
+              Dec 06, 2020 (version 0.1.6).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
