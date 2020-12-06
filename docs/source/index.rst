@@ -44,12 +44,22 @@ The repository is open source (MIT Licensed) on |github| `Github <https://github
 
 
 .. toctree::
-    :caption: Basic Use
+    :caption: Usage
     :maxdepth: 1
     
-    Usage <usage>
     Configuration Options <config>
+    Basic Usage <usage>
+    Advanced Usage <advanced>
 
+.. toctree::
+    :caption: API
+    :maxdepth: 4
+    
+    module/fastapi_aad_auth.auth
+    module/fastapi_aad_auth.config
+    module/fastapi_aad_auth.errors
+    module/fastapi_aad_auth.oauth
+    module/fastapi_aad_auth.ui
 
 .. toctree::
     :caption: Changes and Contributing

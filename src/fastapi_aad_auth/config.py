@@ -1,4 +1,5 @@
 """fastapi_aad_auth configuration options."""
+import importlib
 from typing import Dict, List, Optional
 import uuid
 
@@ -87,16 +88,16 @@ class LoginUIConfig(BaseSettings):
     """
     app_name: str = Field(None, description="Application name to show on the Login UI page", env='APP_NAME')
     template_file: FilePath = Field(resource_filename('fastapi_aad_auth.ui', 'login.html'),
-                                    description="The jinja2 template to use",
+                                    description="The jinja2 template to use for the login screen",
                                     env='FASTAPI_AUTH_LOGIN_TEMPLATE_FILE')
     error_template_file: FilePath = Field(resource_filename('fastapi_aad_auth.ui', 'error.html'),
-                                          description="The jinja2 template to use",
+                                          description="The jinja2 template to use for error information",
                                           env='FASTAPI_AUTH_LOGIN_ERROR_TEMPLATE_FILE')
     user_template_file: FilePath = Field(resource_filename('fastapi_aad_auth.ui', 'user.html'),
-                                         description="The jinja2 template to use",
+                                         description="The jinja2 template to use for the user view",
                                          env='FASTAPI_AUTH_USER_TEMPLATE_FILE')
     static_directory: DirectoryPath = Field(resource_filename('fastapi_aad_auth.ui', 'static'),
-                                            description="Static path for the Login UI",
+                                            description="Static path for the UI components",
                                             env='FASTAPI_AUTH_LOGIN_STATIC_DIR')
     static_path: str = Field('/static-login',
                              description="Path to mount the login static dir in",
@@ -184,13 +185,17 @@ class SessionConfig(BaseSettings):
 
 @expand_doc
 class Config(BaseSettings):
-    """The overall configuraton for the AAD authentication."""
+    """The overall configuration for the AAD authentication."""
+
     enabled: bool = Field(True, description="Enable authentication", env='FASTAPI_AUTH_ENABLED')
     aad: AADConfig = Field(None, description="The AAD configuration to use")
     auth_session: AuthSessionConfig = Field(None, description="The configuration for encoding the authentication information in the session")
     routing: RoutingConfig = Field(None, description="Configuration for routing")
     session: SessionConfig = Field(None, description="Configuration for the session middleware")
     login_ui: LoginUIConfig = Field(None, description="Login UI Configuration")
+    user_klass: type = Field('fastapi_aad_auth.oauth.state:User',
+                             description="User class to use within the AADOAuthBackend, this will be treated as an import path "
+                             "if provided as a string, with the last part the class to load", env='FASTAPI_AUTH_USER_KLASS')
 
     class Config:  # noqa D106
         env_file = '.env'
@@ -223,6 +228,19 @@ class Config(BaseSettings):
     def _validate_login_ui(cls, value):
         if value is None:
             value = LoginUIConfig(_env_file=cls.Config.env_file)
+        return value
+
+    @validator('user_klass')
+    def _validate_klass(cls, value):
+        if isinstance(value, str):
+            if ':' in value:
+                module_name, klass_name = value.split(':')
+            else:
+                split_path = value.split('.')
+                module_name = '.'.join(split_path[:-1])
+                klass_name = split_path[-1]
+            module = importlib.import_module(module_name)
+            value = getattr(module, klass_name)
         return value
 
     _validate_enabled = validator('enabled', allow_reuse=True)(bool_from_env)
