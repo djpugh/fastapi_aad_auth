@@ -230,7 +230,7 @@ class Config(BaseSettings):
             value = LoginUIConfig(_env_file=cls.Config.env_file)
         return value
 
-    @validator('user_klass')
+    @validator('user_klass', pre=True, always=True)
     def _validate_klass(cls, value):
         if isinstance(value, str):
             if ':' in value:
