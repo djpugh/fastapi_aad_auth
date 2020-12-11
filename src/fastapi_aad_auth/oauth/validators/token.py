@@ -237,7 +237,7 @@ class AADTokenValidator(TokenValidator):
             username_key = 'unique_name'
         if 'name' not in claims and 'appid' in claims:
             # This is an application/service principal
-            return self._user_klass(name=claims['appid'], email='', username=claims['appid'], groups=claims.get('groups', []), roles=claims.get('roles', []))
+            return self._user_klass(name=claims['appid'], email='', username=claims['appid'], groups=claims.get('groups', None), roles=claims.get('roles', None))
 
         else:
-            return self._user_klass(name=claims['name'], email=claims[username_key], username=claims[username_key], groups=claims.get('groups', []), roles=claims.get('roles', []))
+            return self._user_klass(name=claims['name'], email=claims[username_key], username=claims[username_key], groups=claims.get('groups', None), roles=claims.get('roles', None))
