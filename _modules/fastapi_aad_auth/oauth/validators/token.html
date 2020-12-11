@@ -386,6 +386,13 @@
     <li class="md-nav__item">
     
     
+      <a href="../../../../changelog.html#release-0-1-7" class="md-nav__link">0.1.7</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
       <a href="../../../../changelog.html#release-0-1-6" class="md-nav__link">0.1.6</a>
       
     
@@ -798,10 +805,10 @@
             <span class="n">username_key</span> <span class="o">=</span> <span class="s1">'unique_name'</span>
         <span class="k">if</span> <span class="s1">'name'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">claims</span> <span class="ow">and</span> <span class="s1">'appid'</span> <span class="ow">in</span> <span class="n">claims</span><span class="p">:</span>
             <span class="c1"># This is an application/service principal</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_klass</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">claims</span><span class="p">[</span><span class="s1">'appid'</span><span class="p">],</span> <span class="n">email</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">claims</span><span class="p">[</span><span class="s1">'appid'</span><span class="p">],</span> <span class="n">groups</span><span class="o">=</span><span class="n">claims</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'groups'</span><span class="p">,</span> <span class="p">[]),</span> <span class="n">roles</span><span class="o">=</span><span class="n">claims</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'roles'</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_klass</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">claims</span><span class="p">[</span><span class="s1">'appid'</span><span class="p">],</span> <span class="n">email</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">claims</span><span class="p">[</span><span class="s1">'appid'</span><span class="p">],</span> <span class="n">groups</span><span class="o">=</span><span class="n">claims</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'groups'</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">roles</span><span class="o">=</span><span class="n">claims</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'roles'</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_klass</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">claims</span><span class="p">[</span><span class="s1">'name'</span><span class="p">],</span> <span class="n">email</span><span class="o">=</span><span class="n">claims</span><span class="p">[</span><span class="n">username_key</span><span class="p">],</span> <span class="n">username</span><span class="o">=</span><span class="n">claims</span><span class="p">[</span><span class="n">username_key</span><span class="p">],</span> <span class="n">groups</span><span class="o">=</span><span class="n">claims</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'groups'</span><span class="p">,</span> <span class="p">[]),</span> <span class="n">roles</span><span class="o">=</span><span class="n">claims</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'roles'</span><span class="p">,</span> <span class="p">[]))</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_klass</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">claims</span><span class="p">[</span><span class="s1">'name'</span><span class="p">],</span> <span class="n">email</span><span class="o">=</span><span class="n">claims</span><span class="p">[</span><span class="n">username_key</span><span class="p">],</span> <span class="n">username</span><span class="o">=</span><span class="n">claims</span><span class="p">[</span><span class="n">username_key</span><span class="p">],</span> <span class="n">groups</span><span class="o">=</span><span class="n">claims</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'groups'</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">roles</span><span class="o">=</span><span class="n">claims</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'roles'</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span></div>
 </pre></div>
 
           </article>
@@ -826,7 +833,7 @@
               
           </div>
             Last updated on
-              Dec 06, 2020 (version 0.1.6).
+              Dec 11, 2020 (version 0.1.7).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

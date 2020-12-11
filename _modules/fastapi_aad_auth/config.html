@@ -386,6 +386,13 @@
     <li class="md-nav__item">
     
     
+      <a href="../../changelog.html#release-0-1-7" class="md-nav__link">0.1.7</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
       <a href="../../changelog.html#release-0-1-6" class="md-nav__link">0.1.6</a>
       
     
@@ -791,7 +798,7 @@
             <span class="n">value</span> <span class="o">=</span> <span class="n">LoginUIConfig</span><span class="p">(</span><span class="n">_env_file</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">env_file</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">value</span>
 
-    <span class="nd">@validator</span><span class="p">(</span><span class="s1">'user_klass'</span><span class="p">)</span>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">'user_klass'</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">always</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_validate_klass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">if</span> <span class="s1">':'</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
@@ -829,7 +836,7 @@
               
           </div>
             Last updated on
-              Dec 06, 2020 (version 0.1.6).
+              Dec 11, 2020 (version 0.1.7).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

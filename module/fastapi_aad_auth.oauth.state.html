@@ -400,6 +400,13 @@
     <li class="md-nav__item">
     
     
+      <a href="../changelog.html#release-0-1-7" class="md-nav__link">0.1.7</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
       <a href="../changelog.html#release-0-1-6" class="md-nav__link">0.1.6</a>
       
     
@@ -583,7 +590,7 @@
 </dd></dl>
 <dl class="py class">
 <dt id="fastapi_aad_auth.oauth.state.AuthenticationState">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.oauth.state.</code><code class="sig-name descname">AuthenticationState</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">session_state: str = '892a7669-84e3-4904-9141-135d5908747d'</em>, <em class="sig-param">state: fastapi_aad_auth.oauth.state.AuthenticationOptions = &lt;AuthenticationOptions.unauthenticated: 0&gt;</em>, <em class="sig-param">user: fastapi_aad_auth.oauth.state.User = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/oauth/state.html#AuthenticationState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.oauth.state.AuthenticationState" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.oauth.state.</code><code class="sig-name descname">AuthenticationState</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">session_state: str = '68162d5f-6821-427f-895a-55efe83752d0'</em>, <em class="sig-param">state: fastapi_aad_auth.oauth.state.AuthenticationOptions = &lt;AuthenticationOptions.unauthenticated: 0&gt;</em>, <em class="sig-param">user: fastapi_aad_auth.oauth.state.User = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/oauth/state.html#AuthenticationState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.oauth.state.AuthenticationState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Authentication State.</p>
 <p>Create a new model by parsing and validating input data from keyword arguments.</p>
 <p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p>
@@ -653,7 +660,7 @@
 </dd></dl>
 <dl class="py class">
 <dt id="fastapi_aad_auth.oauth.state.User">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.oauth.state.</code><code class="sig-name descname">User</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">email</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">roles</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">groups</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/oauth/state.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.oauth.state.User" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.oauth.state.</code><code class="sig-name descname">User</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">email</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">roles</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groups</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/oauth/state.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.oauth.state.User" title="Permalink to this definition">¶</a></dt>
 <dd><p>User Model.</p>
 <p>Create a new model by parsing and validating input data from keyword arguments.</p>
 <p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p>
@@ -712,7 +719,7 @@
               
           </div>
             Last updated on
-              Dec 06, 2020 (version 0.1.6).
+              Dec 11, 2020 (version 0.1.7).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
