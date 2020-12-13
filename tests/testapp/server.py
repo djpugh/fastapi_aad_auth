@@ -10,14 +10,14 @@ from starlette.routing import request_response, Route
 import uvicorn
 
 
-from fastapi_aad_auth import __version__, AADAuth, AuthenticationState
+from fastapi_aad_auth import __version__, Authenticator, AuthenticationState
 
-auth_provider = AADAuth()
+auth_provider = Authenticator()
 
 router = APIRouter()
 
 @router.get('/hello')
-async def hello_world(auth_state:AuthenticationState=Depends(auth_provider.api_auth_scheme)):
+async def hello_world(auth_state:AuthenticationState=Depends(auth_provider.auth_backend)):
     print(auth_state)
     return {'hello': 'world'}
 
@@ -50,7 +50,7 @@ app = FastAPI(title='fastapi_aad_auth test app',
               version=__version__,
               openapi_url=f"/api/v{API_VERSION}/openapi.json",
               docs_url='/api/docs',
-              swagger_ui_init_oauth=auth_provider.api_auth_scheme.init_oauth,
+              swagger_ui_init_oauth=auth_provider._providers[0].validators[0].init_oauth,
               redoc_url='/api/redoc',
               routes=routes)
 

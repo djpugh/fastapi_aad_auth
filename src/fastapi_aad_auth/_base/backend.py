@@ -6,25 +6,24 @@ from typing import Optional
 from starlette.authentication import AuthCredentials, AuthenticationBackend, UnauthenticatedUser
 from starlette.requests import Request
 
-from fastapi_aad_auth.oauth.state import AuthenticationState
+from fastapi_aad_auth._base.state import AuthenticationState
+from fastapi_aad_auth._base.validators import TokenValidator
+from fastapi_aad_auth.mixins import LoggingMixin
 
-logger = logging.getLogger(__name__)
 
-
-class BaseOAuthBackend(AuthenticationBackend):
+class BaseOAuthBackend(LoggingMixin, AuthenticationBackend):
     """Base OAuthBackend with token and session validators."""
 
-    def __init__(self, token_validator, session_validator=None, authenticator=None):
-        """Initialise the validators and authenticator."""
-        self.validators = []
-        if session_validator:
-            self.validators.append(session_validator)
-        self.validators.append(token_validator)
-        self._token_validator = token_validator
-        self.authenticator = authenticator
+    def __init__(self, validators):
+        """Initialise the validators"""
+        self.validators = validators[:]
+        super().__init__()
 
     async def authenticate(self, request):
-        """Authenticate a request."""
+        """Authenticate a request.
+        
+        Required by starlette authentication middleware
+        """
         state = self.check(request)
         if state is None:
             return AuthCredentials([]), UnauthenticatedUser()
@@ -43,17 +42,12 @@ class BaseOAuthBackend(AuthenticationBackend):
         """Check/validate a request."""
         state = None
         while state is None:
-            validator = next(self.iter_validators())
+            validator = next(self._iter_validators())
             state = validator.check(request)
-            logger.debug(f'Authentication state {state} from validator {validator}')
+            self.logger.debug(f'Authentication state {state} from validator {validator}')
         return state
 
-    def iter_validators(self):
+    def _iter_validators(self):
         """Iterate over authentication validators."""
         for validator in self.validators:
             yield validator
-
-    @property
-    def api_auth_scheme(self):
-        """Get the API Authentication Schema."""
-        return self._token_validator
