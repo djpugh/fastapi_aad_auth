@@ -7,9 +7,11 @@ from fastapi_aad_auth.mixins import LoggingMixin, NotAuthenticatedMixin
 
 
 class Validator(NotAuthenticatedMixin, LoggingMixin):
+    """Base Validator Class."""
 
     @abstractmethod
     def check(self, request: Request) -> AuthenticationState:
+        """Check a request."""
         raise NotImplementedError('Implement in subclass')
 
     async def __call__(self, request: Request) -> AuthenticationState:  # type: ignore

@@ -18,7 +18,7 @@ Customising the User Model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The authentication state user can be processed within the application methods - the ``Depends`` part of the api route returns an
-:class:`~fastapi_aad_auth.oauth.state.AuthenticationState` object - ``auth_state`` in the ``testapp`` (see :ref:`testing`).
+:class:`~fastapi_aad_auth._base.state.AuthenticationState` object - ``auth_state`` in the ``testapp`` (see :ref:`testing`).
 
 .. literalinclude:: ../../tests/testapp/server.py
     :language: python
@@ -28,26 +28,25 @@ The authentication state user can be processed within the application methods - 
 
 The associated user is then available at ``auth_state.user``
 
-The :class:`~fastapi_aad_auth.oauth.aad.AADOAuthBackend` object takes a ``user_klass`` argument:
+The :class:`~fastapi_aad_auth.auth.Authenticator` object takes a ``user_klass`` argument:
 
-.. literalinclude:: ../../src/fastapi_aad_auth/oauth/aad.py
+.. literalinclude:: ../../src/fastapi_aad_auth/auth.py
     :language: python
     :linenos:
-    :start-at: class AADOAuthBackend
+    :start-at: class Authenticator
     :end-before: """Initialise
 
 which defaults to the really basic :class:`~fastapi_aad_auth.oauth.state.User` class, but any object with the same 
 interface should work, so you can add e.g. database calls etc. to validate/persist/check the user and any other
 desired behaviours.
 
-You can customise this when initialising the :class:`~fastapi_aad_auth.auth.AADAuth` object by setting
+You can customise this when initialising the :class:`~fastapi_aad_auth.auth.Authenticator` object by setting
 the :class:`~fastapi_aad_auth.config.Config` ``user_klass`` variable (this can also be done by the
-associated environment variable)::
+associated environment variable, or in the argument, which overrides all other settings)::
 
-    from fastapi_aad_auth import AADAuth, Config
+    from fastapi_aad_auth import Authenticator, Config
 
     config = Config()
-    config.user_klass = MyUserClass
 
-    auth = AADAuth(config)
+    auth = Authenticator(config, user_klass=MyUserClass)
 

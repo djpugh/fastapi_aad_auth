@@ -1,28 +1,27 @@
 """Base OAuthBackend with token and session validators."""
-
-import logging
 from typing import Optional
 
-from fastapi.security import OAuth2, OAuth2AuthorizationCodeBearer
+from fastapi.security import OAuth2AuthorizationCodeBearer
 from starlette.authentication import AuthCredentials, AuthenticationBackend, UnauthenticatedUser
 from starlette.requests import Request
 
 from fastapi_aad_auth._base.state import AuthenticationState
 from fastapi_aad_auth._base.validators import SessionValidator, TokenValidator
 from fastapi_aad_auth.mixins import LoggingMixin, NotAuthenticatedMixin
+from fastapi_aad_auth.utilities import deprecate
 
 
 class BaseOAuthBackend(NotAuthenticatedMixin, LoggingMixin, AuthenticationBackend):
     """Base OAuthBackend with token and session validators."""
 
     def __init__(self, validators):
-        """Initialise the validators"""
+        """Initialise the validators."""
         super().__init__()
         self.validators = validators[:]
 
     async def authenticate(self, request):
         """Authenticate a request.
-        
+
         Required by starlette authentication middleware
         """
         state = await self.check(request, allow_session=True)
@@ -60,24 +59,32 @@ class BaseOAuthBackend(NotAuthenticatedMixin, LoggingMixin, AuthenticationBacken
             yield validator
 
     def requires_auth(self, allow_session=False):
-
+        """Require authentication, use with fastapi Depends."""
         # This is a bit horrible, but is needed for fastapi to get this into OpenAPI (or similar) - it needs to be an OAuth2 object
         # We create this here "dynamically" for each endpoint, as we allow customisation on whether a session is permissible
 
         class OAuthValidator(OAuth2AuthorizationCodeBearer):
-            
+            """OAuthValidator for API Auth."""
 
             def __init__(self_):
+                """Initialise the validator."""
                 token_validators = [u for u in self.validators if isinstance(u, TokenValidator)]
                 super().__init__(authorizationUrl=token_validators[0].model.flows.authorizationCode.authorizationUrl,
-                                tokenUrl=token_validators[0].model.flows.authorizationCode.tokenUrl,
-                                scopes=token_validators[0].model.flows.authorizationCode.scopes,
-                                refreshUrl=token_validators[0].model.flows.authorizationCode.refreshUrl)
-        
-            async def __call__(self_,request: Request):
+                                 tokenUrl=token_validators[0].model.flows.authorizationCode.tokenUrl,
+                                 scopes=token_validators[0].model.flows.authorizationCode.scopes,
+                                 refreshUrl=token_validators[0].model.flows.authorizationCode.refreshUrl)
+
+            async def __call__(self_, request: Request):
+                """Validate a request."""
                 state = await self.check(request, allow_session)
                 if state is None or not state.is_authenticated():
                     raise self.not_authenticated
                 return state
-        
+
         return OAuthValidator()
+
+    @property
+    @deprecate('0.2.0', replaced_by=f'{__module__}:BaseOAuthBackend.requires_auth')
+    def api_auth_scheme(self):
+        """Get the API Authentication Schema."""
+        return self.requires_auth()

@@ -1,4 +1,8 @@
 """Utilities."""
+from fastapi_aad_auth.utilities import logging  # noqa: F401
+from fastapi_aad_auth.utilities import urls  # noqa: F401
+from fastapi_aad_auth.utilities.deprecate import DeprecatableFieldsMixin, deprecate, deprecate_module, DeprecatedField, is_deprecated  # noqa: F401
+
 
 def bool_from_env(env_value):
     """Convert environment variable to boolean."""

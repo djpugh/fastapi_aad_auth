@@ -1,7 +1,4 @@
 """Session based validator for interactive (UI) sessions."""
-
-import logging
-
 from itsdangerous import URLSafeSerializer
 
 from fastapi_aad_auth._base.state import AuthenticationState
@@ -9,7 +6,6 @@ from fastapi_aad_auth._base.validators import Validator
 
 
 REDIRECT_KEY = 'requested'
-
 
 
 class SessionValidator(Validator):

@@ -1,7 +1,6 @@
 """Authentication State Handler."""
 from enum import Enum
 import json
-import logging
 from typing import List, Optional
 import uuid
 
@@ -10,8 +9,7 @@ from itsdangerous.exc import BadSignature
 from pydantic import BaseModel, root_validator
 from starlette.authentication import AuthCredentials, AuthenticationError, SimpleUser, UnauthenticatedUser
 
-
-logger = logging.getLogger(__name__)
+from fastapi_aad_auth.mixins import LoggingMixin
 
 
 SESSION_STORE_KEY = 'auth'
@@ -38,11 +36,15 @@ class User(BaseModel):
         return []
 
 
-class AuthenticationState(BaseModel):
+class AuthenticationState(LoggingMixin, BaseModel):
     """Authentication State."""
     session_state: str = str(uuid.uuid4())
     state: AuthenticationOptions = AuthenticationOptions.unauthenticated
     user: Optional[User] = None
+    _logger = None
+
+    class Config:  # noqa: D106
+        underscore_attrs_are_private = True
 
     @root_validator(pre=True)
     def _validate_user(cls, values):
@@ -51,7 +53,7 @@ class AuthenticationState(BaseModel):
         return values
 
     def check_session_state(self, session_state):
-        """Check state againste session state."""
+        """Check state against session state."""
         if session_state != self.session_state:
             raise AuthenticationError("Session states do not match")
         return True

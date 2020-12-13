@@ -1,15 +1,8 @@
 """Base validator for token based authentication."""
-import logging
-from typing import List, Optional
-
-from authlib.jose import errors as jwt_errors, jwk, jwt
-from authlib.jose.util import extract_header
-from cryptography.hazmat.primitives import serialization
-from fastapi import HTTPException, status
+from authlib.jose import errors as jwt_errors
 from fastapi.security import OAuth2AuthorizationCodeBearer
 from fastapi.security.utils import get_authorization_scheme_param
 from pydantic import BaseModel
-import requests
 from starlette.middleware.authentication import AuthenticationError
 from starlette.requests import Request
 
@@ -50,7 +43,7 @@ class TokenValidator(Validator, OAuth2AuthorizationCodeBearer):
         self._use_pkce = use_pkce
         self._user_klass = user_klass
 
-    def check(self, request):
+    def check(self, request: Request):
         """Check the authentication from the request."""
         token = self.get_token(request)
         if token is None:
@@ -59,7 +52,7 @@ class TokenValidator(Validator, OAuth2AuthorizationCodeBearer):
         user = self._get_user_from_claims(claims)
         return AuthenticationState.authenticate_as(user, None, None)
 
-    def get_token(self, request):
+    def get_token(self, request: Request):
         """Get the token from the request."""
         authorization = request.headers.get("Authorization")
         scheme, param = get_authorization_scheme_param(authorization)

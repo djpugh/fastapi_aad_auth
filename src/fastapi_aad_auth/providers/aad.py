@@ -1,31 +1,29 @@
 """AAD OAuth handlers."""
 
 import base64
-import logging
 from typing import List, Optional
 
-import msal
 from authlib.jose import errors as jwt_errors, jwk, jwt
 from authlib.jose.util import extract_header
 from cryptography.hazmat.primitives import serialization
-from fastapi import HTTPException, status
-from fastapi.security import OAuth2AuthorizationCodeBearer
-from fastapi.security.utils import get_authorization_scheme_param
+import msal
 from pkg_resources import resource_string
-from pydantic import BaseSettings, Field, HttpUrl, PrivateAttr, SecretStr, validator
+from pydantic import BaseSettings as _BaseSettings, Field, HttpUrl, PrivateAttr, SecretStr, validator
 import requests
 from starlette.middleware.authentication import AuthenticationError
 from starlette.requests import Request
-from starlette.responses import RedirectResponse
-from starlette.status import HTTP_401_UNAUTHORIZED
 
-from fastapi_aad_auth import urls
 from fastapi_aad_auth._base.authenticators import SessionAuthenticator
 from fastapi_aad_auth._base.provider import Provider
+from fastapi_aad_auth._base.state import User
 from fastapi_aad_auth._base.validators import SessionValidator, TokenValidator
-from fastapi_aad_auth._base.state import AuthenticationState, User
 from fastapi_aad_auth.errors import ConfigurationError
-from fastapi_aad_auth.utilities import bool_from_env, expand_doc, list_from_env
+from fastapi_aad_auth.utilities import bool_from_env,  DeprecatableFieldsMixin, expand_doc, is_deprecated, list_from_env, urls
+
+
+class BaseSettings(DeprecatableFieldsMixin, _BaseSettings):
+    """Base Settings with Deprecatable Fields."""
+    pass
 
 
 class AADSessionAuthenticator(SessionAuthenticator):
@@ -69,7 +67,7 @@ class AADSessionAuthenticator(SessionAuthenticator):
                 client_id,
                 authority=self._authority)
 
-    def _build_redirect_uri(self, request):
+    def _build_redirect_uri(self, request: Request):
         if self._redirect_uri:
             redirect_uri = self._redirect_uri
         else:
@@ -80,7 +78,7 @@ class AADSessionAuthenticator(SessionAuthenticator):
             redirect_uri = f'{request.url.scheme}://{request.url.hostname}{port}{self._redirect_path}'
         return redirect_uri
 
-    def _process_code(self, request, auth_state, code):
+    def _process_code(self, request: Request, auth_state, code):
         # Let's build up the redirect_uri
         result = self.msal_application.acquire_token_by_authorization_code(code, scopes=[],
                                                                            redirect_uri=self._build_redirect_uri(request))
@@ -234,7 +232,6 @@ class AADProvider(Provider):
             session_validator: SessionValidator,
             client_id: str,
             tenant_id: str,
-            redirect_path: str = '/login/oauth/redirect',
             prompt: Optional[str] = None,
             client_secret: Optional[str] = None,
             scopes: Optional[List[str]] = None,
@@ -254,7 +251,6 @@ class AADProvider(Provider):
             tenant_id: Tenant ID to connect to for Azure App Registration
 
         Keyword Args:
-            redirect_path: Path to redirect to on return
             prompt: Prompt options for Azure AD
             client_secret: Client secret value
             scopes: Additional scopes requested
@@ -277,7 +273,7 @@ class AADProvider(Provider):
         super().__init__(validators=[token_validator], authenticator=session_authenticator, enabled=enabled, oauth_base_route=oauth_base_route)
 
     @classmethod
-    def from_config(cls, session_validator, config: 'Config', provider_config: 'AADConfig', user_klass: Optional[type] = None, oauth_base_route: str = '/oauth'):
+    def from_config(cls, session_validator, config, provider_config, user_klass: Optional[type] = None):
         """Load the auth backend from a config.
 
         Args:
@@ -290,18 +286,24 @@ class AADProvider(Provider):
         client_secret = provider_config.client_secret
         if client_secret is not None:
             client_secret = client_secret.get_secret_value()  # type: ignore
-        
+
         if user_klass is None:
             user_klass = config.user_klass
-        logging.warning(f'*******{user_klass}')
 
-        return cls(session_validator=session_validator, client_id=provider_config.client_id.get_secret_value(),
-                   tenant_id=provider_config.tenant_id.get_secret_value(),
-                   client_secret=client_secret, enabled=config.enabled,   # type: ignore
-                   scopes=provider_config.scopes, client_app_ids=provider_config.client_app_ids,
-                   strict_token=provider_config.strict, api_audience=provider_config.api_audience,
-                   prompt=provider_config.prompt, domain_hint=provider_config.domain_hint,
-                   redirect_uri=provider_config.redirect_uri, user_klass=user_klass, oauth_base_route=oauth_base_route)
+        obj = cls(session_validator=session_validator, client_id=provider_config.client_id.get_secret_value(),
+                  tenant_id=provider_config.tenant_id.get_secret_value(),
+                  client_secret=client_secret, enabled=config.enabled,   # type: ignore
+                  scopes=provider_config.scopes, client_app_ids=provider_config.client_app_ids,
+                  strict_token=provider_config.strict, api_audience=provider_config.api_audience,
+                  prompt=provider_config.prompt, domain_hint=provider_config.domain_hint,
+                  redirect_uri=provider_config.redirect_uri, user_klass=user_klass, oauth_base_route=config.routing.oauth_base_route)
+        # We need to override the login and redirect etc until it is deprecated
+        if hasattr(config.routing, 'login_path') and config.routing.login_path and not is_deprecated(config.routing.__fields__['login_path']):
+            obj._login_url = config.routing.login_path
+        if hasattr(config.routing, 'login_redirect_path') and config.routing.login_redirect_path and not is_deprecated(config.routing.__fields__['login_redirect_path']):
+            obj._redirect_url = config.routing.login_redirect_path
+        obj.authenticator._redirect_path = obj.redirect_url
+        return obj
 
     def get_login_button(self, post_redirect='/'):
         """Get the AAD Login Button."""
@@ -339,7 +341,6 @@ class AADConfig(BaseSettings):
 
     class Config:  # noqa D106
         env_file = '.env'
-        
 
     _validate_strict = validator('strict', allow_reuse=True)(bool_from_env)
     _validate_client_app_ids = validator('client_app_ids', allow_reuse=True)(list_from_env)

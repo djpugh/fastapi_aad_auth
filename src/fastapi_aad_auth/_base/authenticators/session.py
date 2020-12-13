@@ -1,14 +1,8 @@
 """Base Session Authenticator for interactive (UI) sessions."""
-import base64
-import logging
-
-import msal
-from pkg_resources import resource_string
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
 from fastapi_aad_auth._base.state import AuthenticationState
-from fastapi_aad_auth.errors import ConfigurationError
 from fastapi_aad_auth.mixins import LoggingMixin
 
 
@@ -106,4 +100,3 @@ class SessionAuthenticator(LoggingMixin):
     def set_post_auth_redirect(self, *args, **kwargs):
         """Set post-authentication redirects."""
         self._session_validator.set_post_auth_redirect(*args, **kwargs)
-

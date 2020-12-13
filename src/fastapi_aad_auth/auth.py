@@ -1,7 +1,7 @@
-"""Authenticator Class"""
+"""Authenticator Class."""
 from functools import wraps
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from fastapi import Depends, FastAPI
 from starlette.authentication import requires
@@ -14,12 +14,12 @@ from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
 from fastapi_aad_auth._base.backend import BaseOAuthBackend
-from fastapi_aad_auth._base.provider import Provider
 from fastapi_aad_auth._base.state import AuthenticationState
 from fastapi_aad_auth._base.validators import SessionValidator
 from fastapi_aad_auth.config import Config
 from fastapi_aad_auth.errors import base_error_handler, ConfigurationError
 from fastapi_aad_auth.mixins import LoggingMixin
+from fastapi_aad_auth.utilities import deprecate
 
 
 _BASE_ROUTES = ['openapi', 'swagger_ui_html', 'swagger_ui_redirect', 'redoc_html']
@@ -31,7 +31,7 @@ class Authenticator(LoggingMixin):
     Creates the key components based on the provided configurations
     """
 
-    def __init__(self, config: Config = None, add_to_base_routes: bool = True, base_context: Dict[str, Any] = None):
+    def __init__(self, config: Config = None, add_to_base_routes: bool = True, base_context: Dict[str, Any] = None, user_klass: Optional[type] = None):
         """Initialise the AAD config based on the provided configuration.
 
         Keyword Args:
@@ -41,6 +41,8 @@ class Authenticator(LoggingMixin):
         super().__init__()
         if config is None:
             config = Config()
+        if user_klass is not None:
+            config.user_klass = user_klass
         self.config = config
         if base_context is None:
             base_context = {}
@@ -63,7 +65,7 @@ class Authenticator(LoggingMixin):
         # Lets setup the oauth backend
 
     def _init_providers(self):
-        return [u._provider_klass.from_config(session_validator=self._session_validator, config=self.config, provider_config=u, oauth_base_route=self.config.routing.oauth_base_route) for u in self.config.providers]
+        return [u._provider_klass.from_config(session_validator=self._session_validator, config=self.config, provider_config=u) for u in self.config.providers]
 
     def _init_auth_backend(self):
         validators = [self._session_validator]
@@ -76,7 +78,6 @@ class Authenticator(LoggingMixin):
         user_template_path = Path(self.config.login_ui.user_template_file)
         login_templates = Jinja2Templates(directory=str(login_template_path.parent))
         user_templates = Jinja2Templates(directory=str(user_template_path.parent))
-
 
         async def login(request: Request, *args, **kwargs):
             context = self._base_context.copy()  # type: ignore
@@ -130,7 +131,7 @@ class Authenticator(LoggingMixin):
                 return RedirectResponse(f'{self.config.routing.landing_path}?redirect=/me/token')
 
             routes += [Route(self.config.routing.user_path, endpoint=get_user, methods=['GET'], name='user'),
-                    Route(f'{self.config.routing.user_path}/token', endpoint=get_token, methods=['GET'], name='get-token')]
+                       Route(f'{self.config.routing.user_path}/token', endpoint=get_token, methods=['GET'], name='get-token')]
         return routes
 
     def _init_auth_routes(self):
@@ -146,6 +147,7 @@ class Authenticator(LoggingMixin):
         routes = [Route(self.config.routing.logout_path, endpoint=logout, methods=['GET'], name='logout')]
         for provider in self._providers:
             routes += provider.get_routes(noauth_redirect=self.config.routing.home_path)
+        # We have a deprecated behaviour here
         return routes
 
     def __force_authenticate(self, request: Request):
@@ -163,7 +165,7 @@ class Authenticator(LoggingMixin):
             except ValueError:
                 pass
         return access_token
-    
+
     def __get_user_from_request(self, request: Request):
         if hasattr(request.user, 'username'):
             user = request.user
@@ -236,7 +238,7 @@ class Authenticator(LoggingMixin):
         """
 
         def on_auth_error(request: Request, exc: Exception):
-            logger.exception(f'Error {exc} for request {request}')
+            self.logger.exception(f'Error {exc} for request {request}')
             self._session_validator.set_post_auth_redirect(request, request.url.path)
             return RedirectResponse(self.config.routing.landing_path)
 
@@ -273,3 +275,17 @@ class Authenticator(LoggingMixin):
         app.routes.extend(self._auth_routes)
         # TODO: select a specific provider to use here
         app.swagger_ui_init_oauth = self._providers[0].validators[0].init_oauth
+
+
+_DEPRECATED_VERSION = '0.2.0'
+
+
+@deprecate(_DEPRECATED_VERSION, replaced_by=f'{Authenticator.__module__}:{Authenticator.__name__}')
+class AADAuth(Authenticator):   # noqa: D101
+    __doc__ = Authenticator.__doc__
+
+    @property
+    @deprecate(_DEPRECATED_VERSION, replaced_by=f'{Authenticator.__module__}:{Authenticator.__name__}.auth_backend.requires_auth')
+    def api_auth_scheme(self):
+        """Get the API Authentication Schema."""
+        return self.auth_backend.requires_auth()

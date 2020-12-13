@@ -2,7 +2,7 @@
 from starlette.responses import JSONResponse, Response
 
 
-from fastapi_aad_auth.logging import getLogger
+from fastapi_aad_auth.utilities.logging import getLogger
 
 logger = getLogger(__name__)
 
