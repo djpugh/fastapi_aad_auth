@@ -16,8 +16,10 @@ auth_provider = Authenticator()
 
 router = APIRouter()
 
+print(auth_provider.auth_backend.check)
+
 @router.get('/hello')
-async def hello_world(auth_state:AuthenticationState=Depends(auth_provider.auth_backend)):
+async def hello_world(auth_state: AuthenticationState = Depends(auth_provider.auth_backend.requires_auth(allow_session=True ))):
     print(auth_state)
     return {'hello': 'world'}
 
@@ -43,14 +45,12 @@ routes = [
     Route("/", endpoint=homepage),
     Route("/test", endpoint=test)
 ]
-              
 
 app = FastAPI(title='fastapi_aad_auth test app',
               description='Testapp for Adding Azure Active Directory Authentication for FastAPI',
               version=__version__,
               openapi_url=f"/api/v{API_VERSION}/openapi.json",
               docs_url='/api/docs',
-              swagger_ui_init_oauth=auth_provider._providers[0].validators[0].init_oauth,
               redoc_url='/api/redoc',
               routes=routes)
 

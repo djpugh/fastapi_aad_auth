@@ -13,11 +13,11 @@ from fastapi_aad_auth import urls
 class Provider(LoggingMixin):
     name: str = None
 
-    def __init__ (self, validators: List[Validator], authenticator: SessionAuthenticator, enabled: bool = True, oauth_login_base: str = '/oauth'):
+    def __init__ (self, validators: List[Validator], authenticator: SessionAuthenticator, enabled: bool = True, oauth_base_route: str = '/oauth'):
         self.validators = validators
         self.authenticator = authenticator
         self.enabled = enabled
-        self.oauth_login_base = oauth_login_base
+        self.oauth_base_route = oauth_base_route
         self._login_url = None
         self._redirect_url = None
         super().__init__()
@@ -48,17 +48,20 @@ class Provider(LoggingMixin):
                         endpoint=login_callback, methods=['GET'], name=f'oauth_login_{self.name}_callback')]
         return routes
 
-    def _build_oauth_url(self, oauth_login_base, route):
-        return urls.append(oauth_login_base, self.name, route)
+    def _build_oauth_url(self, oauth_base_route, route):
+        return urls.append(oauth_base_route, self.name, route)
+    
+    def logout(self, request):
+        pass
 
     @property
     def login_url(self):
         if self._login_url is None:
-            self._login_url = self._build_oauth_url(self.oauth_login_base, 'login')
+            self._login_url = self._build_oauth_url(self.oauth_base_route, 'login')
         return self._login_url
 
     @property
     def redirect_url(self):
         if self._redirect_url is None:
-            self._redirect_url = self._build_oauth_url(self.oauth_login_base, 'redirect')
+            self._redirect_url = self._build_oauth_url(self.oauth_base_route, 'redirect')
         return self._redirect_url

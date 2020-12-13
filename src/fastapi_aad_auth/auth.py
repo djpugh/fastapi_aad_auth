@@ -18,7 +18,7 @@ from fastapi_aad_auth._base.provider import Provider
 from fastapi_aad_auth._base.state import AuthenticationState
 from fastapi_aad_auth._base.validators import SessionValidator
 from fastapi_aad_auth.config import Config
-from fastapi_aad_auth.errors import ConfigurationError
+from fastapi_aad_auth.errors import base_error_handler, ConfigurationError
 from fastapi_aad_auth.mixins import LoggingMixin
 
 
@@ -38,6 +38,7 @@ class Authenticator(LoggingMixin):
             config (fastapi_aad_auth.config.Config): Authentication configuration (includes ui and routing, as well as AAD Application and Tenant IDs)
             add_to_base_routes (bool): Add the authentication to the router
         """
+        super().__init__()
         if config is None:
             config = Config()
         self.config = config
@@ -62,7 +63,7 @@ class Authenticator(LoggingMixin):
         # Lets setup the oauth backend
 
     def _init_providers(self):
-        return [u._provider_klass.from_config(self._session_validator, self.config, u, self.config.routing.oauth_base_route) for u in self.config.providers]
+        return [u._provider_klass.from_config(session_validator=self._session_validator, config=self.config, provider_config=u, oauth_base_route=self.config.routing.oauth_base_route) for u in self.config.providers]
 
     def _init_auth_backend(self):
         validators = [self._session_validator]
@@ -254,14 +255,14 @@ class Authenticator(LoggingMixin):
             error_message = "Oops! It seems like the application has not been configured correctly, please contact an admin"
             error_type = 'Authentication Configuration Error'
             status_code = 500
-            return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=context.copy(), status_code=status_code)
+            return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=self._base_context.copy(), status_code=status_code)
 
         @app.exception_handler(AuthenticationError)
         async def authentication_error_handler(request: Request, exc: AuthenticationError) -> Response:
             error_message = "Oops! It seems like you cannot access this information. If this is an error, please contact an admin"
             error_type = 'Authentication Error'
             status_code = 403
-            return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=context.copy(), status_code=status_code)
+            return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=self._base_context.copy(), status_code=status_code)
 
         # Check if session middleware is there
         if not any([SessionMiddleware in u.cls.__mro__ for u in app.user_middleware]):
@@ -270,3 +271,5 @@ class Authenticator(LoggingMixin):
             self.app_routes_add_auth(app, _BASE_ROUTES)
         app.routes.extend(self._ui_routes)
         app.routes.extend(self._auth_routes)
+        # TODO: select a specific provider to use here
+        app.swagger_ui_init_oauth = self._providers[0].validators[0].init_oauth

@@ -1,14 +1,12 @@
 from abc import abstractmethod
 
-from fastapi import HTTPException
 from starlette.requests import Request
-from starlette.status import HTTP_401_UNAUTHORIZED
 
 from fastapi_aad_auth._base.state import AuthenticationState
-from fastapi_aad_auth.mixins import LoggingMixin
+from fastapi_aad_auth.mixins import LoggingMixin, NotAuthenticatedMixin
 
 
-class Validator(LoggingMixin):
+class Validator(NotAuthenticatedMixin, LoggingMixin):
 
     @abstractmethod
     def check(self, request: Request) -> AuthenticationState:
@@ -24,11 +22,3 @@ class Validator(LoggingMixin):
         if not result.is_authenticated():
             raise self.not_authenticated
         return result
-    
-    @property
-    def not_authenticated(self):
-        return HTTPException(
-                    status_code=HTTP_401_UNAUTHORIZED,
-                    detail="Not authenticated",
-                    headers={"WWW-Authenticate": "Bearer"},
-                )

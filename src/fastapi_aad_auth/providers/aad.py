@@ -1,6 +1,7 @@
 """AAD OAuth handlers."""
 
 import base64
+import logging
 from typing import List, Optional
 
 import msal
@@ -244,7 +245,7 @@ class AADProvider(Provider):
             redirect_uri: Optional[str] = None,
             domain_hint: Optional[str] = None,
             user_klass: type = User,
-            oauth_login_base: str = '/oauth'):
+            oauth_base_route: str = '/oauth'):
         """Initialise the auth backend.
 
         Args:
@@ -265,7 +266,7 @@ class AADProvider(Provider):
             domain_hint: Hint for the domain
             user_klass: Class to use as a user.
         """
-        redirect_path = self._build_oauth_url(oauth_login_base, 'redirect')
+        redirect_path = self._build_oauth_url(oauth_base_route, 'redirect')
         token_validator = AADTokenValidator(client_id=client_id, tenant_id=tenant_id, api_audience=api_audience,
                                             client_app_ids=client_app_ids, scopes={}, enabled=enabled, strict=strict_token,
                                             user_klass=user_klass)
@@ -273,10 +274,10 @@ class AADProvider(Provider):
                                                         client_id=client_id, tenant_id=tenant_id, redirect_path=redirect_path,
                                                         prompt=prompt, client_secret=client_secret, scopes=scopes,
                                                         redirect_uri=redirect_uri, domain_hint=domain_hint)
-        super().__init__(validators=[token_validator], authenticator=session_authenticator, enabled=enabled, oauth_login_base=oauth_login_base)
+        super().__init__(validators=[token_validator], authenticator=session_authenticator, enabled=enabled, oauth_base_route=oauth_base_route)
 
     @classmethod
-    def from_config(cls, session_validator, config: 'Config', provider_config: 'AADConfig', user_klass: Optional[type] = None):
+    def from_config(cls, session_validator, config: 'Config', provider_config: 'AADConfig', user_klass: Optional[type] = None, oauth_base_route: str = '/oauth'):
         """Load the auth backend from a config.
 
         Args:
@@ -292,6 +293,7 @@ class AADProvider(Provider):
         
         if user_klass is None:
             user_klass = config.user_klass
+        logging.warning(f'*******{user_klass}')
 
         return cls(session_validator=session_validator, client_id=provider_config.client_id.get_secret_value(),
                    tenant_id=provider_config.tenant_id.get_secret_value(),
@@ -299,7 +301,7 @@ class AADProvider(Provider):
                    scopes=provider_config.scopes, client_app_ids=provider_config.client_app_ids,
                    strict_token=provider_config.strict, api_audience=provider_config.api_audience,
                    prompt=provider_config.prompt, domain_hint=provider_config.domain_hint,
-                   redirect_uri=provider_config.redirect_uri, user_klass=user_klass)
+                   redirect_uri=provider_config.redirect_uri, user_klass=user_klass, oauth_base_route=oauth_base_route)
 
     def get_login_button(self, post_redirect='/'):
         """Get the AAD Login Button."""
