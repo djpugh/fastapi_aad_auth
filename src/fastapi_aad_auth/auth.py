@@ -175,7 +175,6 @@ class Authenticator(LoggingMixin):
         return user
 
     def _set_error_handlers(self, app):
-        
         error_template_path = Path(self.config.login_ui.error_template_file)
         error_templates = Jinja2Templates(directory=str(error_template_path.parent))
         if self.config.login_ui.app_name:
@@ -261,7 +260,7 @@ class Authenticator(LoggingMixin):
             app: fastapi application
 
         Keyword Args:
-            add_error_handlers (bool) : add the error handlers to the app (default is true, but can be set to False to configure specific handling) 
+            add_error_handlers (bool) : add the error handlers to the app (default is true, but can be set to False to configure specific handling)
         """
 
         def on_auth_error(request: Request, exc: Exception):

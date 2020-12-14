@@ -11,7 +11,7 @@ from fastapi_aad_auth._version import get_versions
 __version__ = get_versions()['version']
 del get_versions
 
-BASE_VERSION = parse_version(parse_version(__version__).base_version)  # type: ignore 
+BASE_VERSION = parse_version(parse_version(__version__).base_version)  # type: ignore
 
 
 class APIDeprecationWarning(FutureWarning):
