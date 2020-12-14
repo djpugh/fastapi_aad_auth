@@ -3,22 +3,20 @@ from functools import wraps
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from starlette.authentication import requires
 from starlette.middleware.authentication import AuthenticationError, AuthenticationMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.requests import Request
-from starlette.responses import JSONResponse, RedirectResponse, Response
-from starlette.routing import Mount, request_response, Route
-from starlette.staticfiles import StaticFiles
-from starlette.templating import Jinja2Templates
+from starlette.responses import RedirectResponse, Response
+from starlette.routing import request_response, Route
 
 from fastapi_aad_auth._base.backend import BaseOAuthBackend
-from fastapi_aad_auth._base.state import AuthenticationState
 from fastapi_aad_auth._base.validators import SessionValidator
 from fastapi_aad_auth.config import Config
 from fastapi_aad_auth.errors import base_error_handler, ConfigurationError
 from fastapi_aad_auth.mixins import LoggingMixin
+from fastapi_aad_auth.ui.jinja import Jinja2Templates
 from fastapi_aad_auth.utilities import deprecate
 
 
@@ -31,12 +29,14 @@ class Authenticator(LoggingMixin):
     Creates the key components based on the provided configurations
     """
 
-    def __init__(self, config: Config = None, add_to_base_routes: bool = True, base_context: Dict[str, Any] = None, user_klass: Optional[type] = None):
-        """Initialise the AAD config based on the provided configuration.
+    def __init__(self, config: Config = None, add_to_base_routes: bool = True, base_context: Optional[Dict[str, Any]] = None, user_klass: Optional[type] = None):
+        """Initialise the Authenticator based on the provided configuration.
 
         Keyword Args:
             config (fastapi_aad_auth.config.Config): Authentication configuration (includes ui and routing, as well as AAD Application and Tenant IDs)
             add_to_base_routes (bool): Add the authentication to the router
+            base_context (Dict[str, Any]): a base context to provide
+            user_klass (type): The user class to use as part of the auth state
         """
         super().__init__()
         if config is None:
@@ -74,66 +74,8 @@ class Authenticator(LoggingMixin):
         return BaseOAuthBackend(validators)
 
     def _init_ui(self):
-        login_template_path = Path(self.config.login_ui.template_file)
-        user_template_path = Path(self.config.login_ui.user_template_file)
-        login_templates = Jinja2Templates(directory=str(login_template_path.parent))
-        user_templates = Jinja2Templates(directory=str(user_template_path.parent))
-
-        async def login(request: Request, *args, **kwargs):
-            context = self._base_context.copy()  # type: ignore
-            if not self.config.enabled or request.user.is_authenticated:
-                # This is authenticated so go straight to the homepage
-                return RedirectResponse(self.config.routing.home_path)
-            context['request'] = request  # type: ignore
-            if 'login' not in context or context['login'] is None:  # type: ignore
-                post_redirect = self._session_validator.pop_post_auth_redirect(request)
-                context['login'] = '<br>'.join([provider.get_login_button(post_redirect) for provider in self._providers])  # type: ignore
-            return login_templates.TemplateResponse(login_template_path.name, context)  # type: ignore
-
-        routes = [Route(self.config.routing.landing_path, endpoint=login, methods=['GET'], name='login'),
-                  Mount(self.config.login_ui.static_path, StaticFiles(directory=str(self.config.login_ui.static_directory)), name='static-login')]
-
-        if self.config.routing.user_path:
-
-            @self.auth_required()
-            async def get_user(request: Request):
-                context = self._base_context.copy()  # type: ignore
-                self.logger.debug(f'Getting token for {request.user}')
-                context['request'] = request  # type: ignore
-                context['token_api_path'] = f'{self.config.routing.user_path}/token'
-                if self.config.enabled:
-                    self.logger.debug(f'Auth {request.auth}')
-                    try:
-                        context['user'] = self._session_validator.get_state_from_session(request).user
-                    except ValueError:
-                        # If we have one provider, we can force the login, otherwise...
-                        return self.__force_authenticate(request)
-                else:
-                    self.logger.debug('Auth not enabled')
-                    context['token'] = None  # type: ignore
-                return user_templates.TemplateResponse(user_template_path.name, context)
-
-            async def get_token(request: Request, auth_state: AuthenticationState = Depends(self.auth_backend)):
-                if not isinstance(auth_state, AuthenticationState):
-                    user = self.__get_user_from_request(request)
-                else:
-                    user = auth_state.user
-                if hasattr(user, 'username'):  # type: ignore
-                    access_token = self.__get_access_token(user)
-                    if access_token:
-                        # We want to get the token for each provider that is authenticated
-                        return JSONResponse(access_token)   # type: ignore
-                    else:
-                        if any([u in request.headers['user-agent'] for u in ['Mozilla', 'Gecko', 'Trident', 'WebKit', 'Presto', 'Edge', 'Blink']]):
-                            # If we have one provider, we can force the login, otherwise we need to request which login route
-                            return self.__force_authenticate(request)
-                        else:
-                            return JSONResponse('Unable to access token as user has not authenticated via session')
-                return RedirectResponse(f'{self.config.routing.landing_path}?redirect=/me/token')
-
-            routes += [Route(self.config.routing.user_path, endpoint=get_user, methods=['GET'], name='user'),
-                       Route(f'{self.config.routing.user_path}/token', endpoint=get_token, methods=['GET'], name='get-token')]
-        return routes
+        ui = self.config.login_ui.ui_klass(self.config, self, self._base_context)
+        return ui.routes
 
     def _init_auth_routes(self):
 
@@ -150,30 +92,6 @@ class Authenticator(LoggingMixin):
             routes += provider.get_routes(noauth_redirect=self.config.routing.home_path)
         # We have a deprecated behaviour here
         return routes
-
-    def __force_authenticate(self, request: Request):
-        if len(self._providers) == 1:
-            return self._providers[0].authenticator.process_login_request(request, force=True, redirect=request.url.path)
-        else:
-            return RedirectResponse(f'{self.config.routing.landing_path}?redirect={request.url.path}')
-
-    def __get_access_token(self, user):
-        access_token = None
-        while access_token is None:
-            provider = next(self._providers)
-            try:
-                access_token = provider.autheticator.get_access_token(user)
-            except ValueError:
-                pass
-        return access_token
-
-    def __get_user_from_request(self, request: Request):
-        if hasattr(request.user, 'username'):
-            user = request.user
-        else:
-            auth_state = self.auth_backend.check(request)
-            user = auth_state.user
-        return user
 
     def _set_error_handlers(self, app):
         error_template_path = Path(self.config.login_ui.error_template_file)

@@ -1,4 +1,6 @@
 """Utilities."""
+import importlib
+
 from fastapi_aad_auth.utilities import logging  # noqa: F401
 from fastapi_aad_auth.utilities import urls  # noqa: F401
 from fastapi_aad_auth.utilities.deprecate import DeprecatableFieldsMixin, deprecate, deprecate_module, DeprecatedField, is_deprecated  # noqa: F401
@@ -16,6 +18,20 @@ def list_from_env(env_value):
     if isinstance(env_value, str):
         env_value = [u for u in env_value.split(',') if u]
     return env_value
+
+
+def klass_from_str(value):
+    """Convert an import path to a class."""
+    if isinstance(value, str):
+        if ':' in value:
+            module_name, klass_name = value.split(':')
+        else:
+            split_path = value.split('.')
+            module_name = '.'.join(split_path[:-1])
+            klass_name = split_path[-1]
+        module = importlib.import_module(module_name)
+        value = getattr(module, klass_name)
+    return value
 
 
 def expand_doc(klass):
