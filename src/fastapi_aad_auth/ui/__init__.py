@@ -47,7 +47,6 @@ class UI(LoggingMixin):
 
     def _login(self, request: Request, *args, **kwargs):
         """Provide the Login UI."""
-
         context = self._base_context.copy()
         context.update(kwargs)  # type: ignore
         if 'app_name' not in context:
