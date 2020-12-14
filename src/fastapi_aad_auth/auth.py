@@ -174,6 +174,30 @@ class Authenticator(LoggingMixin):
             user = auth_state.user
         return user
 
+    def _set_error_handlers(self, app):
+        
+        error_template_path = Path(self.config.login_ui.error_template_file)
+        error_templates = Jinja2Templates(directory=str(error_template_path.parent))
+        if self.config.login_ui.app_name:
+            self._base_context['appname'] = self.config.login_ui.app_name
+        else:
+            self._base_context['appname'] = app.title
+        self._base_context['static_path'] = self.config.login_ui.static_path
+
+        @app.exception_handler(ConfigurationError)
+        async def configuration_error_handler(request: Request, exc: ConfigurationError) -> Response:
+            error_message = "Oops! It seems like the application has not been configured correctly, please contact an admin"
+            error_type = 'Authentication Configuration Error'
+            status_code = 500
+            return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=self._base_context.copy(), status_code=status_code)
+
+        @app.exception_handler(AuthenticationError)
+        async def authentication_error_handler(request: Request, exc: AuthenticationError) -> Response:
+            error_message = "Oops! It seems like you cannot access this information. If this is an error, please contact an admin"
+            error_type = 'Authentication Error'
+            status_code = 403
+            return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=self._base_context.copy(), status_code=status_code)
+
     def auth_required(self, scopes: str = 'authenticated', redirect: str = 'login'):
         """Decorator to require specific scopes (and redirect to the login ui) for an endpoint.
 
@@ -227,7 +251,7 @@ class Authenticator(LoggingMixin):
                 app.router.routes[i] = route
         return app
 
-    def configure_app(self, app: FastAPI):
+    def configure_app(self, app: FastAPI, add_error_handlers=True):
         """Configure the fastapi application to use these authentication handlers.
 
         Adds authentication middleware, error handler and adds authentication
@@ -235,6 +259,9 @@ class Authenticator(LoggingMixin):
 
         Args:
             app: fastapi application
+
+        Keyword Args:
+            add_error_handlers (bool) : add the error handlers to the app (default is true, but can be set to False to configure specific handling) 
         """
 
         def on_auth_error(request: Request, exc: Exception):
@@ -243,29 +270,8 @@ class Authenticator(LoggingMixin):
             return RedirectResponse(self.config.routing.landing_path)
 
         app.add_middleware(AuthenticationMiddleware, backend=self.  auth_backend, on_error=on_auth_error)
-
-        error_template_path = Path(self.config.login_ui.error_template_file)
-        error_templates = Jinja2Templates(directory=str(error_template_path.parent))
-        if self.config.login_ui.app_name:
-            self._base_context['appname'] = self.config.login_ui.app_name
-        else:
-            self._base_context['appname'] = app.title
-        self._base_context['static_path'] = self.config.login_ui.static_path
-
-        @app.exception_handler(ConfigurationError)
-        async def configuration_error_handler(request: Request, exc: ConfigurationError) -> Response:
-            error_message = "Oops! It seems like the application has not been configured correctly, please contact an admin"
-            error_type = 'Authentication Configuration Error'
-            status_code = 500
-            return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=self._base_context.copy(), status_code=status_code)
-
-        @app.exception_handler(AuthenticationError)
-        async def authentication_error_handler(request: Request, exc: AuthenticationError) -> Response:
-            error_message = "Oops! It seems like you cannot access this information. If this is an error, please contact an admin"
-            error_type = 'Authentication Error'
-            status_code = 403
-            return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=self._base_context.copy(), status_code=status_code)
-
+        if add_error_handlers:
+            self._set_error_handlers(app)
         # Check if session middleware is there
         if not any([SessionMiddleware in u.cls.__mro__ for u in app.user_middleware]):
             app.add_middleware(SessionMiddleware, **self.config.session.dict())
