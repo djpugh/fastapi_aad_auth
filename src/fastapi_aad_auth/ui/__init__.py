@@ -47,6 +47,8 @@ class UI(LoggingMixin):
         """Provide the Login UI."""
         context = self._base_context.copy()
         context.update(kwargs)  # type: ignore
+        if 'app_name' not in context:
+            context['app_name'] = self.config.login_ui.app_name
         if not self.config.enabled or request.user.is_authenticated:
             # This is authenticated so go straight to the homepage
             return RedirectResponse(self.config.routing.home_path)
@@ -60,6 +62,8 @@ class UI(LoggingMixin):
         """Provide a UI with information on the user."""
         context = self._base_context.copy()  # type: ignore
         context.update(kwargs)
+        if 'app_name' not in context:
+            context['app_name'] = self.config.login_ui.app_name
         self.logger.debug(f'Getting token for {request.user}')
         context['request'] = request  # type: ignore
         context['token_api_path'] = f'{self.config.routing.user_path}/token'
