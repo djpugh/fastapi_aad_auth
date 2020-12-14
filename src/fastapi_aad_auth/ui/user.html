@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>{{app_name}}</title>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="{{static_path}}/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="{{static_path}}/css/cover.css">
+{% extends "base.html" %}
+
+{% block CSS %}
+        {{ super() }}
         <link href="{{static_path}}/css/open-iconic-bootstrap.css" rel="stylesheet">
-        <link rel="icon" type="img/ipng" href="/static/img/favicon.png" />
-        <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" >
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    </head>
-    <body>
+{% endblock CSS %}
+
+{% block Content %}
         <div class='container'>
             <div class="cover-container d-flex h-5 p-3 mx-auto flex-column text-center justify-content-center">
                 <main class="inner-cover">
@@ -50,16 +43,16 @@
                         
                         <tr class="d-flex">
                         <th class="col-2" scope="row">Roles</th>
-                        <td class="col-10">{{user.roles|join(", ")}}</td>
+                        <td class="col-10">{% if user.roles %}{{user.roles|join(", ")}}{% endif %}</td>
                         </tr>
                         
                         <tr class="d-flex">
                         <th class="col-2" scope="row">Groups</th>
-                        <td class="col-10">{{user.groups|join(", ")}}</td>
+                        <td class="col-10">{% if user.groups %}{{user.groups|join(", ")}}{% endif %}</td>
                         </tr>
                         <tr class="d-flex bg-success">
                         <th class="col-2" scope="row">Permissions</th>
-                        <td class="col-10"><i>{{user.permissions | join("</i>, <i>") | safe}}</i></td>
+                        <td class="col-10"><i>{% if user.permissions %}{{user.permissions | join("</i>, <i>") | safe}}{% endif %}</i></td>
                         </tr>
                         
                         <tr class="d-flex">
@@ -89,14 +82,15 @@
                 <p class="mt-5 mb-3 lead text-muted">{{ explanation }}</p>
             {% endif %}
         </div>
-
+{% endblock Content %}
+{% block BodyScripts %}
         <script>
             $(document).ready(function(){
               $('#tokenText').val('*********');
               $('#expires').text("");
               $("#loadToken").click(function(e){          
                 if (!e.currentTarget.classList.contains("active")){
-                  $.ajax("/me/token").done(function(data){
+                  $.ajax("{{token_api_path}}").done(function(data){
                     $('#tokenText').val(data['access_token']);
                     var expires = new Date();
                     console.log(expires);
@@ -115,6 +109,4 @@
                 }})});
 
           </script>
-
-    </body>
-</html>
+{% endblock BodyScripts %}

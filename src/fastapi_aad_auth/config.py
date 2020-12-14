@@ -1,5 +1,4 @@
 """fastapi_aad_auth configuration options."""
-import importlib
 from typing import Dict, List, Optional, Union
 import uuid
 
@@ -7,7 +6,7 @@ from pkg_resources import resource_filename
 from pydantic import BaseSettings as _BaseSettings, DirectoryPath, Field, FilePath, SecretStr, validator
 
 from fastapi_aad_auth.providers.aad import AADConfig
-from fastapi_aad_auth.utilities import bool_from_env, DeprecatableFieldsMixin, DeprecatedField, expand_doc
+from fastapi_aad_auth.utilities import bool_from_env, DeprecatableFieldsMixin, DeprecatedField, expand_doc, klass_from_str
 
 
 class BaseSettings(DeprecatableFieldsMixin, _BaseSettings):
@@ -74,9 +73,14 @@ class LoginUIConfig(BaseSettings):
                              description="Path to mount the login static dir in",
                              env='FASTAPI_AUTH_LOGIN_STATIC_PATH')
     context: Optional[Dict[str, str]] = Field(None, description="Any additional context variables required for the template")
+    ui_klass: type = Field('fastapi_aad_auth.ui:UI',
+                           description="UI class to use to handle creating and returning the routes for the login, error and user screens, this will be treated as an import path "
+                           "if provided as a string, with the last part the class to load", env='FASTAPI_AUTH_UI_KLASS')
 
     class Config:  # noqa D106
         env_file = '.env'
+
+    _validate_klass = validator('ui_klass', pre=True, always=True, allow_reuse=True)(klass_from_str)
 
 
 @expand_doc
@@ -122,7 +126,10 @@ class SessionConfig(BaseSettings):
 
 @expand_doc
 class Config(BaseSettings):
-    """The overall configuration for the AAD authentication."""
+    """The overall configuration for the AAD authentication.
+
+    Provides the overall configuration and parameters.
+    """
 
     enabled: bool = Field(True, description="Enable authentication", env='FASTAPI_AUTH_ENABLED')
     providers: List[Union[AADConfig]] = Field(None, description="The provider configurations to use")
@@ -175,17 +182,5 @@ class Config(BaseSettings):
             value = LoginUIConfig(_env_file=cls.Config.env_file)
         return value
 
-    @validator('user_klass', pre=True, always=True)
-    def _validate_klass(cls, value):
-        if isinstance(value, str):
-            if ':' in value:
-                module_name, klass_name = value.split(':')
-            else:
-                split_path = value.split('.')
-                module_name = '.'.join(split_path[:-1])
-                klass_name = split_path[-1]
-            module = importlib.import_module(module_name)
-            value = getattr(module, klass_name)
-        return value
-
+    _validate_klass = validator('user_klass', pre=True, always=True, allow_reuse=True)(klass_from_str)
     _validate_enabled = validator('enabled', allow_reuse=True)(bool_from_env)

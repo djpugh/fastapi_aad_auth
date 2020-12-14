@@ -1,17 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>{{app_name}}</title>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="{{static_path}}/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="{{static_path}}/css/cover.css">
-        <link rel="icon" type="img/ipng" href="/static/img/favicon.png" />
-        <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" >
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    </head>
-    <body>
+{% extends "base.html" %}
+{% block Content %}
         <div class='container'>
             <div class="cover-container d-flex h-100 p-3 mx-auto flex-column text-center justify-content-center">
                 <main class="inner-cover">
@@ -35,6 +23,5 @@
             
                 </main>
             </div>
-        </div><!-- /.container-fluid -->
-    </body>
-</html>
+        </div>
+{% endblock Content %}

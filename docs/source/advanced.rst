@@ -50,3 +50,18 @@ associated environment variable, or in the argument, which overrides all other s
 
     auth = Authenticator(config, user_klass=MyUserClass)
 
+Customising the UI
+~~~~~~~~~~~~~~~~~~
+
+The UI templates are rendered using Jinja2 Templates, with a customisation from :py:class:`~fastapi_aad_auth.ui.jinja.Jinja2Templates`
+that uses a loader that allows a package resource to be used in place of a file (using ``{% extends <package>:<resource> %}``).
+
+Additionally, the :py:class:`~fastapi_aad_auth.config.LoginUIConfig` has an attribute ``ui_klass`` that can be used to customise how
+the context is built (note that this class should inherit from (or duck-type the public API of) :class:`~fastapi_aad_auth.ui.UI`)
+
+These jinja templates also are structured (see :doc:`module/fastapi_aad_auth.ui` docs for the other templates) from a base template that is relatively generic:
+
+.. literalinclude:: ../../src/fastapi_aad_auth/ui/base.html
+    :language: html
+
+And can easily be extended or customised.
