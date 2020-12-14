@@ -25,11 +25,16 @@ e.g. for local development::
 
 Configure a web platform for the UI based redirection (or whatever else is set in the config for the redirect path)::
 
-    https://<hostname>/login/oauth/redirect
+    https://<hostname>/oauth/aad/redirect
 
 e.g. for local development::
     
-    http://localhost:8000/login/oauth/redirect
+    http://localhost:8000/oauth/aad/redirect
+
+.. warning::
+    This is new behaviour that will be the default for version ``0.2.0``. To enable this now, you need to set the
+    :class:`~fastapi_aad_auth.config.RoutingConfig` ``login_path`` and ``login_redirect_path`` variables to the empty string or ``None``
+
 
 Youu also need to decide whether the application is multi-tenant or single-tenant
 
@@ -41,14 +46,14 @@ Youu also need to decide whether the application is multi-tenant or single-tenan
 On the "Expose an API tab", you need to set the Application ID URI
 
 .. figure:: figures/App-Registration-App-ID.PNG
-   :alt: Overview of redirect URI configuration for local testing
+   :alt: Overview of app id URI
    
    An example configuration for api Scopes for testing an application
 
 and add scopes as configured for the application (e.g. the default ``openid`` scope is needed)
 
 .. figure:: figures/App-Registration-Scopes.PNG
-   :alt: Overview of redirect URI configuration for local testing
+   :alt: Overview of app scopes
    
    An example configuration for api Scopes for testing an application
 
@@ -103,7 +108,7 @@ You can use it for fastapi routes::
     router = APIRouter()
 
     @router.get('/hello')
-    async def hello_world(auth_state: AuthenticationState =D epends(auth_provider.api_auth_scheme)):
+    async def hello_world(auth_state: AuthenticationState =D epends(auth_provider.auth_backend.requires_auth(allow_session=True))):
         print(auth_state)
         return {'hello': 'world'}
 
@@ -124,14 +129,7 @@ This middleware will set the request.user object and request.credentials object:
         return PlainTextResponse(f'Hello, you')
 
 
-You can set the swagger_ui_init_oauth using auth_provider.api_auth_scheme.init_oauth::
-
-    from fastapi import FastAPI
-    app = FastAPI(...
-                  swagger_ui_init_oauth=auth_provider.api_auth_scheme.init_oauth)
-
-
-To add the required middleware to the fastapi app use::
+The :class:``fastapi.FastAPI`` ``swagger_ui_init_oauth`` variable is set automatically, along with the routing and required middleware using::
 
     auth_provider.configure_app(app)
 
