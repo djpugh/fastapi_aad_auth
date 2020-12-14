@@ -100,6 +100,7 @@ class Authenticator(LoggingMixin):
                 context = self._base_context.copy()  # type: ignore
                 self.logger.debug(f'Getting token for {request.user}')
                 context['request'] = request  # type: ignore
+                context['token_api_path'] = f'{self.config.routing.user_path}/token'
                 if self.config.enabled:
                     self.logger.debug(f'Auth {request.auth}')
                     try:
