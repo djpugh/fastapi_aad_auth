@@ -35,6 +35,8 @@ class UI(LoggingMixin):
         """
         super().__init__()
         self.config = config
+        if base_context is None:
+            base_context = dict()
         self._base_context = base_context
         self._authenticator = authenticator
 
@@ -45,6 +47,7 @@ class UI(LoggingMixin):
 
     def _login(self, request: Request, *args, **kwargs):
         """Provide the Login UI."""
+
         context = self._base_context.copy()
         context.update(kwargs)  # type: ignore
         if 'app_name' not in context:
