@@ -45,7 +45,8 @@ class UI(LoggingMixin):
 
     def _login(self, request: Request, *args, **kwargs):
         """Provide the Login UI."""
-        context = self._base_context.copy()  # type: ignore
+        context = self._base_context.copy()
+        context.update(kwargs)  # type: ignore
         if not self.config.enabled or request.user.is_authenticated:
             # This is authenticated so go straight to the homepage
             return RedirectResponse(self.config.routing.home_path)
@@ -55,9 +56,10 @@ class UI(LoggingMixin):
             context['login'] = '<br>'.join([provider.get_login_button(post_redirect) for provider in self._authenticator._providers])  # type: ignore
         return self.login_templates.TemplateResponse(self.login_template_path.name, context)  # type: ignore
 
-    def _get_user(self, request: Request):
+    def _get_user(self, request: Request, **kwargs):
         """Provide a UI with information on the user."""
         context = self._base_context.copy()  # type: ignore
+        context.update(kwargs)
         self.logger.debug(f'Getting token for {request.user}')
         context['request'] = request  # type: ignore
         context['token_api_path'] = f'{self.config.routing.user_path}/token'
