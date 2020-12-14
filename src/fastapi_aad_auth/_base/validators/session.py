@@ -1,22 +1,14 @@
-"""Validator for interactive (UI) sessions."""
-
-import logging
-
+"""Session based validator for interactive (UI) sessions."""
 from itsdangerous import URLSafeSerializer
 
-from fastapi_aad_auth.oauth.state import AuthenticationState
+from fastapi_aad_auth._base.state import AuthenticationState
+from fastapi_aad_auth._base.validators import Validator
 
-logger = logging.getLogger(__name__)
 
 REDIRECT_KEY = 'requested'
 
 
-def get_session_serializer(secret, salt):
-    """Get or Initialise the session serializer."""
-    return URLSafeSerializer(secret, salt=salt)
-
-
-class SessionValidator:
+class SessionValidator(Validator):
     """Validator for session based authentication."""
 
     def __init__(self, session_serializer: URLSafeSerializer, *args, **kwargs):
@@ -35,7 +27,7 @@ class SessionValidator:
             state = AuthenticationState.load_from_session(self._session_serializer, request.session)
         except Exception:
             state = AuthenticationState.as_unauthenticated(self._session_serializer, request.session)
-            logger.exception('Error authenticating via session')
+            self.logger.exception('Error authenticating via session')
         return state
 
     def pop_post_auth_redirect(self, request):
@@ -45,3 +37,12 @@ class SessionValidator:
     def set_post_auth_redirect(self, request, redirect='/'):
         """Set post-authentication redirects."""
         request.session[REDIRECT_KEY] = redirect
+
+    @staticmethod
+    def get_session_serializer(secret, salt):
+        """Get or Initialise the session serializer."""
+        return URLSafeSerializer(secret, salt=salt)
+
+    def logout(self, request):
+        """Process a logout request."""
+        AuthenticationState.logout(self._session_serializer, request.session)

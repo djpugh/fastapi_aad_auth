@@ -1,10 +1,10 @@
 """fastapi_aad_auth errors."""
-import logging
-
 from starlette.responses import JSONResponse, Response
 
 
-logger = logging.getLogger(__name__)
+from fastapi_aad_auth.utilities.logging import getLogger
+
+logger = getLogger(__name__)
 
 
 def base_error_handler(request, exception, error_type, error_message, templates, template_path, context=None, status_code=500) -> Response:

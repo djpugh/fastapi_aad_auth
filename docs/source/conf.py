@@ -155,7 +155,7 @@ html_theme_options = {
     'repo_name': 'fastapi_aad_auth',
 
     # Visible levels of the global TOC; -1 means unlimited
-    'globaltoc_depth': -1,
+    'globaltoc_depth': 1,
     # If False, expand all TOC entries
     'globaltoc_collapse': False,
     # If True, show hidden TOC entries

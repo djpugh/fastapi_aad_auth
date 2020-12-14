@@ -50,16 +50,23 @@ The repository is open source (MIT Licensed) on |github| `Github <https://github
     Configuration Options <config>
     Basic Usage <usage>
     Advanced Usage <advanced>
+    Deprecations <deprecations>
+
 
 .. toctree::
     :caption: API
-    :maxdepth: 4
+    :maxdepth: 1
     
+    module/fastapi_aad_auth._base
     module/fastapi_aad_auth.auth
     module/fastapi_aad_auth.config
     module/fastapi_aad_auth.errors
+    module/fastapi_aad_auth.mixins
     module/fastapi_aad_auth.oauth
+    module/fastapi_aad_auth.providers
     module/fastapi_aad_auth.ui
+    module/fastapi_aad_auth.utilities
+
 
 .. toctree::
     :caption: Changes and Contributing
