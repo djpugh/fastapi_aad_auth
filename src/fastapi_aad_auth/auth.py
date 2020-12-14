@@ -50,6 +50,10 @@ class Authenticator(LoggingMixin):
             context = self.config.login_ui.context.copy()
             context.update(base_context)
             base_context = context
+        if 'app_name' not in base_context:
+            base_context['app_name'] = self.config.login_ui.app_name
+        if 'static_path' not in base_context:
+            base_context['static_path'] = self.config.login_ui.static_path
         self._base_context = base_context
         self._add_to_base_routes = add_to_base_routes
         self._session_validator = self._init_session_validator()
