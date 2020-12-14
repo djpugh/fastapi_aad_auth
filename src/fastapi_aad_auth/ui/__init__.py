@@ -47,10 +47,10 @@ class UI(LoggingMixin):
 
     def _login(self, request: Request, *args, **kwargs):
         """Provide the Login UI."""
+        if not self.config.enabled or self._authenticator.auth_backend.is_authenticated(request):
+            return RedirectResponse(self.config.routing.home_path)
         context = self._base_context.copy()
         context.update(kwargs)  # type: ignore
-        if 'app_name' not in context:
-            context['app_name'] = self.config.login_ui.app_name
         if not self.config.enabled or request.user.is_authenticated:
             # This is authenticated so go straight to the homepage
             return RedirectResponse(self.config.routing.home_path)
@@ -62,10 +62,10 @@ class UI(LoggingMixin):
 
     def _get_user(self, request: Request, **kwargs):
         """Provide a UI with information on the user."""
+        if not self.config.enabled:
+            return RedirectResponse(self.config.routing.home_path)
         context = self._base_context.copy()  # type: ignore
         context.update(kwargs)
-        if 'app_name' not in context:
-            context['app_name'] = self.config.login_ui.app_name
         self.logger.debug(f'Getting token for {request.user}')
         context['request'] = request  # type: ignore
         context['token_api_path'] = f'{self.config.routing.user_path}/token'
@@ -78,7 +78,7 @@ class UI(LoggingMixin):
                 return self.__force_authenticate(request)
         else:
             self.logger.debug('Auth not enabled')
-            context['token'] = None  # type: ignore
+            context['token_api_path'] = None  # type: ignore
         return self.user_templates.TemplateResponse(self.user_template_path.name, context)
 
     def _get_token(self, request: Request, auth_state: AuthenticationState):
