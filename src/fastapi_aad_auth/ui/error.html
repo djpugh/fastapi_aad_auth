@@ -1,12 +1,15 @@
 {% extends "fastapi_aad_auth.ui:base.html" %}
 {% block Content %}
         <main class='container' role="main">
+        {% block ContentHeader %}
             {% if logo %}
                 {{logo | safe }}
             {% endif %}
             {% if appname %}
                 <h1 class="h1">{{appname}}</h1>
             {% endif %}
+        {% endblock ContentHeader %}
+        {% block Error %}
             <h2>Server Error {{status_code}}:</h2>
             <h3> {{error_type}}</h3>
             <p class="lead">{{error_description}}</p>
@@ -20,12 +23,14 @@
                         {{ error | safe }}
                 </code>
             </div>
+        {% endblock Error %}
+        {% block ContentFooter %}
             {% if copyright %}
                 <p class="mt-5 mb-3 lead text-muted">© {{ copyright }}</p>
             {% endif %}
             {% if explanation %}
                 <p class="mt-5 mb-3 lead text-muted">{{ explanation }}</p>
             {% endif %}
-        
+        {% endblock ContentFooter %}
         </main>
 {% endblock Content %}

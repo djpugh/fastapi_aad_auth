@@ -7,6 +7,7 @@
 
 {% block Content %}
         <div class='container'>
+        {% block ContentHeader %}
             <div class="cover-container d-flex h-5 p-3 mx-auto flex-column text-center justify-content-center">
                 <main class="inner-cover">
                     <p class="lead">
@@ -20,9 +21,13 @@
                     </p>
                 </main>
             </div>
+        {% endblock ContentHeader %}
+        {% block ContentSubHeader %}
             <div class="row mb-md-3">
                 <h2>Current User</h2>
             </div>
+        {% endblock ContentSubHeader %}
+        {% block ContentTable %}
             <div class="row">
                 <table class="table">
                     <tbody>
@@ -75,14 +80,18 @@
                     </tbody>
                 </table>
             </div>
+        {% endblock ContentTable %}
+        {% block ContentFooter %}
             {% if copyright %}
                 <p class="mt-5 mb-3 lead text-muted">© {{ copyright }}</p>
             {% endif %}
             {% if explanation %}
                 <p class="mt-5 mb-3 lead text-muted">{{ explanation }}</p>
             {% endif %}
+        {% endblock ContentFooter %}
         </div>
 {% endblock Content %}
+
 {% block BodyScripts %}
         <script>
             $(document).ready(function(){
