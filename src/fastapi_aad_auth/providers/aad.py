@@ -302,7 +302,7 @@ class AADProvider(Provider):
             obj._login_url = config.routing.login_path
         if hasattr(config.routing, 'login_redirect_path') and config.routing.login_redirect_path and not is_deprecated(config.routing.__fields__['login_redirect_path']):
             obj._redirect_url = config.routing.login_redirect_path
-        obj.authenticator._redirect_path = obj.redirect_url
+        obj.authenticator._redirect_path = obj.redirect_url  # type: ignore
         return obj
 
     def get_login_button(self, post_redirect='/'):

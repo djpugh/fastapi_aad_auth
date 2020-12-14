@@ -99,7 +99,7 @@ class Authenticator(LoggingMixin):
             async def get_user(request: Request):
                 context = self._base_context.copy()  # type: ignore
                 self.logger.debug(f'Getting token for {request.user}')
-                context['request'] = request
+                context['request'] = request  # type: ignore
                 if self.config.enabled:
                     self.logger.debug(f'Auth {request.auth}')
                     try:
@@ -109,7 +109,7 @@ class Authenticator(LoggingMixin):
                         return self.__force_authenticate(request)
                 else:
                     self.logger.debug('Auth not enabled')
-                    context['token'] = None
+                    context['token'] = None  # type: ignore
                 return user_templates.TemplateResponse(user_template_path.name, context)
 
             async def get_token(request: Request, auth_state: AuthenticationState = Depends(self.auth_backend)):
@@ -284,7 +284,7 @@ _DEPRECATED_VERSION = '0.2.0'
 class AADAuth(Authenticator):   # noqa: D101
     __doc__ = Authenticator.__doc__
 
-    @property
+    @property  # type: ignore
     @deprecate(_DEPRECATED_VERSION, replaced_by=f'{Authenticator.__module__}:{Authenticator.__name__}.auth_backend.requires_auth')
     def api_auth_scheme(self):
         """Get the API Authentication Schema."""

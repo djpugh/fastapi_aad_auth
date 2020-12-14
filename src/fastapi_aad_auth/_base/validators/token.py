@@ -17,7 +17,7 @@ class InitOAuth(BaseModel):
     usePkceWithAuthorizationCodeGrant: bool
 
 
-class TokenValidator(Validator, OAuth2AuthorizationCodeBearer):
+class TokenValidator(Validator, OAuth2AuthorizationCodeBearer):  # type: ignore
     """Validator for token based authentication."""
 
     def __init__(

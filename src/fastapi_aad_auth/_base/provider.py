@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
@@ -12,7 +12,7 @@ from fastapi_aad_auth.utilities import urls
 
 class Provider(LoggingMixin):
     """Authentication Provider."""
-    name: str = None
+    name: Optional[str] = None
 
     def __init__(self, validators: List[Validator], authenticator: SessionAuthenticator, enabled: bool = True, oauth_base_route: str = '/oauth'):
         """Initialise the authentication provider."""
