@@ -350,6 +350,8 @@
             
   <h1 id="modules-fastapi-aad-auth-utilities--page-root">Source code for fastapi_aad_auth.utilities</h1><div class="highlight"><pre>
 <span></span><span class="sd">"""Utilities."""</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities</span> <span class="kn">import</span> <span class="n">logging</span>  <span class="c1"># noqa: F401</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities</span> <span class="kn">import</span> <span class="n">urls</span>  <span class="c1"># noqa: F401</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities.deprecate</span> <span class="kn">import</span> <span class="n">DeprecatableFieldsMixin</span><span class="p">,</span> <span class="n">deprecate</span><span class="p">,</span> <span class="n">deprecate_module</span><span class="p">,</span> <span class="n">DeprecatedField</span><span class="p">,</span> <span class="n">is_deprecated</span>  <span class="c1"># noqa: F401</span>
@@ -367,6 +369,20 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env_value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">env_value</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">env_value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">','</span><span class="p">)</span> <span class="k">if</span> <span class="n">u</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">env_value</span></div>
+
+
+<div class="viewcode-block" id="klass_from_str"><a class="viewcode-back" href="../../module/fastapi_aad_auth.utilities.html#fastapi_aad_auth.utilities.klass_from_str">[docs]</a><span class="k">def</span> <span class="nf">klass_from_str</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">"""Convert an import path to a class."""</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">':'</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">module_name</span><span class="p">,</span> <span class="n">klass_name</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">':'</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">split_path</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'.'</span><span class="p">)</span>
+            <span class="n">module_name</span> <span class="o">=</span> <span class="s1">'.'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">split_path</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">klass_name</span> <span class="o">=</span> <span class="n">split_path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">klass_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span></div>
 
 
 <div class="viewcode-block" id="expand_doc"><a class="viewcode-back" href="../../module/fastapi_aad_auth.utilities.html#fastapi_aad_auth.utilities.expand_doc">[docs]</a><span class="k">def</span> <span class="nf">expand_doc</span><span class="p">(</span><span class="n">klass</span><span class="p">):</span>
@@ -418,7 +434,7 @@
               
           </div>
             Last updated on
-              Dec 14, 2020 (version 0.1.8).
+              Dec 14, 2020 (version 0.1.10).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

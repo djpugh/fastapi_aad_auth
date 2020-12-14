@@ -403,6 +403,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.login_ui.static_directory</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.DirectoryPath</span></code>) : Static path for the UI components [default: <code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth\ui\static</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_STATIC_DIR</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.login_ui.static_path</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : Path to mount the login static dir in [default: <code class="docutils literal notranslate"><span class="pre">/static-login</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_STATIC_PATH</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.login_ui.context</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) : Any additional context variables required for the template</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.login_ui.ui_klass</span></code> (<code class="docutils literal notranslate"><span class="pre">type</span></code>) : UI class to use to handle creating and returning the routes for the login, error and user screens, this will be treated as an import path if provided as a string, with the last part the class to load [default: <code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth.ui:UI</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_UI_KLASS</span></code> environment variable)</p></li>
 </ul>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers</span></code>:</dt><dd><ul class="simple">
@@ -490,7 +491,7 @@
               
           </div>
             Last updated on
-              Dec 14, 2020 (version 0.1.8).
+              Dec 14, 2020 (version 0.1.10).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

@@ -58,7 +58,7 @@
     <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="fastapi_aad_auth.utilities" href="fastapi_aad_auth.utilities.html" />
+    <link rel="next" title="fastapi_aad_auth.ui.jinja" href="fastapi_aad_auth.ui.jinja.html" />
     <link rel="prev" title="fastapi_aad_auth.providers.aad" href="fastapi_aad_auth.providers.aad.html" />
   
     <link rel="apple-touch-icon" href="../_static/images/apple-icon-152x152.png"/>
@@ -374,6 +374,39 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">user.html</span></code>: View the user's information and get an access token</p></li>
 </ul>
 </div></blockquote>
+<dl class="py class">
+<dt id="fastapi_aad_auth.ui.UI">
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.ui.</code><code class="sig-name descname">UI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n"><a class="reference internal" href="fastapi_aad_auth.config.html#fastapi_aad_auth.config.Config" title="fastapi_aad_auth.config.Config">fastapi_aad_auth.config.Config</a></span></em>, <em class="sig-param"><span class="n">authenticator</span><span class="p">:</span> <span class="n"><a class="reference internal" href="fastapi_aad_auth.auth.html#fastapi_aad_auth.auth.Authenticator" title="fastapi_aad_auth.auth.Authenticator">fastapi_aad_auth.auth.Authenticator</a></span></em>, <em class="sig-param"><span class="n">base_context</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/ui.html#UI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.ui.UI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides Login endpoint methods, which are then wrapped in a factory method.</p>
+<p>Initialise the UI based on the provided configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<a class="reference internal" href="fastapi_aad_auth.config.html#fastapi_aad_auth.config.Config" title="fastapi_aad_auth.config.Config"><em>fastapi_aad_auth.config.Config</em></a>) -- Authentication configuration (includes ui and routing, as well as AAD Application and Tenant IDs)</p></li>
+<li><p><strong>authenticator</strong> (<a class="reference internal" href="fastapi_aad_auth.auth.html#fastapi_aad_auth.auth.Authenticator" title="fastapi_aad_auth.auth.Authenticator"><em>fastapi_aad_auth.auth.Authenticator</em></a>) -- The authenticator object</p></li>
+<li><p><strong>base_context</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>Any</em><em>]</em>) -- Add the authentication to the router</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="fastapi_aad_auth.ui.UI.routes">
+<em class="property">property </em><code class="sig-name descname">routes</code><a class="headerlink" href="#fastapi_aad_auth.ui.UI.routes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the routes for the UI.</p>
+<p>Provides the login UI route, and if the routing config has
+the <code class="docutils literal notranslate"><span class="pre">user_path</span></code> set, it also provides the user description
+view (and token endpoint)</p>
+</dd></dl>
+</dd></dl>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Sub-modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fastapi_aad_auth.ui.jinja.html">fastapi_aad_auth.ui.jinja</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fastapi_aad_auth.ui.base.html.html">fastapi_aad_auth.ui:base.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fastapi_aad_auth.ui.error.html.html">fastapi_aad_auth.ui:error.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fastapi_aad_auth.ui.login.html.html">fastapi_aad_auth.ui:login.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fastapi_aad_auth.ui.user.html.html">fastapi_aad_auth.ui:user.html</a></li>
+</ul>
+</div>
 
 
 
@@ -400,12 +433,12 @@
             </a>
           
           
-            <a href="fastapi_aad_auth.utilities.html" title="fastapi_aad_auth.utilities"
+            <a href="fastapi_aad_auth.ui.jinja.html" title="fastapi_aad_auth.ui.jinja"
                class="md-flex md-footer-nav__link md-footer-nav__link--next"
                rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
                 class="md-flex__ellipsis"> <span
-                class="md-footer-nav__direction"> Next </span> fastapi_aad_auth.utilities </span>
+                class="md-footer-nav__direction"> Next </span> fastapi_aad_auth.ui.jinja </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink"><i
                 class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
@@ -423,7 +456,7 @@
               
           </div>
             Last updated on
-              Dec 14, 2020 (version 0.1.8).
+              Dec 14, 2020 (version 0.1.10).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

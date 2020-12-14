@@ -239,6 +239,8 @@
         <li class="md-nav__item"><a href="#accessing-user-tokens-view" class="md-nav__link">Accessing User Tokens/View</a>
         </li>
         <li class="md-nav__item"><a href="#customising-the-user-model" class="md-nav__link">Customising the User Model</a>
+        </li>
+        <li class="md-nav__item"><a href="#customising-the-ui" class="md-nav__link">Customising the UI</a>
         </li></ul>
             </nav>
         </li>
@@ -363,6 +365,8 @@
         <li class="md-nav__item"><a href="#accessing-user-tokens-view" class="md-nav__link">Accessing User Tokens/View</a>
         </li>
         <li class="md-nav__item"><a href="#customising-the-user-model" class="md-nav__link">Customising the User Model</a>
+        </li>
+        <li class="md-nav__item"><a href="#customising-the-ui" class="md-nav__link">Customising the UI</a>
         </li></ul>
             </nav>
         </li>
@@ -420,7 +424,7 @@ The <code class="docutils literal notranslate"><span class="pre">/me/token</span
 <span class="sd">    Creates the key components based on the provided configurations</span>
 <span class="sd">    """</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">add_to_base_routes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">base_context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">user_klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">add_to_base_routes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">base_context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">user_klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 </pre></div>
 </td></tr></table></div>
 <p>which defaults to the really basic <a class="reference internal" href="module/fastapi_aad_auth.oauth.state.html#fastapi_aad_auth.oauth.state.User" title="fastapi_aad_auth.oauth.state.User"><code class="xref py py-class docutils literal notranslate"><span class="pre">User</span></code></a> class, but any object with the same
@@ -436,6 +440,51 @@ associated environment variable, or in the argument, which overrides all other s
 <span class="n">auth</span> <span class="o">=</span> <span class="n">Authenticator</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">user_klass</span><span class="o">=</span><span class="n">MyUserClass</span><span class="p">)</span>
 </pre></div>
 </div>
+
+
+<h2 id="customising-the-ui">Customising the UI<a class="headerlink" href="#customising-the-ui" title="Permalink to this headline">¶</a></h2>
+<p>The UI templates are rendered using Jinja2 Templates, with a customisation from <a class="reference internal" href="module/fastapi_aad_auth.ui.jinja.html#fastapi_aad_auth.ui.jinja.Jinja2Templates" title="fastapi_aad_auth.ui.jinja.Jinja2Templates"><code class="xref py py-class docutils literal notranslate"><span class="pre">Jinja2Templates</span></code></a>
+that uses a loader that allows a package resource to be used in place of a file (using <code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">extends</span> <span class="pre">&lt;package&gt;:&lt;resource&gt;</span> <span class="pre">%}</span></code>).</p>
+<p>Additionally, the <a class="reference internal" href="module/fastapi_aad_auth.config.html#fastapi_aad_auth.config.LoginUIConfig" title="fastapi_aad_auth.config.LoginUIConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoginUIConfig</span></code></a> has an attribute <code class="docutils literal notranslate"><span class="pre">ui_klass</span></code> that can be used to customise how
+the context is built (note that this class should inherit from (or duck-type the public API of) <a class="reference internal" href="module/fastapi_aad_auth.ui.html#fastapi_aad_auth.ui.UI" title="fastapi_aad_auth.ui.UI"><code class="xref py py-class docutils literal notranslate"><span class="pre">UI</span></code></a>)</p>
+<p>These jinja templates also are structured (see <a class="reference internal" href="module/fastapi_aad_auth.ui.html"><span class="doc">fastapi_aad_auth.ui</span></a> docs for the other templates) from a base template that is relatively generic:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">"en"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    {% block Head %}
+        <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>{{app_name}}<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">"UTF-8"</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content</span><span class="o">=</span><span class="s">"IE=edge"</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">"viewport"</span> <span class="na">content</span><span class="o">=</span><span class="s">"width=device-width, initial-scale=1"</span><span class="p">&gt;</span>
+        {% block CSS %}
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">"{{static_path}}/css/bootstrap.min.css"</span> <span class="na">rel</span><span class="o">=</span><span class="s">"stylesheet"</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">"stylesheet"</span> <span class="na">href</span><span class="o">=</span><span class="s">"{{static_path}}/css/cover.css"</span><span class="p">&gt;</span>
+        {% endblock CSS %}
+        {% block Favicon %}
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">"icon"</span> <span class="na">type</span><span class="o">=</span><span class="s">"img/ipng"</span> <span class="na">href</span><span class="o">=</span><span class="s">"/static/img/favicon.png"</span> <span class="p">/&gt;</span>
+        {% endblock Favicon %}
+        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">"Content-Type"</span> <span class="na">content</span><span class="o">=</span><span class="s">"text/html;charset=iso-8859-1"</span> <span class="p">&gt;</span>
+        {% block HeadScripts %}
+        <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">"text/javascript"</span> <span class="na">src</span><span class="o">=</span><span class="s">"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+        {% endblock HeadScripts %}
+    {% endblock Head %}
+    <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    {% block Body %}
+        {% block Nav %}
+        {% endblock Nav %}
+        {% block Content %}
+        {% endblock Content %}
+        {% block Footer %}
+        {% endblock Footer %}
+        {% block BodyScripts %}
+        {% endblock BodyScripts %}
+    {% endblock Body %}
+    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>And can easily be extended or customised.</p>
 
 
 
@@ -486,7 +535,7 @@ associated environment variable, or in the argument, which overrides all other s
               
           </div>
             Last updated on
-              Dec 14, 2020 (version 0.1.8).
+              Dec 14, 2020 (version 0.1.10).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

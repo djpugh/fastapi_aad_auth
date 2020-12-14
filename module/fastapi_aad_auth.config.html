@@ -377,8 +377,8 @@ authentication across workers)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Keyword Arguments</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>secret</strong> (<em>pydantic.types.SecretStr</em>) -- Secret used for encoding authentication information [default: <code class="docutils literal notranslate"><span class="pre">263ba229-20dc-403b-bb27-1fd17fbe6441</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_AUTH_SECRET</span></code> environment variable)</p></li>
-<li><p><strong>salt</strong> (<em>pydantic.types.SecretStr</em>) -- Salt used for encoding authentication information [default: <code class="docutils literal notranslate"><span class="pre">a71f0d8f-a021-41f4-b65d-75965c1fa049</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_AUTH_SALT</span></code> environment variable)</p></li>
+<li><p><strong>secret</strong> (<em>pydantic.types.SecretStr</em>) -- Secret used for encoding authentication information [default: <code class="docutils literal notranslate"><span class="pre">ad88bbcf-0163-47b8-aab8-d3c52bb2e152</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_AUTH_SECRET</span></code> environment variable)</p></li>
+<li><p><strong>salt</strong> (<em>pydantic.types.SecretStr</em>) -- Salt used for encoding authentication information [default: <code class="docutils literal notranslate"><span class="pre">5d952ed6-44e0-4b6e-bdd8-891a79642ccf</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_AUTH_SALT</span></code> environment variable)</p></li>
 </ul>
 </dd>
 </dl>
@@ -394,6 +394,9 @@ authentication across workers)</p>
 <dt id="fastapi_aad_auth.config.Config">
 <em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.config.</code><code class="sig-name descname">Config</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/config.html#Config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.config.Config" title="Permalink to this definition">¶</a></dt>
 <dd><p>The overall configuration for the AAD authentication.</p>
+<blockquote>
+<div><p>Provides the overall configuration and parameters.</p>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Keyword Arguments</dt>
 <dd class="field-odd"><ul class="simple">
@@ -428,6 +431,7 @@ static directory, path to mount the login static information to, and the context
 <li><p><strong>static_directory</strong> (<em>pydantic.types.DirectoryPath</em>) -- Static path for the UI components [default: <code class="docutils literal notranslate"><span class="pre">D:\a\fastapi_aad_auth\fastapi_aad_auth\.tox\docs\lib\site-packages\fastapi_aad_auth\ui\static</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_STATIC_DIR</span></code> environment variable)</p></li>
 <li><p><strong>static_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Path to mount the login static dir in [default: <code class="docutils literal notranslate"><span class="pre">/static-login</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_STATIC_PATH</span></code> environment variable)</p></li>
 <li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) -- Any additional context variables required for the template</p></li>
+<li><p><strong>ui_klass</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)"><em>type</em></a>) -- UI class to use to handle creating and returning the routes for the login, error and user screens, this will be treated as an import path if provided as a string, with the last part the class to load [default: <code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth.ui:UI</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_UI_KLASS</span></code> environment variable)</p></li>
 </ul>
 </dd>
 </dl>
@@ -473,7 +477,7 @@ across workers)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Keyword Arguments</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>secret_key</strong> (<em>pydantic.types.SecretStr</em>) -- Secret used for the session middleware [default: <code class="docutils literal notranslate"><span class="pre">78e7dfe1-b68e-4794-9009-2689c340ec7c</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_SECRET</span></code> environment variable)</p></li>
+<li><p><strong>secret_key</strong> (<em>pydantic.types.SecretStr</em>) -- Secret used for the session middleware [default: <code class="docutils literal notranslate"><span class="pre">4f0b12a2-16af-4ccf-9c88-0757377a21c9</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_SECRET</span></code> environment variable)</p></li>
 <li><p><strong>session_cookie</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Cookie name for the session information [default: <code class="docutils literal notranslate"><span class="pre">session</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_COOKIE</span></code> environment variable)</p></li>
 <li><p><strong>same_site</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- Cookie validation mode for the session [default: <code class="docutils literal notranslate"><span class="pre">lax</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_SAME_SITE</span></code> environment variable)</p></li>
 <li><p><strong>https_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- Allow the sessions only with https connections (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_HTTPS_ONLY</span></code> environment variable)</p></li>
@@ -532,7 +536,7 @@ across workers)</p>
               
           </div>
             Last updated on
-              Dec 14, 2020 (version 0.1.8).
+              Dec 14, 2020 (version 0.1.10).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

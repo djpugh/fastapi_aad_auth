@@ -373,11 +373,13 @@
 <div><p>Creates the key components based on the provided configurations</p>
 </div></blockquote>
 <p>DEPRECATED - fastapi_aad_auth.auth:AADAuth will be deprecated in version 0.2.0, and is replaced by fastapi_aad_auth.auth:Authenticator</p>
-<p>Initialise the AAD config based on the provided configuration.</p>
+<p>Initialise the Authenticator based on the provided configuration.</p>
 <blockquote>
 <div><dl class="simple">
 <dt>Keyword Args:</dt><dd><p>config (fastapi_aad_auth.config.Config): Authentication configuration (includes ui and routing, as well as AAD Application and Tenant IDs)
-add_to_base_routes (bool): Add the authentication to the router</p>
+add_to_base_routes (bool): Add the authentication to the router
+base_context (Dict[str, Any]): a base context to provide
+user_klass (type): The user class to use as part of the auth state</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -391,14 +393,16 @@ add_to_base_routes (bool): Add the authentication to the router</p>
 </dd></dl>
 <dl class="py class">
 <dt id="fastapi_aad_auth.auth.Authenticator">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.auth.</code><code class="sig-name descname">Authenticator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n"><a class="reference internal" href="fastapi_aad_auth.config.html#fastapi_aad_auth.config.Config" title="fastapi_aad_auth.config.Config">fastapi_aad_auth.config.Config</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_to_base_routes</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">base_context</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">user_klass</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)">type</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/auth.html#Authenticator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.auth.Authenticator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.auth.</code><code class="sig-name descname">Authenticator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n"><a class="reference internal" href="fastapi_aad_auth.config.html#fastapi_aad_auth.config.Config" title="fastapi_aad_auth.config.Config">fastapi_aad_auth.config.Config</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_to_base_routes</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">base_context</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">user_klass</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)">type</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/auth.html#Authenticator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.auth.Authenticator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Authenticator class.</p>
 <p>Creates the key components based on the provided configurations</p>
-<p>Initialise the AAD config based on the provided configuration.</p>
+<p>Initialise the Authenticator based on the provided configuration.</p>
 <blockquote>
 <div><dl class="simple">
 <dt>Keyword Args:</dt><dd><p>config (fastapi_aad_auth.config.Config): Authentication configuration (includes ui and routing, as well as AAD Application and Tenant IDs)
-add_to_base_routes (bool): Add the authentication to the router</p>
+add_to_base_routes (bool): Add the authentication to the router
+base_context (Dict[str, Any]): a base context to provide
+user_klass (type): The user class to use as part of the auth state</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -500,7 +504,7 @@ to the default routes as well as adding the authentication specific routes</p>
               
           </div>
             Last updated on
-              Dec 14, 2020 (version 0.1.8).
+              Dec 14, 2020 (version 0.1.10).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
