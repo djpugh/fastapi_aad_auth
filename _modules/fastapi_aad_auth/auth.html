@@ -410,6 +410,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_session_validator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_session_validator</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_providers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_providers</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">auth_backend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_auth_backend</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui_routes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_ui</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_auth_routes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_auth_routes</span><span class="p">()</span>
 
@@ -426,11 +427,11 @@
         <span class="n">validators</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_session_validator</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">provider</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_providers</span><span class="p">:</span>
             <span class="n">validators</span> <span class="o">+=</span> <span class="n">provider</span><span class="o">.</span><span class="n">validators</span>
-        <span class="k">return</span> <span class="n">BaseOAuthBackend</span><span class="p">(</span><span class="n">validators</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">BaseOAuthBackend</span><span class="p">(</span><span class="n">validators</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">enabled</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_init_ui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">ui</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">login_ui</span><span class="o">.</span><span class="n">ui_klass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_context</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ui</span><span class="o">.</span><span class="n">routes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">login_ui</span><span class="o">.</span><span class="n">ui_klass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_context</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">routes</span>
 
     <span class="k">def</span> <span class="nf">_init_auth_routes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
@@ -536,7 +537,6 @@
 <span class="sd">        Keyword Args:</span>
 <span class="sd">            add_error_handlers (bool) : add the error handlers to the app (default is true, but can be set to False to configure specific handling)</span>
 <span class="sd">        """</span>
-
         <span class="k">def</span> <span class="nf">on_auth_error</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Error </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s1"> for request </span><span class="si">{</span><span class="n">request</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_session_validator</span><span class="o">.</span><span class="n">set_post_auth_redirect</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
@@ -553,7 +553,8 @@
         <span class="n">app</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ui_routes</span><span class="p">)</span>
         <span class="n">app</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_auth_routes</span><span class="p">)</span>
         <span class="c1"># TODO: select a specific provider to use here</span>
-        <span class="n">app</span><span class="o">.</span><span class="n">swagger_ui_init_oauth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_providers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">validators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">init_oauth</span></div></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span>
+            <span class="n">app</span><span class="o">.</span><span class="n">swagger_ui_init_oauth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_providers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">validators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">init_oauth</span></div></div>
 
 
 <span class="n">_DEPRECATED_VERSION</span> <span class="o">=</span> <span class="s1">'0.2.0'</span>
@@ -592,7 +593,7 @@
               
           </div>
             Last updated on
-              Dec 15, 2020 (version 0.1.11).
+              Dec 15, 2020 (version 0.1.13).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
