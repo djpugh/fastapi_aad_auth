@@ -59,7 +59,7 @@ class Authenticator(LoggingMixin):
         self._session_validator = self._init_session_validator()
         self._providers = self._init_providers()
         self.auth_backend = self._init_auth_backend()
-        self._ui
+        self._ui = None
         self._ui_routes = self._init_ui()
         self._auth_routes = self._init_auth_routes()
 
