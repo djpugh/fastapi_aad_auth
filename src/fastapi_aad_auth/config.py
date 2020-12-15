@@ -133,7 +133,7 @@ class Config(BaseSettings):
 
     enabled: bool = Field(True, description="Enable authentication", env='FASTAPI_AUTH_ENABLED')
     providers: List[Union[AADConfig]] = Field(None, description="The provider configurations to use")
-    aad: AADConfig = DeprecatedField(None, description='AAD Configuration information', deprecated_in='0.2.0', replaced_by='Config.providers')
+    aad: Optional[AADConfig] = DeprecatedField(None, description='AAD Configuration information', deprecated_in='0.2.0', replaced_by='Config.providers')
     auth_session: AuthSessionConfig = Field(None, description="The configuration for encoding the authentication information in the session")
     routing: RoutingConfig = Field(None, description="Configuration for routing")
     session: SessionConfig = Field(None, description="Configuration for the session middleware")
@@ -146,14 +146,18 @@ class Config(BaseSettings):
         env_file = '.env'
 
     @validator('providers', always=True, pre=True)
-    def _validate_providers(cls, value):
+    def _validate_providers(cls, value, values):
+        enabled = values.get('enabled', cls.__fields__['enabled'].default)
         if value is None:
-            value = [AADConfig(_env_file=cls.Config.env_file)]
+            value = []
+            if enabled:
+                value.append(AADConfig(_env_file=cls.Config.env_file))
         return value
 
     @validator('aad', always=True, pre=True)
     def _validate_aad(cls, value, values):
-        if value is None:
+        enabled = values.get('enabled', cls.__fields__['enabled'].default)
+        if value is None and enabled:
             providers = values.get('providers', [AADConfig(_env_file=cls.Config.env_file)])
             value = [u for u in providers if isinstance(u, AADConfig)][0]
         return value
