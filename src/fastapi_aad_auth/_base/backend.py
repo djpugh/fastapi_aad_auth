@@ -14,9 +14,10 @@ from fastapi_aad_auth.utilities import deprecate
 class BaseOAuthBackend(NotAuthenticatedMixin, LoggingMixin, AuthenticationBackend):
     """Base OAuthBackend with token and session validators."""
 
-    def __init__(self, validators: List[Validator]):
+    def __init__(self, validators: List[Validator], enabled: bool = True):
         """Initialise the validators."""
         super().__init__()
+        self.enabled = enabled
         self.validators = validators[:]
 
     async def authenticate(self, request):
@@ -62,25 +63,32 @@ class BaseOAuthBackend(NotAuthenticatedMixin, LoggingMixin, AuthenticationBacken
         # This is a bit horrible, but is needed for fastapi to get this into OpenAPI (or similar) - it needs to be an OAuth2 object
         # We create this here "dynamically" for each endpoint, as we allow customisation on whether a session is permissible
 
-        class OAuthValidator(OAuth2AuthorizationCodeBearer):
-            """OAuthValidator for API Auth."""
+        if self.enabled:
+            class OAuthValidator(OAuth2AuthorizationCodeBearer):
+                """OAuthValidator for API Auth."""
 
-            def __init__(self_):
-                """Initialise the validator."""
-                token_validators = [u for u in self.validators if isinstance(u, TokenValidator)]
-                super().__init__(authorizationUrl=token_validators[0].model.flows.authorizationCode.authorizationUrl,
-                                 tokenUrl=token_validators[0].model.flows.authorizationCode.tokenUrl,
-                                 scopes=token_validators[0].model.flows.authorizationCode.scopes,
-                                 refreshUrl=token_validators[0].model.flows.authorizationCode.refreshUrl)
+                def __init__(self_):
+                    """Initialise the validator."""
+                    token_validators = [u for u in self.validators if isinstance(u, TokenValidator)]
+                    super().__init__(authorizationUrl=token_validators[0].model.flows.authorizationCode.authorizationUrl,
+                                     tokenUrl=token_validators[0].model.flows.authorizationCode.tokenUrl,
+                                     scopes=token_validators[0].model.flows.authorizationCode.scopes,
+                                     refreshUrl=token_validators[0].model.flows.authorizationCode.refreshUrl)
 
-            async def __call__(self_, request: Request):
-                """Validate a request."""
-                state = self.check(request, allow_session)
-                if state is None or not state.is_authenticated():
-                    raise self.not_authenticated
-                return state
+                async def __call__(self_, request: Request):
+                    """Validate a request."""
+                    state = self.check(request, allow_session)
+                    if state is None or not state.is_authenticated():
+                        raise self.not_authenticated
+                    return state
 
-        return OAuthValidator()
+            return OAuthValidator()
+
+        else:
+            def noauth(request: Request):
+                return AuthenticationState()
+
+        return noauth
 
     @property  # type: ignore
     @deprecate('0.2.0', replaced_by=f'{__name__}:BaseOAuthBackend.requires_auth')

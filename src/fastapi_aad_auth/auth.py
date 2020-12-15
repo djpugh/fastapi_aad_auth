@@ -59,6 +59,7 @@ class Authenticator(LoggingMixin):
         self._session_validator = self._init_session_validator()
         self._providers = self._init_providers()
         self.auth_backend = self._init_auth_backend()
+        self._ui
         self._ui_routes = self._init_ui()
         self._auth_routes = self._init_auth_routes()
 
@@ -75,11 +76,11 @@ class Authenticator(LoggingMixin):
         validators = [self._session_validator]
         for provider in self._providers:
             validators += provider.validators
-        return BaseOAuthBackend(validators)
+        return BaseOAuthBackend(validators, enabled=self.config.enabled)
 
     def _init_ui(self):
-        ui = self.config.login_ui.ui_klass(self.config, self, self._base_context)
-        return ui.routes
+        self._ui = self.config.login_ui.ui_klass(self.config, self, self._base_context)
+        return self._ui.routes
 
     def _init_auth_routes(self):
 
@@ -185,7 +186,6 @@ class Authenticator(LoggingMixin):
         Keyword Args:
             add_error_handlers (bool) : add the error handlers to the app (default is true, but can be set to False to configure specific handling)
         """
-
         def on_auth_error(request: Request, exc: Exception):
             self.logger.exception(f'Error {exc} for request {request}')
             self._session_validator.set_post_auth_redirect(request, request.url.path)
@@ -202,7 +202,8 @@ class Authenticator(LoggingMixin):
         app.routes.extend(self._ui_routes)
         app.routes.extend(self._auth_routes)
         # TODO: select a specific provider to use here
-        app.swagger_ui_init_oauth = self._providers[0].validators[0].init_oauth
+        if self.config.enabled:
+            app.swagger_ui_init_oauth = self._providers[0].validators[0].init_oauth
 
 
 _DEPRECATED_VERSION = '0.2.0'

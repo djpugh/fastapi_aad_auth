@@ -120,7 +120,7 @@ class UI(LoggingMixin):
             async def get_user(request: Request):
                 return self._get_user(request)
 
-            async def get_token(request: Request, auth_state: AuthenticationState = Depends(self._authenticator.auth_backend)):
+            async def get_token(request: Request, auth_state: AuthenticationState = Depends(self._authenticator.auth_backend.requires_auth(allow_session=True))):
                 return self._get_token(request, auth_state)
 
             routes += [Route(self.config.routing.user_path, endpoint=get_user, methods=['GET'], name='user'),
