@@ -353,11 +353,12 @@
             
   
 <h1 id="module-fastapi-aad-auth-ui-login-html--page-root">fastapi_aad_auth.ui:login.html<a class="headerlink" href="#module-fastapi-aad-auth-ui-login-html--page-root" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-html notranslate"><div class="highlight"><pre><span></span>{% extends "base.html" %}
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span>{% extends "fastapi_aad_auth.ui:base.html" %}
 {% block Content %}
         <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'container'</span><span class="p">&gt;</span>
             <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"cover-container d-flex h-100 p-3 mx-auto flex-column text-center justify-content-center"</span><span class="p">&gt;</span>
                 <span class="p">&lt;</span><span class="nt">main</span> <span class="na">class</span><span class="o">=</span><span class="s">"inner-cover"</span><span class="p">&gt;</span>
+                {% block ContentHeader %}
                     <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">"lead"</span><span class="p">&gt;</span>
                     {% if logo %}
                         {{logo | safe }}
@@ -365,16 +366,21 @@
                     {% if appname %}
                         <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">class</span><span class="o">=</span><span class="s">"h1"</span><span class="p">&gt;</span>{{appname}}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
                     {% endif %}
+                {% endblock ContentHeader %}
+                {% block Login %}
                         <span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
                         <span class="p">&lt;</span><span class="nt">h4</span> <span class="na">class</span><span class="o">=</span><span class="s">"mb-3 font-weight-normal"</span><span class="p">&gt;</span>Please sign in<span class="p">&lt;/</span><span class="nt">h4</span><span class="p">&gt;</span>
                         {{ login | safe }}
                     <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-                {% if copyright %}
-                    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">"mt-5 mb-3 lead text-muted"</span><span class="p">&gt;</span>© {{ copyright }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-                {% endif %}
-                {% if explanation %}
-                    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">"mt-5 mb-3 lead text-muted"</span><span class="p">&gt;</span>{{ explanation }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-                {% endif %}
+                {% endblock Login %}
+                {% block ContentFooter %}
+                    {% if copyright %}
+                        <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">"mt-5 mb-3 lead text-muted"</span><span class="p">&gt;</span>© {{ copyright }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+                    {% endif %}
+                    {% if explanation %}
+                        <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">"mt-5 mb-3 lead text-muted"</span><span class="p">&gt;</span>{{ explanation }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+                    {% endif %}
+                {% endblock ContentFooter %}
             
                 <span class="p">&lt;/</span><span class="nt">main</span><span class="p">&gt;</span>
             <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
@@ -431,7 +437,7 @@
               
           </div>
             Last updated on
-              Dec 14, 2020 (version 0.1.10).
+              Dec 15, 2020 (version 0.1.11).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

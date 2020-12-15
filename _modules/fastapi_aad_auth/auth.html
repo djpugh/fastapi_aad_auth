@@ -401,6 +401,10 @@
             <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">login_ui</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">base_context</span><span class="p">)</span>
             <span class="n">base_context</span> <span class="o">=</span> <span class="n">context</span>
+        <span class="k">if</span> <span class="s1">'app_name'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">base_context</span><span class="p">:</span>
+            <span class="n">base_context</span><span class="p">[</span><span class="s1">'app_name'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">login_ui</span><span class="o">.</span><span class="n">app_name</span>
+        <span class="k">if</span> <span class="s1">'static_path'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">base_context</span><span class="p">:</span>
+            <span class="n">base_context</span><span class="p">[</span><span class="s1">'static_path'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">login_ui</span><span class="o">.</span><span class="n">static_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_base_context</span> <span class="o">=</span> <span class="n">base_context</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_base_routes</span> <span class="o">=</span> <span class="n">add_to_base_routes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_session_validator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_session_validator</span><span class="p">()</span>
@@ -588,7 +592,7 @@
               
           </div>
             Last updated on
-              Dec 14, 2020 (version 0.1.10).
+              Dec 15, 2020 (version 0.1.11).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
