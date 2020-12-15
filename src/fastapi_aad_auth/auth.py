@@ -59,6 +59,7 @@ class Authenticator(LoggingMixin):
         self._session_validator = self._init_session_validator()
         self._providers = self._init_providers()
         self.auth_backend = self._init_auth_backend()
+        self._ui
         self._ui_routes = self._init_ui()
         self._auth_routes = self._init_auth_routes()
 
@@ -78,8 +79,8 @@ class Authenticator(LoggingMixin):
         return BaseOAuthBackend(validators, enabled=self.config.enabled)
 
     def _init_ui(self):
-        ui = self.config.login_ui.ui_klass(self.config, self, self._base_context)
-        return ui.routes
+        self._ui = self.config.login_ui.ui_klass(self.config, self, self._base_context)
+        return self._ui.routes
 
     def _init_auth_routes(self):
 
