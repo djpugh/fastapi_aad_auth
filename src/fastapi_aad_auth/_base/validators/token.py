@@ -45,12 +45,16 @@ class TokenValidator(Validator, OAuth2AuthorizationCodeBearer):  # type: ignore
 
     def check(self, request: Request):
         """Check the authentication from the request."""
-        token = self.get_token(request)
-        if token is None:
-            return AuthenticationState.as_unauthenticated(None, None)
-        claims = self.validate_token(token)
-        user = self._get_user_from_claims(claims)
-        return AuthenticationState.authenticate_as(user, None, None)
+        state = AuthenticationState.as_unauthenticated(None, None)
+        try:
+            token = self.get_token(request)
+            if token is not None:
+                claims = self.validate_token(token)
+                user = self._get_user_from_claims(claims)
+                state = AuthenticationState.authenticate_as(user, None, None)
+        except Exception:
+            self.logger.exception('Error authenticating via token')
+        return state
 
     def get_token(self, request: Request):
         """Get the token from the request."""

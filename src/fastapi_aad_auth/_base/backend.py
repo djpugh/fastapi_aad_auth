@@ -48,7 +48,7 @@ class BaseOAuthBackend(NotAuthenticatedMixin, LoggingMixin, AuthenticationBacken
                 continue
             state = validator.check(request)
             self.logger.debug(f'Authentication state {state} from validator {validator}')
-            if state is not None:
+            if state is not None and state.is_authenticated():
                 break
         self.logger.info(f'Identified state {state}')
         return state
