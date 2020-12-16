@@ -1,26 +1,35 @@
 """Utilities."""
 import importlib
+from typing import List, Union
+
+from pydantic.main import ModelMetaclass
+from starlette.requests import Request
 
 from fastapi_aad_auth.utilities import logging  # noqa: F401
 from fastapi_aad_auth.utilities import urls  # noqa: F401
 from fastapi_aad_auth.utilities.deprecate import DeprecatableFieldsMixin, deprecate, deprecate_module, DeprecatedField, is_deprecated  # noqa: F401
 
 
-def bool_from_env(env_value):
+def is_interactive(request: Request):
+    """Check if a request is from an interactive client."""
+    return any([u in request.headers['user-agent'] for u in ['Mozilla', 'Gecko', 'Trident', 'WebKit', 'Presto', 'Edge', 'Blink']])
+
+
+def bool_from_env(env_value: Union[bool, str]) -> bool:
     """Convert environment variable to boolean."""
     if isinstance(env_value, str):
         env_value = env_value.lower() in ['true', '1']
     return env_value
 
 
-def list_from_env(env_value):
+def list_from_env(env_value: Union[List[str], str]) -> List[str]:
     """Convert environment variable to list."""
     if isinstance(env_value, str):
         env_value = [u for u in env_value.split(',') if u]
     return env_value
 
 
-def klass_from_str(value):
+def klass_from_str(value: str):
     """Convert an import path to a class."""
     if isinstance(value, str):
         if ':' in value:
@@ -34,10 +43,10 @@ def klass_from_str(value):
     return value
 
 
-def expand_doc(klass):
+def expand_doc(klass: ModelMetaclass) -> ModelMetaclass:
     """Expand pydantic model documentation to enable autodoc."""
     docs = ['', '', 'Keyword Args:']
-    for name, field in klass.__fields__.items():
+    for name, field in klass.__fields__.items():  # type: ignore
         default_str = ''
         if field.default:
             default_str = f' [default: ``{field.default}``]'
