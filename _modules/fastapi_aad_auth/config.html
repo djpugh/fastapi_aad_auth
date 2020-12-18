@@ -397,7 +397,12 @@
     <span class="k">def</span> <span class="nf">_validate_post_logout_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'landing_path'</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">value</span></div>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">no_redirect_routes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""Routes that we don't want to redirect to."""</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">login_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">login_redirect_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">oauth_base_route</span><span class="si">}</span><span class="s1">/*'</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="LoginUIConfig"><a class="viewcode-back" href="../../module/fastapi_aad_auth.config.html#fastapi_aad_auth.config.LoginUIConfig">[docs]</a><span class="nd">@expand_doc</span>
@@ -563,7 +568,7 @@
               
           </div>
             Last updated on
-              Dec 15, 2020 (version 0.1.13).
+              Dec 18, 2020 (version 0.1.14).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

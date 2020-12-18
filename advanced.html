@@ -241,6 +241,8 @@
         <li class="md-nav__item"><a href="#customising-the-user-model" class="md-nav__link">Customising the User Model</a>
         </li>
         <li class="md-nav__item"><a href="#customising-the-ui" class="md-nav__link">Customising the UI</a>
+        </li>
+        <li class="md-nav__item"><a href="#token-scopes" class="md-nav__link">Token Scopes</a>
         </li></ul>
             </nav>
         </li>
@@ -367,6 +369,8 @@
         <li class="md-nav__item"><a href="#customising-the-user-model" class="md-nav__link">Customising the User Model</a>
         </li>
         <li class="md-nav__item"><a href="#customising-the-ui" class="md-nav__link">Customising the UI</a>
+        </li>
+        <li class="md-nav__item"><a href="#token-scopes" class="md-nav__link">Token Scopes</a>
         </li></ul>
             </nav>
         </li>
@@ -487,6 +491,14 @@ the context is built (note that this class should inherit from (or duck-type the
 <p>And can easily be extended or customised.</p>
 
 
+<h2 id="token-scopes">Token Scopes<a class="headerlink" href="#token-scopes" title="Permalink to this headline">¶</a></h2>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">fastapi_aad_auth</span></code> is used for providing authentication and authorisation on an API using Azure Active Directory as an authorisation provider.</p>
+<p>This means that scopes are requested against the <code class="docutils literal notranslate"><span class="pre">client_id</span></code> of the application rather than e.g. MS Graph or similar, if your backend API needs to
+access Microsoft (or other APIs) you will need to use e.g. an additional msal instance (or provide specific additional <code class="docutils literal notranslate"><span class="pre">scopes</span></code> through the
+<a class="reference internal" href="module/fastapi_aad_auth.providers.aad.html#fastapi_aad_auth.providers.aad.AADSessionAuthenticator.get_access_token" title="fastapi_aad_auth.providers.aad.AADSessionAuthenticator.get_access_token"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi_aad_auth.providers.aad.AADSessionAuthenticator.get_access_token()</span></code></a>, with <code class="docutils literal notranslate"><span class="pre">app_scopes=False</span></code>), if those permissions are added on the App Registration.</p>
+<p>Alternatively, you can use an on-behalf-of flow (see <a class="reference external" href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-on-behalf-of-flow">Azure Docs</a>).</p>
+
+
 
 
           </article>
@@ -535,7 +547,7 @@ the context is built (note that this class should inherit from (or duck-type the
               
           </div>
             Last updated on
-              Dec 15, 2020 (version 0.1.13).
+              Dec 18, 2020 (version 0.1.14).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

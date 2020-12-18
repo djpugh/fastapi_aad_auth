@@ -376,7 +376,11 @@
                 <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
                 <span class="p">&lt;</span><span class="nt">code</span> <span class="na">class</span><span class="o">=</span><span class="s">"language-json card-body"</span><span class="p">&gt;</span>
                         {{ error | safe }}
-                <span class="p">&lt;/</span><span class="nt">code</span><span class="p">&gt;</span>
+                {% if error_detail %}
+                        <span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
+                        {{ error_detail }}
+                {% endif %}
+            <span class="p">&lt;/</span><span class="nt">code</span><span class="p">&gt;</span>
             <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
         {% endblock Error %}
         {% block ContentFooter %}
@@ -440,7 +444,7 @@
               
           </div>
             Last updated on
-              Dec 15, 2020 (version 0.1.13).
+              Dec 18, 2020 (version 0.1.14).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

@@ -396,12 +396,16 @@
 
 <div class="viewcode-block" id="TokenValidator.check"><a class="viewcode-back" href="../../../../module/fastapi_aad_auth._base.validators.token.html#fastapi_aad_auth._base.validators.token.TokenValidator.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
         <span class="sd">"""Check the authentication from the request."""</span>
-        <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">AuthenticationState</span><span class="o">.</span><span class="n">as_unauthenticated</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">claims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_user_from_claims</span><span class="p">(</span><span class="n">claims</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">AuthenticationState</span><span class="o">.</span><span class="n">authenticate_as</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">AuthenticationState</span><span class="o">.</span><span class="n">as_unauthenticated</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">claims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+                <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_user_from_claims</span><span class="p">(</span><span class="n">claims</span><span class="p">)</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="n">AuthenticationState</span><span class="o">.</span><span class="n">authenticate_as</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">'Error authenticating via token'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">state</span></div>
 
 <div class="viewcode-block" id="TokenValidator.get_token"><a class="viewcode-back" href="../../../../module/fastapi_aad_auth._base.validators.token.html#fastapi_aad_auth._base.validators.token.TokenValidator.get_token">[docs]</a>    <span class="k">def</span> <span class="nf">get_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
         <span class="sd">"""Get the token from the request."""</span>
@@ -486,7 +490,7 @@
               
           </div>
             Last updated on
-              Dec 15, 2020 (version 0.1.13).
+              Dec 18, 2020 (version 0.1.14).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

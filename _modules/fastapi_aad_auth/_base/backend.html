@@ -399,7 +399,7 @@
                 <span class="k">continue</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">validator</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Authentication state </span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s1"> from validator </span><span class="si">{</span><span class="n">validator</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">state</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
                 <span class="k">break</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Identified state </span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">state</span></div>
@@ -470,7 +470,7 @@
               
           </div>
             Last updated on
-              Dec 15, 2020 (version 0.1.13).
+              Dec 18, 2020 (version 0.1.14).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

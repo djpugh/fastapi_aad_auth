@@ -350,45 +350,79 @@
             
   <h1 id="modules-fastapi-aad-auth-errors--page-root">Source code for fastapi_aad_auth.errors</h1><div class="highlight"><pre>
 <span></span><span class="sd">"""fastapi_aad_auth errors."""</span>
-<span class="kn">from</span> <span class="nn">starlette.responses</span> <span class="kn">import</span> <span class="n">JSONResponse</span><span class="p">,</span> <span class="n">Response</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
 
+<span class="kn">from</span> <span class="nn">starlette.authentication</span> <span class="kn">import</span> <span class="n">AuthenticationError</span>
+<span class="kn">from</span> <span class="nn">starlette.requests</span> <span class="kn">import</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="nn">starlette.responses</span> <span class="kn">import</span> <span class="n">JSONResponse</span><span class="p">,</span> <span class="n">RedirectResponse</span><span class="p">,</span> <span class="n">Response</span>
+<span class="kn">from</span> <span class="nn">starlette.templating</span> <span class="kn">import</span> <span class="n">Jinja2Templates</span>
 
+<span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities</span> <span class="kn">import</span> <span class="n">is_interactive</span><span class="p">,</span> <span class="n">urls</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities.logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="base_error_handler"><a class="viewcode-back" href="../../module/fastapi_aad_auth.errors.html#fastapi_aad_auth.errors.base_error_handler">[docs]</a><span class="k">def</span> <span class="nf">base_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exception</span><span class="p">,</span> <span class="n">error_type</span><span class="p">,</span> <span class="n">error_message</span><span class="p">,</span> <span class="n">templates</span><span class="p">,</span> <span class="n">template_path</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<div class="viewcode-block" id="base_error_handler"><a class="viewcode-back" href="../../module/fastapi_aad_auth.errors.html#fastapi_aad_auth.errors.base_error_handler">[docs]</a><span class="k">def</span> <span class="nf">base_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exception</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">error_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">error_message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">templates</span><span class="p">:</span> <span class="n">Jinja2Templates</span><span class="p">,</span> <span class="n">template_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">status_code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
     <span class="sd">"""Handle Error as JSON or HTML response depending on request type."""</span>
-    <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Handling error </span><span class="si">{</span><span class="n">exception</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-    <span class="n">status_code</span> <span class="o">=</span> <span class="mi">500</span>
-    <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">u</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">'user-agent'</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'Mozilla'</span><span class="p">,</span> <span class="s1">'Gecko'</span><span class="p">,</span> <span class="s1">'Trident'</span><span class="p">,</span> <span class="s1">'WebKit'</span><span class="p">,</span> <span class="s1">'Presto'</span><span class="p">,</span> <span class="s1">'Edge'</span><span class="p">,</span> <span class="s1">'Blink'</span><span class="p">]]):</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">'Interactive environment so returning error template'</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Path: </span><span class="si">{</span><span class="n">template_path</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-        <span class="n">error_context</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">error_context</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">'error'</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">exception</span><span class="p">),</span>
-                              <span class="s1">'status_code'</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">status_code</span><span class="p">),</span>
-                              <span class="s1">'error_type'</span><span class="p">:</span> <span class="n">error_type</span><span class="p">,</span>
-                              <span class="s1">'error_description'</span><span class="p">:</span> <span class="n">error_message</span><span class="p">,</span>
-                              <span class="s1">'request'</span><span class="p">:</span> <span class="n">request</span><span class="p">})</span>  <span class="c1"># type: ignore</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">TemplateResponse</span><span class="p">(</span><span class="n">template_path</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                                              <span class="n">error_context</span><span class="p">,</span>
-                                              <span class="n">status_code</span><span class="o">=</span><span class="n">status_code</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">is_interactive</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">ui_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exception</span><span class="p">,</span> <span class="n">error_type</span><span class="p">,</span> <span class="n">error_message</span><span class="p">,</span> <span class="n">templates</span><span class="p">,</span> <span class="n">template_path</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">status_code</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">'Non-Interactive environment so returning JSON message'</span><span class="p">)</span>
-
-        <span class="n">response</span> <span class="o">=</span> <span class="n">JSONResponse</span><span class="p">(</span>   <span class="c1"># type: ignore</span>
-            <span class="n">status_code</span><span class="o">=</span><span class="n">status_code</span><span class="p">,</span>
-            <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s2">"message"</span><span class="p">:</span> <span class="n">error_message</span><span class="p">}</span>
-        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">json_error_handler</span><span class="p">(</span><span class="n">error_message</span><span class="p">,</span> <span class="n">status_code</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Response </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span></div>
 
 
+<div class="viewcode-block" id="json_error_handler"><a class="viewcode-back" href="../../module/fastapi_aad_auth.errors.html#fastapi_aad_auth.errors.json_error_handler">[docs]</a><span class="k">def</span> <span class="nf">json_error_handler</span><span class="p">(</span><span class="n">error_message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">status_code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JSONResponse</span><span class="p">:</span>
+    <span class="sd">"""Handle error as a JSON."""</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">'Non-Interactive environment so returning JSON message'</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span>   <span class="c1"># type: ignore</span>
+        <span class="n">status_code</span><span class="o">=</span><span class="n">status_code</span><span class="p">,</span>
+        <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s2">"message"</span><span class="p">:</span> <span class="n">error_message</span><span class="p">}</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="redirect_error_handler"><a class="viewcode-back" href="../../module/fastapi_aad_auth.errors.html#fastapi_aad_auth.errors.redirect_error_handler">[docs]</a><span class="k">def</span> <span class="nf">redirect_error_handler</span><span class="p">(</span><span class="n">redirect_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exception</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RedirectResponse</span><span class="p">:</span>
+    <span class="sd">"""Handle error as a redirect with error info in the query parameters."""</span>
+    <span class="k">return</span> <span class="n">RedirectResponse</span><span class="p">(</span><span class="n">urls</span><span class="o">.</span><span class="n">with_query_params</span><span class="p">(</span><span class="n">redirect_path</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">exception</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ui_error_handler"><a class="viewcode-back" href="../../module/fastapi_aad_auth.errors.html#fastapi_aad_auth.errors.ui_error_handler">[docs]</a><span class="k">def</span> <span class="nf">ui_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exception</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">error_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">error_message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">templates</span><span class="p">:</span> <span class="n">Jinja2Templates</span><span class="p">,</span> <span class="n">template_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">status_code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+    <span class="sd">"""Return a UI view of the error."""</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">'Interactive environment so returning error template'</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Path: </span><span class="si">{</span><span class="n">template_path</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Exception: </span><span class="si">{</span><span class="n">exception</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">error_context</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">exception</span>
+    <span class="n">detail</span> <span class="o">=</span> <span class="s1">''</span>
+    <span class="k">if</span> <span class="n">exception</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">'Getting args'</span><span class="p">)</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">exception</span><span class="o">.</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">detail</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">error_context</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">'error'</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">),</span>
+                          <span class="s1">'status_code'</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">status_code</span><span class="p">),</span>
+                          <span class="s1">'error_type'</span><span class="p">:</span> <span class="n">error_type</span><span class="p">,</span>
+                          <span class="s1">'error_description'</span><span class="p">:</span> <span class="n">error_message</span><span class="p">,</span>
+                          <span class="s1">'error_detail'</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">detail</span><span class="p">),</span>
+                          <span class="s1">'request'</span><span class="p">:</span> <span class="n">request</span><span class="p">})</span>  <span class="c1"># type: ignore</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Error context: </span><span class="si">{</span><span class="n">error_context</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">templates</span><span class="o">.</span><span class="n">TemplateResponse</span><span class="p">(</span><span class="n">template_path</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                      <span class="n">error_context</span><span class="p">,</span>
+                                      <span class="n">status_code</span><span class="o">=</span><span class="n">status_code</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="ConfigurationError"><a class="viewcode-back" href="../../module/fastapi_aad_auth.errors.html#fastapi_aad_auth.errors.ConfigurationError">[docs]</a><span class="k">class</span> <span class="nc">ConfigurationError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">"""Misconfigured application."""</span></div>
+
+
+<div class="viewcode-block" id="AuthorisationError"><a class="viewcode-back" href="../../module/fastapi_aad_auth.errors.html#fastapi_aad_auth.errors.AuthorisationError">[docs]</a><span class="k">class</span> <span class="nc">AuthorisationError</span><span class="p">(</span><span class="n">AuthenticationError</span><span class="p">):</span>
+    <span class="sd">"""Not Authorised to access this resource."""</span></div>
 </pre></div>
 
           </article>
@@ -413,7 +447,7 @@
               
           </div>
             Last updated on
-              Dec 15, 2020 (version 0.1.13).
+              Dec 18, 2020 (version 0.1.14).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

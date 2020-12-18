@@ -367,22 +367,27 @@
 <p>Utilities.</p>
 <dl class="py function">
 <dt id="fastapi_aad_auth.utilities.bool_from_env">
-<code class="sig-prename descclassname">fastapi_aad_auth.utilities.</code><code class="sig-name descname">bool_from_env</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">env_value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/utilities.html#bool_from_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.utilities.bool_from_env" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fastapi_aad_auth.utilities.</code><code class="sig-name descname">bool_from_env</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">env_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/fastapi_aad_auth/utilities.html#bool_from_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.utilities.bool_from_env" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert environment variable to boolean.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="fastapi_aad_auth.utilities.expand_doc">
-<code class="sig-prename descclassname">fastapi_aad_auth.utilities.</code><code class="sig-name descname">expand_doc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">klass</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/utilities.html#expand_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.utilities.expand_doc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fastapi_aad_auth.utilities.</code><code class="sig-name descname">expand_doc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">klass</span><span class="p">:</span> <span class="n">pydantic.main.ModelMetaclass</span></em><span class="sig-paren">)</span> → pydantic.main.ModelMetaclass<a class="reference internal" href="../_modules/fastapi_aad_auth/utilities.html#expand_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.utilities.expand_doc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Expand pydantic model documentation to enable autodoc.</p>
 </dd></dl>
 <dl class="py function">
+<dt id="fastapi_aad_auth.utilities.is_interactive">
+<code class="sig-prename descclassname">fastapi_aad_auth.utilities.</code><code class="sig-name descname">is_interactive</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">starlette.requests.Request</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/utilities.html#is_interactive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.utilities.is_interactive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a request is from an interactive client.</p>
+</dd></dl>
+<dl class="py function">
 <dt id="fastapi_aad_auth.utilities.klass_from_str">
-<code class="sig-prename descclassname">fastapi_aad_auth.utilities.</code><code class="sig-name descname">klass_from_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/utilities.html#klass_from_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.utilities.klass_from_str" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fastapi_aad_auth.utilities.</code><code class="sig-name descname">klass_from_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/utilities.html#klass_from_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.utilities.klass_from_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert an import path to a class.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="fastapi_aad_auth.utilities.list_from_env">
-<code class="sig-prename descclassname">fastapi_aad_auth.utilities.</code><code class="sig-name descname">list_from_env</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">env_value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/utilities.html#list_from_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.utilities.list_from_env" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fastapi_aad_auth.utilities.</code><code class="sig-name descname">list_from_env</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">env_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em><span class="sig-paren">)</span> → List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><a class="reference internal" href="../_modules/fastapi_aad_auth/utilities.html#list_from_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.utilities.list_from_env" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert environment variable to list.</p>
 </dd></dl>
 <div class="toctree-wrapper compound">
@@ -441,7 +446,7 @@
               
           </div>
             Last updated on
-              Dec 15, 2020 (version 0.1.13).
+              Dec 18, 2020 (version 0.1.14).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

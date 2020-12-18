@@ -36,7 +36,7 @@ The :class:`~fastapi_aad_auth.auth.Authenticator` object takes a ``user_klass`` 
     :start-at: class Authenticator
     :end-before: """Initialise
 
-which defaults to the really basic :class:`~fastapi_aad_auth.oauth.state.User` class, but any object with the same 
+which defaults to the really basic :class:`~fastapi_aad_auth.oauth.state.User` class, but any object with the same
 interface should work, so you can add e.g. database calls etc. to validate/persist/check the user and any other
 desired behaviours.
 
@@ -65,3 +65,15 @@ These jinja templates also are structured (see :doc:`module/fastapi_aad_auth.ui`
     :language: html
 
 And can easily be extended or customised.
+
+
+Token Scopes
+~~~~~~~~~~~~
+
+:mod:`fastapi_aad_auth` is used for providing authentication and authorisation on an API using Azure Active Directory as an authorisation provider.
+
+This means that scopes are requested against the ``client_id`` of the application rather than e.g. MS Graph or similar, if your backend API needs to
+access Microsoft (or other APIs) you will need to use e.g. an additional msal instance (or provide specific additional ``scopes`` through the
+:py:meth:`fastapi_aad_auth.providers.aad.AADSessionAuthenticator.get_access_token`, with ``app_scopes=False``), if those permissions are added on the App Registration.
+
+Alternatively, you can use an on-behalf-of flow (see `Azure Docs <https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-on-behalf-of-flow>`_).

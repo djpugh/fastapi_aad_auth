@@ -357,7 +357,7 @@
 <p>Session based validator for interactive (UI) sessions.</p>
 <dl class="py class">
 <dt id="fastapi_aad_auth._base.validators.session.SessionValidator">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth._base.validators.session.</code><code class="sig-name descname">SessionValidator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">session_serializer</span><span class="p">:</span> <span class="n">itsdangerous.url_safe.URLSafeSerializer</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth._base.validators.session.</code><code class="sig-name descname">SessionValidator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">session_serializer</span><span class="p">:</span> <span class="n">itsdangerous.url_safe.URLSafeSerializer</span></em>, <em class="sig-param"><span class="n">ignore_redirect_routes</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validator for session based authentication.</p>
 <p>Initialise validator for session based authentication.</p>
 <dl class="py method">
@@ -374,6 +374,11 @@
 <dt id="fastapi_aad_auth._base.validators.session.SessionValidator.get_state_from_session">
 <code class="sig-name descname">get_state_from_session</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.get_state_from_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.get_state_from_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the session from the request.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="fastapi_aad_auth._base.validators.session.SessionValidator.is_valid_redirect">
+<code class="sig-name descname">is_valid_redirect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">redirect</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.is_valid_redirect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.is_valid_redirect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the redirect is not to endpoints that we don't want to redirect to.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.validators.session.SessionValidator.logout">
@@ -440,7 +445,7 @@
               
           </div>
             Last updated on
-              Dec 15, 2020 (version 0.1.13).
+              Dec 18, 2020 (version 0.1.14).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

@@ -356,7 +356,7 @@
 
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
 <span class="kn">from</span> <span class="nn">starlette.authentication</span> <span class="kn">import</span> <span class="n">requires</span>
-<span class="kn">from</span> <span class="nn">starlette.middleware.authentication</span> <span class="kn">import</span> <span class="n">AuthenticationError</span><span class="p">,</span> <span class="n">AuthenticationMiddleware</span>
+<span class="kn">from</span> <span class="nn">starlette.middleware.authentication</span> <span class="kn">import</span> <span class="n">AuthenticationMiddleware</span>
 <span class="kn">from</span> <span class="nn">starlette.middleware.sessions</span> <span class="kn">import</span> <span class="n">SessionMiddleware</span>
 <span class="kn">from</span> <span class="nn">starlette.requests</span> <span class="kn">import</span> <span class="n">Request</span>
 <span class="kn">from</span> <span class="nn">starlette.responses</span> <span class="kn">import</span> <span class="n">RedirectResponse</span><span class="p">,</span> <span class="n">Response</span>
@@ -365,10 +365,10 @@
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.backend</span> <span class="kn">import</span> <span class="n">BaseOAuthBackend</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.validators</span> <span class="kn">import</span> <span class="n">SessionValidator</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.config</span> <span class="kn">import</span> <span class="n">Config</span>
-<span class="kn">from</span> <span class="nn">fastapi_aad_auth.errors</span> <span class="kn">import</span> <span class="n">base_error_handler</span><span class="p">,</span> <span class="n">ConfigurationError</span>
+<span class="kn">from</span> <span class="nn">fastapi_aad_auth.errors</span> <span class="kn">import</span> <span class="n">AuthenticationError</span><span class="p">,</span> <span class="n">AuthorisationError</span><span class="p">,</span> <span class="n">base_error_handler</span><span class="p">,</span> <span class="n">ConfigurationError</span><span class="p">,</span> <span class="n">json_error_handler</span><span class="p">,</span> <span class="n">redirect_error_handler</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.mixins</span> <span class="kn">import</span> <span class="n">LoggingMixin</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.ui.jinja</span> <span class="kn">import</span> <span class="n">Jinja2Templates</span>
-<span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities</span> <span class="kn">import</span> <span class="n">deprecate</span>
+<span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities</span> <span class="kn">import</span> <span class="n">deprecate</span><span class="p">,</span> <span class="n">is_interactive</span>
 
 
 <span class="n">_BASE_ROUTES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'openapi'</span><span class="p">,</span> <span class="s1">'swagger_ui_html'</span><span class="p">,</span> <span class="s1">'swagger_ui_redirect'</span><span class="p">,</span> <span class="s1">'redoc_html'</span><span class="p">]</span>
@@ -417,7 +417,7 @@
     <span class="k">def</span> <span class="nf">_init_session_validator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">auth_serializer</span> <span class="o">=</span> <span class="n">SessionValidator</span><span class="o">.</span><span class="n">get_session_serializer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">auth_session</span><span class="o">.</span><span class="n">secret</span><span class="o">.</span><span class="n">get_secret_value</span><span class="p">(),</span>
                                                                   <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">auth_session</span><span class="o">.</span><span class="n">salt</span><span class="o">.</span><span class="n">get_secret_value</span><span class="p">())</span>
-        <span class="k">return</span> <span class="n">SessionValidator</span><span class="p">(</span><span class="n">auth_serializer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">SessionValidator</span><span class="p">(</span><span class="n">auth_serializer</span><span class="p">,</span> <span class="n">ignore_redirect_routes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">routing</span><span class="o">.</span><span class="n">no_redirect_routes</span><span class="p">)</span>
         <span class="c1"># Lets setup the oauth backend</span>
 
     <span class="k">def</span> <span class="nf">_init_providers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -465,12 +465,29 @@
             <span class="n">status_code</span> <span class="o">=</span> <span class="mi">500</span>
             <span class="k">return</span> <span class="n">base_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">error_type</span><span class="p">,</span> <span class="n">error_message</span><span class="p">,</span> <span class="n">error_templates</span><span class="p">,</span> <span class="n">error_template_path</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_context</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status_code</span><span class="p">)</span>
 
-        <span class="nd">@app</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">AuthenticationError</span><span class="p">)</span>
-        <span class="k">async</span> <span class="k">def</span> <span class="nf">authentication_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="n">AuthenticationError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+        <span class="nd">@app</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">AuthorisationError</span><span class="p">)</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">authorisation_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="n">AuthorisationError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
             <span class="n">error_message</span> <span class="o">=</span> <span class="s2">"Oops! It seems like you cannot access this information. If this is an error, please contact an admin"</span>
-            <span class="n">error_type</span> <span class="o">=</span> <span class="s1">'Authentication Error'</span>
+            <span class="n">error_type</span> <span class="o">=</span> <span class="s1">'Authorisation Error'</span>
             <span class="n">status_code</span> <span class="o">=</span> <span class="mi">403</span>
             <span class="k">return</span> <span class="n">base_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">error_type</span><span class="p">,</span> <span class="n">error_message</span><span class="p">,</span> <span class="n">error_templates</span><span class="p">,</span> <span class="n">error_template_path</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_context</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status_code</span><span class="p">)</span>
+
+        <span class="nd">@app</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">AuthenticationError</span><span class="p">)</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">authentication_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="n">AuthenticationError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_authentication_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_authentication_error_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="n">AuthenticationError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+        <span class="n">error_message</span> <span class="o">=</span> <span class="s2">"Oops! It seems like you are not correctly authenticated"</span>
+        <span class="n">status_code</span> <span class="o">=</span> <span class="mi">401</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Error </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s1"> for request </span><span class="si">{</span><span class="n">request</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_interactive</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_session_validator</span><span class="o">.</span><span class="n">set_post_auth_redirect</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session_validator</span><span class="o">.</span><span class="n">is_valid_redirect</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">'redirect'</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span>
+            <span class="k">return</span> <span class="n">redirect_error_handler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">routing</span><span class="o">.</span><span class="n">landing_path</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json_error_handler</span><span class="p">(</span><span class="n">error_message</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status_code</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Authenticator.auth_required"><a class="viewcode-back" href="../../module/fastapi_aad_auth.auth.html#fastapi_aad_auth.auth.Authenticator.auth_required">[docs]</a>    <span class="k">def</span> <span class="nf">auth_required</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scopes</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'authenticated'</span><span class="p">,</span> <span class="n">redirect</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'login'</span><span class="p">):</span>
         <span class="sd">"""Decorator to require specific scopes (and redirect to the login ui) for an endpoint.</span>
@@ -537,10 +554,8 @@
 <span class="sd">        Keyword Args:</span>
 <span class="sd">            add_error_handlers (bool) : add the error handlers to the app (default is true, but can be set to False to configure specific handling)</span>
 <span class="sd">        """</span>
-        <span class="k">def</span> <span class="nf">on_auth_error</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Error </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s1"> for request </span><span class="si">{</span><span class="n">request</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_session_validator</span><span class="o">.</span><span class="n">set_post_auth_redirect</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">RedirectResponse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">routing</span><span class="o">.</span><span class="n">landing_path</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">on_auth_error</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="n">AuthenticationError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_authentication_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
 
         <span class="n">app</span><span class="o">.</span><span class="n">add_middleware</span><span class="p">(</span><span class="n">AuthenticationMiddleware</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span>  <span class="n">auth_backend</span><span class="p">,</span> <span class="n">on_error</span><span class="o">=</span><span class="n">on_auth_error</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">add_error_handlers</span><span class="p">:</span>
@@ -593,7 +608,7 @@
               
           </div>
             Last updated on
-              Dec 15, 2020 (version 0.1.13).
+              Dec 18, 2020 (version 0.1.14).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.

@@ -351,12 +351,18 @@
             
   <h1 id="modules-fastapi-aad-auth-utilities-urls--page-root">Source code for fastapi_aad_auth.utilities.urls</h1><div class="highlight"><pre>
 <span></span><span class="sd">"""URL utilities."""</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">starlette.datastructures</span> <span class="kn">import</span> <span class="n">URL</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="with_redirect"><a class="viewcode-back" href="../../../module/fastapi_aad_auth.utilities.urls.html#fastapi_aad_auth.utilities.urls.with_redirect">[docs]</a><span class="k">def</span> <span class="nf">with_redirect</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">post_redirect</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">"""Append a redirect query parameter."""</span>
     <span class="k">if</span> <span class="n">post_redirect</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1">?redirect=</span><span class="si">{</span><span class="n">post_redirect</span><span class="si">}</span><span class="s1">'</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">with_query_params</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">redirect</span><span class="o">=</span><span class="n">post_redirect</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">url</span></div>
 
 
@@ -368,6 +374,17 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span>
     <span class="k">return</span> <span class="n">url</span></div>
+
+
+<div class="viewcode-block" id="with_query_params"><a class="viewcode-back" href="../../../module/fastapi_aad_auth.utilities.urls.html#fastapi_aad_auth.utilities.urls.with_query_params">[docs]</a><span class="k">def</span> <span class="nf">with_query_params</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">query_params</span><span class="p">):</span>
+    <span class="sd">"""Add query parameters to a url."""</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Adding </span><span class="si">{</span><span class="n">query_params</span><span class="si">}</span><span class="s1"> to </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">URL</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Existing query params </span><span class="si">{</span><span class="n">parsed_url</span><span class="o">.</span><span class="n">query</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="n">new_url</span> <span class="o">=</span> <span class="n">parsed_url</span><span class="o">.</span><span class="n">include_query_params</span><span class="p">(</span><span class="o">**</span><span class="n">query_params</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Updated query params </span><span class="si">{</span><span class="n">new_url</span><span class="o">.</span><span class="n">query</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Updated url </span><span class="si">{</span><span class="n">new_url</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">new_url</span><span class="p">)</span></div>
 </pre></div>
 
           </article>
@@ -392,7 +409,7 @@
               
           </div>
             Last updated on
-              Dec 15, 2020 (version 0.1.13).
+              Dec 18, 2020 (version 0.1.14).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
