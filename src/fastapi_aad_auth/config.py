@@ -48,6 +48,11 @@ class RoutingConfig(BaseSettings):
             value = values.get('landing_path')
         return value
 
+    @property
+    def no_redirect_routes(self):
+        """Routes that we don't want to redirect to."""
+        return [self.login_path, self.login_redirect_path, f'{self.oauth_base_route}/*']
+
 
 @expand_doc
 class LoginUIConfig(BaseSettings):

@@ -21,7 +21,11 @@
                 </div>
                 <code class="language-json card-body">
                         {{ error | safe }}
-                </code>
+                {% if error_detail %}
+                        <br>
+                        {{ error_detail }}
+                {% endif %}
+            </code>
             </div>
         {% endblock Error %}
         {% block ContentFooter %}

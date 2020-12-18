@@ -3,6 +3,7 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
 from fastapi_aad_auth._base.state import AuthenticationState
+from fastapi_aad_auth.errors import ConfigurationError
 from fastapi_aad_auth.mixins import LoggingMixin
 
 
@@ -49,6 +50,11 @@ class SessionAuthenticator(LoggingMixin):
 
     def process_login_callback(self, request):
         """Process the provider login callback."""
+        if 'error' in request.query_params:
+            error_args = [request.query_params['error'], ]
+            if 'error_description' in request.query_params:
+                error_args.append(request.query_params['error_description'])
+            raise ConfigurationError(*error_args)
         code = request.query_params.get('code', None)
         state = request.query_params.get('state', None)
         if state is None or code is None:
@@ -64,7 +70,7 @@ class SessionAuthenticator(LoggingMixin):
     def _process_code(self, request, auth_state, code):
         raise NotImplementedError('Implement in subclass')
 
-    def get_access_token(self, user):
+    def get_access_token(self, user, scopes=None, app_scopes=True):
         """Get the access token for the user."""
         raise NotImplementedError('Implement in subclass')
 

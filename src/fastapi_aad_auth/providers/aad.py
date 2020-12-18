@@ -1,7 +1,8 @@
 """AAD OAuth handlers."""
 
 import base64
-from typing import List, Optional
+from enum import Enum
+from typing import List, Optional, Union
 
 from authlib.jose import errors as jwt_errors, jwk, jwt
 from authlib.jose.util import extract_header
@@ -19,6 +20,12 @@ from fastapi_aad_auth._base.state import User
 from fastapi_aad_auth._base.validators import SessionValidator, TokenValidator
 from fastapi_aad_auth.errors import ConfigurationError
 from fastapi_aad_auth.utilities import bool_from_env,  DeprecatableFieldsMixin, expand_doc, is_deprecated, list_from_env, urls
+
+
+class TokenType(Enum):
+    """Type of token to use."""
+    access = 'access_token'
+    id = 'id_token'
 
 
 class BaseSettings(DeprecatableFieldsMixin, _BaseSettings):
@@ -40,7 +47,8 @@ class AADSessionAuthenticator(SessionAuthenticator):
             client_secret=None,
             scopes=None,
             redirect_uri=None,
-            domain_hint=None):
+            domain_hint=None,
+            token_type=TokenType.access):
         """Initialise AAD Authenticator for interactive (UI) sessions."""
         super().__init__(session_validator, token_validator)
         self._redirect_path = redirect_path
@@ -49,10 +57,12 @@ class AADSessionAuthenticator(SessionAuthenticator):
         self._prompt = prompt
         self.client_id = client_id
         if scopes is None:
-            scopes = [f'api://{self.client_id}']
-        elif isinstance(scopes, str):
-            scopes = [scopes]
+            scopes = [f'{self.client_id}/openid']
+        self.logger.info(f'Scopes {scopes}')
         self._scopes = scopes
+        if isinstance(token_type, Enum):
+            token_type = token_type.value
+        self._token_type = token_type
         self._authority = f'https://login.microsoftonline.com/{tenant_id}'
 
         if client_secret is not None:
@@ -80,12 +90,15 @@ class AADSessionAuthenticator(SessionAuthenticator):
 
     def _process_code(self, request: Request, auth_state, code):
         # Let's build up the redirect_uri
-        result = self.msal_application.acquire_token_by_authorization_code(code, scopes=[],
+        result = self.msal_application.acquire_token_by_authorization_code(code, scopes=self._scopes,
                                                                            redirect_uri=self._build_redirect_uri(request))
         self.logger.debug(f'Result {result}')
         if 'error' in result and result['error']:
-            raise ConfigurationError(result)
-        return result['id_token']
+            error_args = [result['error']]
+            if 'error_description' in result:
+                error_args.append(result['error_description'])
+            raise ConfigurationError(*error_args)
+        return result[self._token_type]
 
     def _get_user_from_token(self, token, options=None):
         if options is None:
@@ -95,31 +108,43 @@ class AADSessionAuthenticator(SessionAuthenticator):
         return super()._get_user_from_token(token, options=options)
 
     def _get_authorization_url(self, request, session_state):
-        return self.msal_application.get_authorization_request_url([],
+        return self.msal_application.get_authorization_request_url(self._scopes,
                                                                    state=session_state,
                                                                    claims_challenge='{"id_token": {"roles": {"essential": true} } }',
                                                                    redirect_uri=self._build_redirect_uri(request),
                                                                    prompt=self._prompt,
                                                                    domain_hint=self._domain_hint)
 
-    def get_access_token(self, user):
+    def get_access_token(self, user, scopes=None, app_scopes=True):
         """Get the access token for the user."""
         result = None
         account = None
+        if scopes is None:
+            scopes = self._scopes
+        elif app_scopes:
+            scopes = self.as_app_scopes(scopes)
         if user.username:
             account = self.msal_application.get_accounts(user.username)
         if account:
             account = account[0]
             self.logger.info(account)
-            # This needs you to register the openid api
-            result = self.msal_application.acquire_token_silent_with_error(scopes=[f'api://{self.client_id}/openid'], account=account)
-            self.logger.info(result)
+            # This needs you to register the scopes in the app registration
+            result = self.msal_application.acquire_token_silent_with_error(scopes=scopes, account=account)
+            self.logger.info(f'Acquired Token: {result}')
         if result is None:
             raise ValueError('Token not found')
+        elif 'error' in result:
+            raise ConfigurationError(result['error'], result['error_description'])
         else:
             return {'token_type': result['token_type'],
                     'expires_in': result['expires_in'],
                     'access_token': result['access_token']}
+
+    def as_app_scopes(self, scopes):
+        """Add the application client id to the scopes so that the tokens are valid for this app."""
+        if self.client_id not in scopes[0]:
+            scopes[0] = f'{self.client_id}/{scopes[0]}'
+        return scopes
 
 
 class AADTokenValidator(TokenValidator):
@@ -169,12 +194,13 @@ class AADTokenValidator(TokenValidator):
         self.logger.debug(f'Key is {jwk_}')
         try:
             if hasattr(jwk, 'public_bytes'):
-                public_bytes = jwk_.public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.PKCS1)
+                key = jwk_.public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.PKCS1)
             else:
-                public_bytes = jwk_.raw_key.public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.PKCS1)
+                key = jwk_.raw_key.public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.PKCS1)
+            self.logger.debug(f'Processed Key: {key}')
             claims = jwt.decode(
                 token,
-                public_bytes,
+                key,
             )
         except Exception:
             self.logger.exception('Unable to parse error')
@@ -186,7 +212,6 @@ class AADTokenValidator(TokenValidator):
             options = self._claims_options
         # We need to do some 1.0/2.0 handling because it doesn't seem to work properly
         # TODO: validate whether we want this claim here?
-        # TODO: validate whether the user is approved for the app
         if 'appid' in options and 'azp' in options:
             if 'appid' not in claims:
                 options.pop('appid')
@@ -217,10 +242,10 @@ class AADTokenValidator(TokenValidator):
             username_key = 'unique_name'
         if 'name' not in claims and 'appid' in claims:
             # This is an application/service principal
-            return self._user_klass(name=claims['appid'], email='', username=claims['appid'], groups=claims.get('groups', None), roles=claims.get('roles', None))
-
+            user = self._user_klass(name=claims['appid'], email='', username=claims['appid'], groups=claims.get('groups', None), roles=claims.get('roles', None), scopes=claims.get('scp', None))
         else:
-            return self._user_klass(name=claims['name'], email=claims[username_key], username=claims[username_key], groups=claims.get('groups', None), roles=claims.get('roles', None))
+            user = self._user_klass(name=claims['name'], email=claims[username_key], username=claims[username_key], groups=claims.get('groups', None), roles=claims.get('roles', None), scopes=claims.get('scp', None))
+        return user
 
 
 class AADProvider(Provider):
@@ -242,7 +267,8 @@ class AADProvider(Provider):
             redirect_uri: Optional[str] = None,
             domain_hint: Optional[str] = None,
             user_klass: type = User,
-            oauth_base_route: str = '/oauth'):
+            oauth_base_route: str = '/oauth',
+            token_type: Union[str, TokenType] = TokenType.access):
         """Initialise the auth backend.
 
         Args:
@@ -269,7 +295,7 @@ class AADProvider(Provider):
         session_authenticator = AADSessionAuthenticator(session_validator=session_validator, token_validator=token_validator,
                                                         client_id=client_id, tenant_id=tenant_id, redirect_path=redirect_path,
                                                         prompt=prompt, client_secret=client_secret, scopes=scopes,
-                                                        redirect_uri=redirect_uri, domain_hint=domain_hint)
+                                                        redirect_uri=redirect_uri, domain_hint=domain_hint, token_type=token_type)
         super().__init__(validators=[token_validator], authenticator=session_authenticator, enabled=enabled, oauth_base_route=oauth_base_route)
 
     @classmethod
@@ -296,7 +322,8 @@ class AADProvider(Provider):
                   scopes=provider_config.scopes, client_app_ids=provider_config.client_app_ids,
                   strict_token=provider_config.strict, api_audience=provider_config.api_audience,
                   prompt=provider_config.prompt, domain_hint=provider_config.domain_hint,
-                  redirect_uri=provider_config.redirect_uri, user_klass=user_klass, oauth_base_route=config.routing.oauth_base_route)
+                  redirect_uri=provider_config.redirect_uri, user_klass=user_klass,
+                  oauth_base_route=config.routing.oauth_base_route, token_type=provider_config.token_type)
         # We need to override the login and redirect etc until it is deprecated
         if hasattr(config.routing, 'login_path') and config.routing.login_path and not is_deprecated(config.routing.__fields__['login_path']):
             obj._login_url = config.routing.login_path
@@ -326,7 +353,7 @@ class AADConfig(BaseSettings):
     client_id: SecretStr = Field(..., description="Application Registration Client ID", env='AAD_CLIENT_ID')
     tenant_id: SecretStr = Field(..., description="Application Registration Tenant ID", env='AAD_TENANT_ID')
     client_secret: Optional[SecretStr] = Field(None, description="Application Registration Client Secret (if required)", env='AAD_CLIENT_SECRET')
-    scopes: List[str] = Field(["Read"], description="Additional scopes requested")
+    scopes: Optional[List[str]] = Field(None, description="Additional scopes requested - if the scope is not configured to the application this will throw an error when validating the token")
     client_app_ids: Optional[List[str]] = Field(None, description="Additional Client App IDs to accept tokens from (when running as a backend service)",
                                                 env='AAD_CLIENT_APP_IDS')
     strict: bool = Field(True, description="Check that all claims are provided", env='AAD_STRICT_CLAIM_CHECK')
@@ -337,6 +364,7 @@ class AADConfig(BaseSettings):
     prompt: Optional[str] = Field(None, description="AAD prompt to request", env='AAD_PROMPT')
     domain_hint: Optional[str] = Field(None, description="AAD domain hint", env='AAD_DOMAIN_HINT')
     roles: Optional[List[str]] = Field(None, description="AAD roles required in claims", env='AAD_ROLES')
+    token_type: TokenType = Field(TokenType.access, description='The AAD token type to use to validate (we should use the access token if it is configured, unless we are acting as a pure UI component')
     _provider_klass: type = PrivateAttr(AADProvider)
 
     class Config:  # noqa D106
