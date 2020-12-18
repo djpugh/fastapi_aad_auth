@@ -70,7 +70,7 @@ class SessionAuthenticator(LoggingMixin):
     def _process_code(self, request, auth_state, code):
         raise NotImplementedError('Implement in subclass')
 
-    def get_access_token(self, user, scopes=None):
+    def get_access_token(self, user, scopes=None, app_scopes=True):
         """Get the access token for the user."""
         raise NotImplementedError('Implement in subclass')
 

@@ -74,6 +74,6 @@ Token Scopes
 
 This means that scopes are requested against the ``client_id`` of the application rather than e.g. MS Graph or similar, if your backend API needs to
 access Microsoft (or other APIs) you will need to use e.g. an additional msal instance (or provide specific additional ``scopes`` through the
-:py:method:`fastapi_aad_auth._base.authenticators.session.get_access_token`, with ``app_scopes=False``), if those permissions are added on the App Registration.
+:py:meth:`fastapi_aad_auth.providers.aad.AADSessionAuthenticator.get_access_token`, with ``app_scopes=False``), if those permissions are added on the App Registration.
 
 Alternatively, you can use an on-behalf-of flow (see `Azure Docs <https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-on-behalf-of-flow>`_).

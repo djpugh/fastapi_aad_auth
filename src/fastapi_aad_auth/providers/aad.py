@@ -115,13 +115,13 @@ class AADSessionAuthenticator(SessionAuthenticator):
                                                                    prompt=self._prompt,
                                                                    domain_hint=self._domain_hint)
 
-    def get_access_token(self, user, scopes=None, _app_scopes=True):
+    def get_access_token(self, user, scopes=None, app_scopes=True):
         """Get the access token for the user."""
         result = None
         account = None
         if scopes is None:
             scopes = self._scopes
-        elif _app_scopes:
+        elif app_scopes:
             scopes = self.as_app_scopes(scopes)
         if user.username:
             account = self.msal_application.get_accounts(user.username)
