@@ -8,7 +8,7 @@ Includes:
     * ``user.html``: View the user's information and get an access token
 """
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 from fastapi import Depends
 from starlette.requests import Request
@@ -21,6 +21,7 @@ from fastapi_aad_auth import auth, config  # noqa: F401
 from fastapi_aad_auth._base.state import AuthenticationState
 from fastapi_aad_auth.mixins import LoggingMixin
 from fastapi_aad_auth.ui.jinja import Jinja2Templates
+from fastapi_aad_auth.utilities import urls
 
 
 class UI(LoggingMixin):
@@ -81,14 +82,18 @@ class UI(LoggingMixin):
             context['token_api_path'] = None  # type: ignore
         return self.user_templates.TemplateResponse(self.user_template_path.name, context)
 
-    def _get_token(self, request: Request, auth_state: AuthenticationState):
+    def _get_token(self, request: Request, auth_state: AuthenticationState, scopes: Optional[List[str]] = None):
         """Return the access token for the user."""
         if not isinstance(auth_state, AuthenticationState):
             user = self.__get_user_from_request(request)
         else:
             user = auth_state.user
         if hasattr(user, 'username'):  # type: ignore
-            access_token = self.__get_access_token(user)
+            if scopes is None:
+                scopes = request.query_params.get('scopes', None)
+            if isinstance(scopes, str):
+                scopes = scopes.split(' ')  # type: ignore
+            access_token = self.__get_access_token(user, scopes)
             if access_token:
                 # We want to get the token for each provider that is authenticated
                 return JSONResponse(access_token)   # type: ignore
@@ -98,7 +103,11 @@ class UI(LoggingMixin):
                     return self.__force_authenticate(request)
                 else:
                     return JSONResponse('Unable to access token as user has not authenticated via session')
-        return RedirectResponse(f'{self.config.routing.landing_path}?redirect=/me/token')
+        redirect = '/me/token'
+        if scopes:
+            self.logger.debug(f'Getting Access Token with scopes {scopes}')
+            redirect = urls.with_query_params(redirect, scopes=scopes)
+        return RedirectResponse(urls.with_query_params(self.config.routing.landing_path, redirect=redirect))
 
     @property
     def routes(self):
@@ -120,8 +129,8 @@ class UI(LoggingMixin):
             async def get_user(request: Request):
                 return self._get_user(request)
 
-            async def get_token(request: Request, auth_state: AuthenticationState = Depends(self._authenticator.auth_backend.requires_auth(allow_session=True))):
-                return self._get_token(request, auth_state)
+            async def get_token(request: Request, auth_state: AuthenticationState = Depends(self._authenticator.auth_backend.requires_auth(allow_session=True)), scopes: Optional[List[str]] = None):
+                return self._get_token(request, auth_state, scopes)
 
             routes += [Route(self.config.routing.user_path, endpoint=get_user, methods=['GET'], name='user'),
                        Route(f'{self.config.routing.user_path}/token', endpoint=get_token, methods=['GET'], name='get-token')]
@@ -129,16 +138,20 @@ class UI(LoggingMixin):
         return routes
 
     def __force_authenticate(self, request: Request):
+        # lets get the full redirect including any query parameters
+        redirect = urls.with_query_params(request.url.path, **request.query_params)
+        self.logger.debug(f'Request {request.url}')
+        self.logger.info(f'Forcing authentication with redirect = {redirect}')
         if len(self._authenticator._providers) == 1:
-            return self._authenticator._providers[0].authenticator.process_login_request(request, force=True, redirect=request.url.path)
+            return self._authenticator._providers[0].authenticator.process_login_request(request, force=True, redirect=redirect)
         else:
-            return RedirectResponse(f'{self.config.routing.landing_path}?redirect={request.url.path}')
+            return RedirectResponse(urls.with_query_params(self.config.routing.landing_path, redirect=redirect))
 
-    def __get_access_token(self, user):
+    def __get_access_token(self, user, scopes=None):
         access_token = None
         for provider in self._authenticator._providers:
             try:
-                access_token = provider.authenticator.get_access_token(user)
+                access_token = provider.authenticator.get_access_token(user, scopes)
             except ValueError:
                 pass
             if access_token is not None:

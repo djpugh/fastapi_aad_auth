@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 
 from fastapi import FastAPI
 from starlette.authentication import requires
-from starlette.middleware.authentication import AuthenticationError, AuthenticationMiddleware
+from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.requests import Request
 from starlette.responses import RedirectResponse, Response
@@ -14,10 +14,10 @@ from starlette.routing import request_response, Route
 from fastapi_aad_auth._base.backend import BaseOAuthBackend
 from fastapi_aad_auth._base.validators import SessionValidator
 from fastapi_aad_auth.config import Config
-from fastapi_aad_auth.errors import base_error_handler, ConfigurationError
+from fastapi_aad_auth.errors import AuthenticationError, AuthorisationError, base_error_handler, ConfigurationError, json_error_handler, redirect_error_handler
 from fastapi_aad_auth.mixins import LoggingMixin
 from fastapi_aad_auth.ui.jinja import Jinja2Templates
-from fastapi_aad_auth.utilities import deprecate
+from fastapi_aad_auth.utilities import deprecate, is_interactive
 
 
 _BASE_ROUTES = ['openapi', 'swagger_ui_html', 'swagger_ui_redirect', 'redoc_html']
@@ -66,7 +66,7 @@ class Authenticator(LoggingMixin):
     def _init_session_validator(self):
         auth_serializer = SessionValidator.get_session_serializer(self.config.auth_session.secret.get_secret_value(),
                                                                   self.config.auth_session.salt.get_secret_value())
-        return SessionValidator(auth_serializer)
+        return SessionValidator(auth_serializer, ignore_redirect_routes=self.config.routing.no_redirect_routes)
         # Lets setup the oauth backend
 
     def _init_providers(self):
@@ -114,12 +114,29 @@ class Authenticator(LoggingMixin):
             status_code = 500
             return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=self._base_context.copy(), status_code=status_code)
 
-        @app.exception_handler(AuthenticationError)
-        async def authentication_error_handler(request: Request, exc: AuthenticationError) -> Response:
+        @app.exception_handler(AuthorisationError)
+        async def authorisation_error_handler(request: Request, exc: AuthorisationError) -> Response:
             error_message = "Oops! It seems like you cannot access this information. If this is an error, please contact an admin"
-            error_type = 'Authentication Error'
+            error_type = 'Authorisation Error'
             status_code = 403
             return base_error_handler(request, exc, error_type, error_message, error_templates, error_template_path, context=self._base_context.copy(), status_code=status_code)
+
+        @app.exception_handler(AuthenticationError)
+        async def authentication_error_handler(request: Request, exc: AuthenticationError) -> Response:
+            return self._authentication_error_handler(request, exc)
+
+    def _authentication_error_handler(self, request: Request, exc: AuthenticationError) -> Response:
+        error_message = "Oops! It seems like you are not correctly authenticated"
+        status_code = 401
+        self.logger.exception(f'Error {exc} for request {request}')
+        if is_interactive(request):
+            self._session_validator.set_post_auth_redirect(request, request.url.path)
+            kwargs = {}
+            if self._session_validator.is_valid_redirect(request.url.path):
+                kwargs['redirect'] = request.url.path
+            return redirect_error_handler(self.config.routing.landing_path, exc, **kwargs)
+        else:
+            return json_error_handler(error_message, status_code=status_code)
 
     def auth_required(self, scopes: str = 'authenticated', redirect: str = 'login'):
         """Decorator to require specific scopes (and redirect to the login ui) for an endpoint.
@@ -186,10 +203,8 @@ class Authenticator(LoggingMixin):
         Keyword Args:
             add_error_handlers (bool) : add the error handlers to the app (default is true, but can be set to False to configure specific handling)
         """
-        def on_auth_error(request: Request, exc: Exception):
-            self.logger.exception(f'Error {exc} for request {request}')
-            self._session_validator.set_post_auth_redirect(request, request.url.path)
-            return RedirectResponse(self.config.routing.landing_path)
+        def on_auth_error(request: Request, exc: AuthenticationError):
+            return self._authentication_error_handler(request, exc)
 
         app.add_middleware(AuthenticationMiddleware, backend=self.  auth_backend, on_error=on_auth_error)
         if add_error_handlers:

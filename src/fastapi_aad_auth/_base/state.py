@@ -6,9 +6,10 @@ import uuid
 
 from itsdangerous import URLSafeSerializer
 from itsdangerous.exc import BadSignature
-from pydantic import BaseModel, root_validator
-from starlette.authentication import AuthCredentials, AuthenticationError, SimpleUser, UnauthenticatedUser
+from pydantic import BaseModel, Field, root_validator, validator
+from starlette.authentication import AuthCredentials, SimpleUser, UnauthenticatedUser
 
+from fastapi_aad_auth.errors import AuthenticationError
 from fastapi_aad_auth.mixins import LoggingMixin
 
 
@@ -24,16 +25,28 @@ class AuthenticationOptions(Enum):
 
 class User(BaseModel):
     """User Model."""
-    name: str
-    email: str
-    username: str
-    roles: Optional[List[str]] = None
-    groups: Optional[List[str]] = None
+    name: str = Field(..., description='Full name')
+    email: str = Field(..., description='User email')
+    username: str = Field(..., description='Username')
+    roles: Optional[List[str]] = Field(None, description='Any roles provided')
+    groups: Optional[List[str]] = Field(None, description='Any groups provided')
+    scopes: Optional[List[str]] = Field(None, description='Token scopes provided')
 
     @property
     def permissions(self):
         """User Permissions."""
-        return []
+        permissions = []
+        if self.scopes:
+            for scope in self.scopes:
+                if not scope.startswith('.'):
+                    permissions.append(scope)
+        return permissions[:]
+
+    @validator('scopes', always=True, pre=True)
+    def _validate_scopes(cls, value):
+        if isinstance(value, str):
+            value = value.split(' ')
+        return value
 
 
 class AuthenticationState(LoggingMixin, BaseModel):
