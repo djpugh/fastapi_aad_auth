@@ -48,6 +48,8 @@ class SessionValidator(Validator):
 
     def is_valid_redirect(self, redirect):
         """Check if the redirect is not to endpoints that we don't want to redirect to."""
+        if redirect is None:
+            return False
         return not any(map(partial(fnmatch.fnmatch, redirect), self._ignore_redirect_routes))
 
     @staticmethod
