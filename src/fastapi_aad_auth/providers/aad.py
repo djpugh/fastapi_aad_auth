@@ -15,7 +15,7 @@ from starlette.middleware.authentication import AuthenticationError
 from starlette.requests import Request
 
 from fastapi_aad_auth._base.authenticators import SessionAuthenticator
-from fastapi_aad_auth._base.provider import Provider
+from fastapi_aad_auth._base.provider import Provider, ProviderConfig
 from fastapi_aad_auth._base.state import User
 from fastapi_aad_auth._base.validators import SessionValidator, TokenValidator
 from fastapi_aad_auth.errors import ConfigurationError
@@ -340,7 +340,7 @@ class AADProvider(Provider):
 
 
 @expand_doc
-class AADConfig(BaseSettings):
+class AADConfig(ProviderConfig):
     """Configuration for the AAD application.
 
     Includes expected claims, application registration, etc.

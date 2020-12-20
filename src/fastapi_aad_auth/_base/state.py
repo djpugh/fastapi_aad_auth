@@ -6,11 +6,12 @@ import uuid
 
 from itsdangerous import URLSafeSerializer
 from itsdangerous.exc import BadSignature
-from pydantic import BaseModel, Field, root_validator, validator
+from pydantic import Field, root_validator, validator
 from starlette.authentication import AuthCredentials, SimpleUser, UnauthenticatedUser
 
 from fastapi_aad_auth.errors import AuthenticationError
 from fastapi_aad_auth.mixins import LoggingMixin
+from fastapi_aad_auth.utilities import InheritableBaseModel, InheritablePropertyBaseModel
 
 
 SESSION_STORE_KEY = 'auth'
@@ -23,7 +24,7 @@ class AuthenticationOptions(Enum):
     authenticated = 1
 
 
-class User(BaseModel):
+class User(InheritablePropertyBaseModel):
     """User Model."""
     name: str = Field(..., description='Full name')
     email: str = Field(..., description='User email')
@@ -49,7 +50,7 @@ class User(BaseModel):
         return value
 
 
-class AuthenticationState(LoggingMixin, BaseModel):
+class AuthenticationState(LoggingMixin, InheritableBaseModel):
     """Authentication State."""
     session_state: str = str(uuid.uuid4())
     state: AuthenticationOptions = AuthenticationOptions.unauthenticated
