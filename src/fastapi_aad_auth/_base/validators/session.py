@@ -18,7 +18,9 @@ class SessionValidator(Validator):
     def __init__(self, session_serializer: URLSafeSerializer, ignore_redirect_routes: Optional[List[str]] = None, *args, **kwargs):
         """Initialise validator for session based authentication."""
         self._session_serializer = session_serializer
-        self._ignore_redirect_routes = ignore_redirect_routes
+        if ignore_redirect_routes is None:
+            ignore_redirect_routes = []
+        self._ignore_redirect_routes = [u for u in ignore_redirect_routes if u]
         super().__init__(*args, **kwargs)  # type: ignore
 
     def get_state_from_session(self, request):
