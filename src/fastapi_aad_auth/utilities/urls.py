@@ -1,7 +1,7 @@
 """URL utilities."""
 import logging
 
-from starlette.datastructures import URL, parse_qsl
+from starlette.datastructures import parse_qsl, URL
 
 
 logger = logging.getLogger(__name__)
@@ -25,10 +25,12 @@ def append(base_url, *args):
 
 
 def parse_url(url):
+    """Parse the URL."""
     return URL(url)
 
 
 def query_params(url):
+    """Extract the query parameters from a url."""
     logger.debug(f'Parsing Query Params from {url}')
     url = parse_url(url)
     query = url.query

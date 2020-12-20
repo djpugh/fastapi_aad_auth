@@ -8,7 +8,7 @@ Includes:
     * ``user.html``: View the user's information and get an access token
 """
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from fastapi import Depends
 from starlette.requests import Request
@@ -138,7 +138,7 @@ class UI(LoggingMixin):
 
         return routes
 
-    def __force_authenticate(self, request: Request, ajax: bool=False):
+    def __force_authenticate(self, request: Request, ajax: bool = False) -> Union[JSONResponse, RedirectResponse]:
         # lets get the full redirect including any query parameters
         redirect = urls.with_query_params(request.url.path, **request.query_params)
         self.logger.debug(f'Request {request.url}')
@@ -153,9 +153,9 @@ class UI(LoggingMixin):
             query_params = urls.query_params(redirect_url)
             query_params.pop('redirect', None)
             self.logger.debug(f'url {url.path}, query_params {query_params}')
-            response = JSONResponse({'redirect': url.path, 'query_params': query_params})
+            response = JSONResponse({'redirect': url.path, 'query_params': query_params})  # type: ignore
         else:
-            response = RedirectResponse(redirect)
+            response = RedirectResponse(redirect_url)  # type: ignore
         return response
 
     def __get_access_token(self, user, scopes=None):

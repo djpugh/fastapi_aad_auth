@@ -27,7 +27,7 @@ class Provider(LoggingMixin):
     def get_routes(self, noauth_redirect='/'):
         """Get the authenticator routes."""
 
-        async def login(request: Request, force: bool = False, redirect: str ='/'):
+        async def login(request: Request, force: bool = False, redirect: str = '/'):
             self.logger.debug(f'Logging in with {self.name} - request url {request.url}')
             if self.enabled:
                 self.logger.debug(f'Auth {request.auth}')
