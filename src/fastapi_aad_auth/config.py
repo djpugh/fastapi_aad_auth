@@ -51,7 +51,8 @@ class RoutingConfig(BaseSettings):
     @property
     def no_redirect_routes(self):
         """Routes that we don't want to redirect to."""
-        return [self.login_path, self.login_redirect_path, f'{self.oauth_base_route}/*']
+        expected = [self.login_path, self.login_redirect_path, f'{self.oauth_base_route}/*']
+        return [u for u in expected if u]
 
 
 @expand_doc
