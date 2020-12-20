@@ -56,7 +56,7 @@ class PropertyMixin:
              exclude_defaults: bool = False,
              exclude_none: bool = False,):
         """Return the object as a dictionary."""
-        attribs = super().dict(
+        attribs = super().dict(  # type: ignore
             include=include,
             exclude=exclude,
             by_alias=by_alias,
