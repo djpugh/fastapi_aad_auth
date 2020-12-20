@@ -1,5 +1,6 @@
 """Authentication State Handler."""
 from enum import Enum
+import importlib
 import json
 from typing import List, Optional
 import uuid
@@ -43,6 +44,11 @@ class User(InheritablePropertyBaseModel):
                     permissions.append(scope)
         return permissions[:]
 
+    @property
+    def klass(self):
+        """Return the user klass information for loading from a session."""
+        return f'{self.__class__.__module__}:{self.__class__.__name__}'
+
     @validator('scopes', always=True, pre=True)
     def _validate_scopes(cls, value):
         if isinstance(value, str):
@@ -52,13 +58,26 @@ class User(InheritablePropertyBaseModel):
 
 class AuthenticationState(LoggingMixin, InheritableBaseModel):
     """Authentication State."""
+    _logger = None
     session_state: str = str(uuid.uuid4())
     state: AuthenticationOptions = AuthenticationOptions.unauthenticated
     user: Optional[User] = None
-    _logger = None
 
     class Config:  # noqa: D106
         underscore_attrs_are_private = True
+
+    @validator('user', always=True, pre=True)
+    def _validate_user_klass(cls, value):
+        if isinstance(value, dict):
+            klass = value.get('klass', None)
+            if klass:
+                module, name = klass.split(':')
+                mod = importlib.import_module(module)
+                klass = getattr(mod, name)
+            else:
+                klass = User
+            value = klass(**value)
+        return value
 
     @root_validator(pre=True)
     def _validate_user(cls, values):
