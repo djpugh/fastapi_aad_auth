@@ -82,7 +82,7 @@ class UI(LoggingMixin):
             context['token_api_path'] = None  # type: ignore
         return self.user_templates.TemplateResponse(self.user_template_path.name, context)
 
-    def _get_token(self, request: Request, auth_state: AuthenticationState, scopes: Optional[List[str]] = None):
+    def _get_token(self, request: Request, auth_state: AuthenticationState, scopes: Optional[List[str]] = None, ajax: bool = False):
         """Return the access token for the user."""
         if not isinstance(auth_state, AuthenticationState):
             user = self.__get_user_from_request(request)
@@ -100,7 +100,7 @@ class UI(LoggingMixin):
             else:
                 if any([u in request.headers['user-agent'] for u in ['Mozilla', 'Gecko', 'Trident', 'WebKit', 'Presto', 'Edge', 'Blink']]):
                     # If we have one provider, we can force the login, otherwise we need to request which login route
-                    return self.__force_authenticate(request)
+                    return self.__force_authenticate(request, ajax)
                 else:
                     return JSONResponse('Unable to access token as user has not authenticated via session')
         redirect = '/me/token'
@@ -130,22 +130,33 @@ class UI(LoggingMixin):
                 return self._get_user(request)
 
             async def get_token(request: Request, auth_state: AuthenticationState = Depends(self._authenticator.auth_backend.requires_auth(allow_session=True)), scopes: Optional[List[str]] = None):
-                return self._get_token(request, auth_state, scopes)
+                ajax = request.query_params.get('ajax', False)
+                return self._get_token(request, auth_state, scopes, ajax)
 
             routes += [Route(self.config.routing.user_path, endpoint=get_user, methods=['GET'], name='user'),
                        Route(f'{self.config.routing.user_path}/token', endpoint=get_token, methods=['GET'], name='get-token')]
 
         return routes
 
-    def __force_authenticate(self, request: Request):
+    def __force_authenticate(self, request: Request, ajax: bool=False):
         # lets get the full redirect including any query parameters
         redirect = urls.with_query_params(request.url.path, **request.query_params)
         self.logger.debug(f'Request {request.url}')
         self.logger.info(f'Forcing authentication with redirect = {redirect}')
         if len(self._authenticator._providers) == 1:
-            return self._authenticator._providers[0].authenticator.process_login_request(request, force=True, redirect=redirect)
+            redirect_url = urls.with_query_params(self._authenticator._providers[0].login_url, redirect=redirect, force=True)
         else:
-            return RedirectResponse(urls.with_query_params(self.config.routing.landing_path, redirect=redirect))
+            redirect_url = urls.with_query_params(self.config.routing.landing_path, redirect=redirect)
+        if ajax:
+            self.logger.debug(f'AJAX is true - handling {redirect_url}')
+            url = urls.parse_url(redirect_url)
+            query_params = urls.query_params(redirect_url)
+            query_params.pop('redirect', None)
+            self.logger.debug(f'url {url.path}, query_params {query_params}')
+            response = JSONResponse({'redirect': url.path, 'query_params': query_params})
+        else:
+            response = RedirectResponse(redirect)
+        return response
 
     def __get_access_token(self, user, scopes=None):
         access_token = None
