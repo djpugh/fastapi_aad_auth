@@ -350,6 +350,7 @@
   <h1 id="modules-fastapi-aad-auth-base-state--page-root">Source code for fastapi_aad_auth._base.state</h1><div class="highlight"><pre>
 <span></span><span class="sd">"""Authentication State Handler."""</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">import</span> <span class="nn">uuid</span>
@@ -393,6 +394,11 @@
                     <span class="n">permissions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scope</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">permissions</span><span class="p">[:]</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">klass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""Return the user klass information for loading from a session."""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">'</span>
+
     <span class="nd">@validator</span><span class="p">(</span><span class="s1">'scopes'</span><span class="p">,</span> <span class="n">always</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_validate_scopes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -402,13 +408,26 @@
 
 <div class="viewcode-block" id="AuthenticationState"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState">[docs]</a><span class="k">class</span> <span class="nc">AuthenticationState</span><span class="p">(</span><span class="n">LoggingMixin</span><span class="p">,</span> <span class="n">InheritableBaseModel</span><span class="p">):</span>
     <span class="sd">"""Authentication State."""</span>
+    <span class="n">_logger</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">session_state</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">AuthenticationOptions</span> <span class="o">=</span> <span class="n">AuthenticationOptions</span><span class="o">.</span><span class="n">unauthenticated</span>
     <span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">_logger</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># noqa: D106</span>
         <span class="n">underscore_attrs_are_private</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">'user'</span><span class="p">,</span> <span class="n">always</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_validate_user_klass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">klass</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'klass'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">klass</span><span class="p">:</span>
+                <span class="n">module</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">':'</span><span class="p">)</span>
+                <span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+                <span class="n">klass</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">klass</span> <span class="o">=</span> <span class="n">User</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">klass</span><span class="p">(</span><span class="o">**</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
 
     <span class="nd">@root_validator</span><span class="p">(</span><span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_validate_user</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
@@ -519,7 +538,7 @@
               
           </div>
             Last updated on
-              Dec 20, 2020 (version 0.1.16).
+              Dec 20, 2020 (version 0.1.17).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
