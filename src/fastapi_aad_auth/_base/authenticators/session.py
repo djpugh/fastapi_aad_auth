@@ -38,6 +38,7 @@ class SessionAuthenticator(LoggingMixin):
         """Process the provider login request."""
         self.logger.debug(f'Logging in - request url {request.url}')
         auth_state = self._session_validator.get_state_from_session(request)
+        force = request.query_params.get('force', force)
         if auth_state.is_authenticated() and not force:
             self.logger.debug(f'Authenticated - redirecting {auth_state}')
             response = self.redirect_if_authenticated(auth_state)

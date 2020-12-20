@@ -17,7 +17,7 @@
                         {% if appname %}
                         <h1 class="h1">{{appname}}</h1>
                         {% endif %}
-                        
+
                     </p>
                 </main>
             </div>
@@ -35,22 +35,22 @@
                         <th class="col-2" scope="row">Username</th>
                         <td class="col-10">{{user.username}}</td>
                         </tr>
-                        
+
                         <tr class="d-flex">
                         <th class="col-2" scope="row">Name</th>
                         <td class="col-10">{{user.name}}</td>
                         </tr>
-                        
+
                         <tr class="d-flex">
                         <th class="col-2" scope="row">Email</th>
                         <td class="col-10">{{user.email}}</td>
                         </tr>
-                        
+
                         <tr class="d-flex">
                         <th class="col-2" scope="row">Roles</th>
                         <td class="col-10">{% if user.roles %}{{user.roles|join(", ")}}{% endif %}</td>
                         </tr>
-                        
+
                         <tr class="d-flex">
                         <th class="col-2" scope="row">Groups</th>
                         <td class="col-10">{% if user.groups %}{{user.groups|join(", ")}}{% endif %}</td>
@@ -59,7 +59,7 @@
                         <th class="col-2" scope="row">Permissions</th>
                         <td class="col-10"><i>{% if user.permissions %}{{user.permissions | join("</i>, <i>") | safe}}{% endif %}</i></td>
                         </tr>
-                        
+
                         <tr class="d-flex">
                         <th class="col-2" scope="row">Bearer Token</th>
                         <td class="col-10">
@@ -74,9 +74,9 @@
                             <span id="expires"></span>
                         </td>
                         </tr>
-                    
-                    
-                    
+
+
+
                     </tbody>
                 </table>
             </div>
@@ -97,18 +97,19 @@
             $(document).ready(function(){
               $('#tokenText').val('*********');
               $('#expires').text("");
-              $("#loadToken").click(function(e){          
+              $("#loadToken").click(function(e){
                 if (!e.currentTarget.classList.contains("active")){
-                  $.ajax("{{token_api_path}}").done(function(data){
-                    $('#tokenText').val(data['access_token']);
-                    var expires = new Date();
-                    console.log(expires);
-                    console.log(expires);
-
-                    expires.setSeconds(expires.getSeconds()+data['expires_in']);
-                    console.log(expires);
-                    console.log(expires.toISOString());
-                    $('#expires').text("Expires: "+expires.toString())
+                  $.ajax("{{token_api_path}}?ajax=True").done(function(data){
+                    if (data.redirect) {
+                        data.query_params.redirect = "{{ request.path }}"
+                        login_url = data.redirect+"?"+$.param(data.query_params);
+                        window.location.replace(login_url);
+                    } else {
+                        $('#tokenText').val(data['access_token']);
+                        var expires = new Date();
+                        expires.setSeconds(expires.getSeconds()+data['expires_in']);
+                        $('#expires').text("Expires: "+expires.toString())
+                    }
                   });
                   e.currentTarget.className += " active"}
                 else{
