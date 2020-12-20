@@ -55,7 +55,6 @@
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   
@@ -369,7 +368,9 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_serializer</span><span class="p">:</span> <span class="n">URLSafeSerializer</span><span class="p">,</span> <span class="n">ignore_redirect_routes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">"""Initialise validator for session based authentication."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_session_serializer</span> <span class="o">=</span> <span class="n">session_serializer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_redirect_routes</span> <span class="o">=</span> <span class="n">ignore_redirect_routes</span>
+        <span class="k">if</span> <span class="n">ignore_redirect_routes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ignore_redirect_routes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_redirect_routes</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">ignore_redirect_routes</span> <span class="k">if</span> <span class="n">u</span><span class="p">]</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
 <div class="viewcode-block" id="SessionValidator.get_state_from_session"><a class="viewcode-back" href="../../../../module/fastapi_aad_auth._base.validators.session.html#fastapi_aad_auth._base.validators.session.SessionValidator.get_state_from_session">[docs]</a>    <span class="k">def</span> <span class="nf">get_state_from_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
@@ -435,10 +436,10 @@
               
           </div>
             Last updated on
-              Dec 19, 2020 (version 0.1.15).
+              Dec 20, 2020 (version 0.1.16).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

@@ -55,7 +55,6 @@
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   
@@ -357,11 +356,12 @@
 
 <span class="kn">from</span> <span class="nn">itsdangerous</span> <span class="kn">import</span> <span class="n">URLSafeSerializer</span>
 <span class="kn">from</span> <span class="nn">itsdangerous.exc</span> <span class="kn">import</span> <span class="n">BadSignature</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">root_validator</span><span class="p">,</span> <span class="n">validator</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">root_validator</span><span class="p">,</span> <span class="n">validator</span>
 <span class="kn">from</span> <span class="nn">starlette.authentication</span> <span class="kn">import</span> <span class="n">AuthCredentials</span><span class="p">,</span> <span class="n">SimpleUser</span><span class="p">,</span> <span class="n">UnauthenticatedUser</span>
 
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.errors</span> <span class="kn">import</span> <span class="n">AuthenticationError</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.mixins</span> <span class="kn">import</span> <span class="n">LoggingMixin</span>
+<span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities</span> <span class="kn">import</span> <span class="n">InheritableBaseModel</span><span class="p">,</span> <span class="n">InheritablePropertyBaseModel</span>
 
 
 <span class="n">SESSION_STORE_KEY</span> <span class="o">=</span> <span class="s1">'auth'</span>
@@ -374,7 +374,7 @@
     <span class="n">authenticated</span> <span class="o">=</span> <span class="mi">1</span></div>
 
 
-<div class="viewcode-block" id="User"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<div class="viewcode-block" id="User"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">InheritablePropertyBaseModel</span><span class="p">):</span>
     <span class="sd">"""User Model."""</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Full name'</span><span class="p">)</span>
     <span class="n">email</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'User email'</span><span class="p">)</span>
@@ -400,7 +400,7 @@
         <span class="k">return</span> <span class="n">value</span></div>
 
 
-<div class="viewcode-block" id="AuthenticationState"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState">[docs]</a><span class="k">class</span> <span class="nc">AuthenticationState</span><span class="p">(</span><span class="n">LoggingMixin</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
+<div class="viewcode-block" id="AuthenticationState"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState">[docs]</a><span class="k">class</span> <span class="nc">AuthenticationState</span><span class="p">(</span><span class="n">LoggingMixin</span><span class="p">,</span> <span class="n">InheritableBaseModel</span><span class="p">):</span>
     <span class="sd">"""Authentication State."""</span>
     <span class="n">session_state</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">AuthenticationOptions</span> <span class="o">=</span> <span class="n">AuthenticationOptions</span><span class="o">.</span><span class="n">unauthenticated</span>
@@ -519,10 +519,10 @@
               
           </div>
             Last updated on
-              Dec 19, 2020 (version 0.1.15).
+              Dec 20, 2020 (version 0.1.16).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

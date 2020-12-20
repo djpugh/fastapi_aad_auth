@@ -55,7 +55,6 @@
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   
@@ -366,7 +365,7 @@
 <span class="kn">from</span> <span class="nn">starlette.requests</span> <span class="kn">import</span> <span class="n">Request</span>
 
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.authenticators</span> <span class="kn">import</span> <span class="n">SessionAuthenticator</span>
-<span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.provider</span> <span class="kn">import</span> <span class="n">Provider</span>
+<span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.provider</span> <span class="kn">import</span> <span class="n">Provider</span><span class="p">,</span> <span class="n">ProviderConfig</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.state</span> <span class="kn">import</span> <span class="n">User</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.validators</span> <span class="kn">import</span> <span class="n">SessionValidator</span><span class="p">,</span> <span class="n">TokenValidator</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.errors</span> <span class="kn">import</span> <span class="n">ConfigurationError</span>
@@ -691,7 +690,7 @@
 
 
 <div class="viewcode-block" id="AADConfig"><a class="viewcode-back" href="../../../module/fastapi_aad_auth.providers.aad.html#fastapi_aad_auth.providers.aad.AADConfig">[docs]</a><span class="nd">@expand_doc</span>
-<span class="k">class</span> <span class="nc">AADConfig</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">AADConfig</span><span class="p">(</span><span class="n">ProviderConfig</span><span class="p">):</span>
     <span class="sd">"""Configuration for the AAD application.</span>
 
 <span class="sd">    Includes expected claims, application registration, etc.</span>
@@ -748,10 +747,10 @@
               
           </div>
             Last updated on
-              Dec 19, 2020 (version 0.1.15).
+              Dec 20, 2020 (version 0.1.16).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

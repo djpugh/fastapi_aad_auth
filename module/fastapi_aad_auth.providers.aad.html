@@ -55,7 +55,6 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="fastapi_aad_auth.ui" href="fastapi_aad_auth.ui.html" />
@@ -356,7 +355,7 @@
 <p>AAD OAuth handlers.</p>
 <dl class="py class">
 <dt id="fastapi_aad_auth.providers.aad.AADConfig">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.providers.aad.</code><code class="sig-name descname">AADConfig</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/providers/aad.html#AADConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.providers.aad.AADConfig" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.providers.aad.</code><code class="sig-name descname">AADConfig</code><span class="sig-paren">(</span><em class="sig-param">_env_file: Optional[Union[pathlib.Path</em>, <em class="sig-param">str]] = '&lt;object object&gt;'</em>, <em class="sig-param">_env_file_encoding: Optional[str] = None</em>, <em class="sig-param">_secrets_dir: Optional[Union[pathlib.Path</em>, <em class="sig-param">str]] = None</em>, <em class="sig-param">*</em>, <em class="sig-param">client_id: pydantic.types.SecretStr</em>, <em class="sig-param">tenant_id: pydantic.types.SecretStr</em>, <em class="sig-param">client_secret: pydantic.types.SecretStr = None</em>, <em class="sig-param">scopes: List[str] = None</em>, <em class="sig-param">client_app_ids: List[str] = None</em>, <em class="sig-param">strict: bool = True</em>, <em class="sig-param">api_audience: str = None</em>, <em class="sig-param">redirect_uri: pydantic.networks.HttpUrl = None</em>, <em class="sig-param">prompt: str = None</em>, <em class="sig-param">domain_hint: str = None</em>, <em class="sig-param">roles: List[str] = None</em>, <em class="sig-param">token_type: fastapi_aad_auth.providers.aad.TokenType = &lt;TokenType.access: 'access_token'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/providers/aad.html#AADConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.providers.aad.AADConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configuration for the AAD application.</p>
 <blockquote>
 <div><p>Includes expected claims, application registration, etc.</p>
@@ -382,7 +381,6 @@ roles in the AAD application registration manifest)</p>
 </ul>
 </dd>
 </dl>
-<p>Initialise the Field Deprecation Validator.</p>
 </dd></dl>
 <dl class="py class">
 <dt id="fastapi_aad_auth.providers.aad.AADProvider">
@@ -449,13 +447,13 @@ user_klass: Class to use as a user.</p>
 </dd></dl>
 <dl class="py class">
 <dt id="fastapi_aad_auth.providers.aad.AADTokenValidator">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.providers.aad.</code><code class="sig-name descname">AADTokenValidator</code><span class="sig-paren">(</span><em class="sig-param">client_id: str</em>, <em class="sig-param">tenant_id: str</em>, <em class="sig-param">api_audience: str = None</em>, <em class="sig-param">scheme_name: str = None</em>, <em class="sig-param">scopes: dict = None</em>, <em class="sig-param">auto_error: bool = False</em>, <em class="sig-param">enabled: bool = True</em>, <em class="sig-param">use_pkce: bool = True</em>, <em class="sig-param">strict: bool = True</em>, <em class="sig-param">client_app_ids: Optional[List[str]] = None</em>, <em class="sig-param">user_klass: type = &lt;class 'fastapi_aad_auth._base.state.User'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/providers/aad.html#AADTokenValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.providers.aad.AADTokenValidator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.providers.aad.</code><code class="sig-name descname">AADTokenValidator</code><span class="sig-paren">(</span><em class="sig-param">client_id: str</em>, <em class="sig-param">tenant_id: str</em>, <em class="sig-param">api_audience: Optional[str] = None</em>, <em class="sig-param">scheme_name: Optional[str] = None</em>, <em class="sig-param">scopes: Optional[dict] = None</em>, <em class="sig-param">auto_error: bool = False</em>, <em class="sig-param">enabled: bool = True</em>, <em class="sig-param">use_pkce: bool = True</em>, <em class="sig-param">strict: bool = True</em>, <em class="sig-param">client_app_ids: Optional[List[str]] = None</em>, <em class="sig-param">user_klass: type = &lt;class 'fastapi_aad_auth._base.state.User'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/providers/aad.html#AADTokenValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.providers.aad.AADTokenValidator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validator for AAD token based authentication.</p>
 <p>Initialise validator for AAD token based authentication.</p>
 </dd></dl>
 <dl class="py class">
 <dt id="fastapi_aad_auth.providers.aad.BaseSettings">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.providers.aad.</code><code class="sig-name descname">BaseSettings</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/providers/aad.html#BaseSettings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.providers.aad.BaseSettings" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.providers.aad.</code><code class="sig-name descname">BaseSettings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">_env_file</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'&lt;object object&gt;'</span></em>, <em class="sig-param"><span class="n">_env_file_encoding</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">_secrets_dir</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/providers/aad.html#BaseSettings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.providers.aad.BaseSettings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base Settings with Deprecatable Fields.</p>
 <p>Initialise the Field Deprecation Validator.</p>
 </dd></dl>
@@ -513,10 +511,10 @@ user_klass: Class to use as a user.</p>
               
           </div>
             Last updated on
-              Dec 19, 2020 (version 0.1.15).
+              Dec 20, 2020 (version 0.1.16).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

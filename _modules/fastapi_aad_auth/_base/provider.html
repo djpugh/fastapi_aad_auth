@@ -55,7 +55,6 @@
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   
@@ -351,6 +350,7 @@
   <h1 id="modules-fastapi-aad-auth-base-provider--page-root">Source code for fastapi_aad_auth._base.provider</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">PrivateAttr</span>
 <span class="kn">from</span> <span class="nn">starlette.requests</span> <span class="kn">import</span> <span class="n">Request</span>
 <span class="kn">from</span> <span class="nn">starlette.responses</span> <span class="kn">import</span> <span class="n">RedirectResponse</span>
 <span class="kn">from</span> <span class="nn">starlette.routing</span> <span class="kn">import</span> <span class="n">Route</span>
@@ -358,7 +358,7 @@
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.authenticators</span> <span class="kn">import</span> <span class="n">SessionAuthenticator</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.validators</span> <span class="kn">import</span> <span class="n">Validator</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.mixins</span> <span class="kn">import</span> <span class="n">LoggingMixin</span>
-<span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities</span> <span class="kn">import</span> <span class="n">urls</span>
+<span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities</span> <span class="kn">import</span> <span class="n">InheritableBaseSettings</span><span class="p">,</span> <span class="n">urls</span>
 
 
 <div class="viewcode-block" id="Provider"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.provider.html#fastapi_aad_auth._base.provider.Provider">[docs]</a><span class="k">class</span> <span class="nc">Provider</span><span class="p">(</span><span class="n">LoggingMixin</span><span class="p">):</span>
@@ -378,11 +378,11 @@
 <div class="viewcode-block" id="Provider.get_routes"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.provider.html#fastapi_aad_auth._base.provider.Provider.get_routes">[docs]</a>    <span class="k">def</span> <span class="nf">get_routes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">noauth_redirect</span><span class="o">=</span><span class="s1">'/'</span><span class="p">):</span>
         <span class="sd">"""Get the authenticator routes."""</span>
 
-        <span class="k">async</span> <span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">redirect</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'/'</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Logging in with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> - request url </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Auth </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">auth</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">authenticator</span><span class="o">.</span><span class="n">process_login_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">authenticator</span><span class="o">.</span><span class="n">process_login_request</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'Auth not enabled'</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">RedirectResponse</span><span class="p">(</span><span class="n">noauth_redirect</span><span class="p">)</span>
@@ -422,6 +422,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redirect_url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_redirect_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_oauth_url</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oauth_base_route</span><span class="p">,</span> <span class="s1">'redirect'</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redirect_url</span></div>
+
+
+<div class="viewcode-block" id="ProviderConfig"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.provider.html#fastapi_aad_auth._base.provider.ProviderConfig">[docs]</a><span class="k">class</span> <span class="nc">ProviderConfig</span><span class="p">(</span><span class="n">InheritableBaseSettings</span><span class="p">):</span>
+    <span class="sd">"""Configuration for a provider."""</span>
+
+    <span class="n">_provider_klass</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">Provider</span><span class="p">)</span></div>
 </pre></div>
 
           </article>
@@ -446,10 +452,10 @@
               
           </div>
             Last updated on
-              Dec 19, 2020 (version 0.1.15).
+              Dec 20, 2020 (version 0.1.16).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

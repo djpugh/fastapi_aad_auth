@@ -55,7 +55,6 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Using fastapi_aad_auth" href="usage.html" />
@@ -407,22 +406,11 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.login_ui.ui_klass</span></code> (<code class="docutils literal notranslate"><span class="pre">type</span></code>) : UI class to use to handle creating and returning the routes for the login, error and user screens, this will be treated as an import path if provided as a string, with the last part the class to load [default: <code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth.ui:UI</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_UI_KLASS</span></code> environment variable)</p></li>
 </ul>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers</span></code>:</dt><dd><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers.client_id</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.SecretStr</span></code>) : Application Registration Client ID [default: <code class="docutils literal notranslate"><span class="pre">uuid.uuid4()</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_ID</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers.tenant_id</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.SecretStr</span></code>) : Application Registration Tenant ID [default: <code class="docutils literal notranslate"><span class="pre">uuid.uuid4()</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_TENANT_ID</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers.client_secret</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.SecretStr</span></code>) : Application Registration Client Secret (if required) (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_SECRET</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers.scopes</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) : Additional scopes requested - if the scope is not configured to the application this will throw an error when validating the token</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers.client_app_ids</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) : Additional Client App IDs to accept tokens from (when running as a backend service) (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_APP_IDS</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers.strict</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) : Check that all claims are provided [default: <code class="docutils literal notranslate"><span class="pre">True</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_STRICT_CLAIM_CHECK</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers.api_audience</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : Corresponds to the Application ID URI - used for token validation, defaults to api://{client_id} (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_API_AUDIENCE</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers.redirect_uri</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.networks.HttpUrl</span></code>) : The redirect URI to use - overwrites the default path handling etc (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_REDIRECT_URI</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers.prompt</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : AAD prompt to request (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_PROMPT</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers.domain_hint</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : AAD domain hint (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_DOMAIN_HINT</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers.roles</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) : AAD roles required in claims (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_ROLES</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers.token_type</span></code> (<a class="reference internal" href="module/fastapi_aad_auth.providers.aad.html#fastapi_aad_auth.providers.aad.TokenType" title="fastapi_aad_auth.providers.aad.TokenType"><code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi_aad_auth.providers.aad.TokenType</span></code></a>) : The AAD token type to use to validate (we should use the access token if it is configured, unless we are acting as a pure UI component [default: <code class="docutils literal notranslate"><span class="pre">TokenType.access</span></code>]</p></li>
-</ul>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.routing</span></code>:</dt><dd><ul class="simple">
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.providers</span></code>:
+<code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.routing</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.routing.login_path</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : Path for initiating the AAD oauth call Field will be deprecated in version 0.2.0, and is replaced by Routing.oauth_base_route - To access the new behaviour, set this value to None or an empty string [default: <code class="docutils literal notranslate"><span class="pre">/login/oauth</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_ROUTE</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.routing.login_redirect_path</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : Path for handling the AAD redirect call Field will be deprecated in version 0.2.0, and is replaced by Routing.oauth_base_route - To access the new behaviour, set this value to None or an empty string [default: <code class="docutils literal notranslate"><span class="pre">/login/oauth/redirect</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_REDIRECT_ROUTE</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.routing.oauth_base_route</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : Base Path for initiating the oauth calls [default: <code class="docutils literal notranslate"><span class="pre">/oauth</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_OAUTH_BASE_ROUTE</span></code> environment variable)</p></li>
@@ -432,7 +420,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.routing.home_path</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : Path for the application home page (default redirect if none provided) [default: <code class="docutils literal notranslate"><span class="pre">/</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">APP_HOME_ROUTE</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.routing.post_logout_path</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : Path for the redirect post logout - defaults to the landing path if not provided (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_POST_LOGOUT_ROUTE</span></code> environment variable)</p></li>
 </ul>
-</dd>
+</div></blockquote>
+<dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.session</span></code>:</dt><dd><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.session.secret_key</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.SecretStr</span></code>) : Secret used for the session middleware [default: <code class="docutils literal notranslate"><span class="pre">uuid.uuid4()</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_SECRET</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.session.session_cookie</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : Cookie name for the session information [default: <code class="docutils literal notranslate"><span class="pre">session</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">SESSION_COOKIE</span></code> environment variable)</p></li>
@@ -493,10 +482,10 @@
               
           </div>
             Last updated on
-              Dec 19, 2020 (version 0.1.15).
+              Dec 20, 2020 (version 0.1.16).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>
