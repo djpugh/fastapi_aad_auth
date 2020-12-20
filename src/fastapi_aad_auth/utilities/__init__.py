@@ -7,6 +7,7 @@ from starlette.requests import Request
 
 from fastapi_aad_auth.utilities import logging  # noqa: F401
 from fastapi_aad_auth.utilities import urls  # noqa: F401
+from fastapi_aad_auth.utilities.basemodel import InheritableBaseModel, InheritableBaseSettings, InheritablePropertyBaseModel, InheritablePropertyBaseSettings, PropertyBaseModel, PropertyBaseSettings  # noqa: F401
 from fastapi_aad_auth.utilities.deprecate import DeprecatableFieldsMixin, deprecate, deprecate_module, DeprecatedField, is_deprecated  # noqa: F401
 
 

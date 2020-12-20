@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from pydantic import PrivateAttr
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from starlette.routing import Route
@@ -7,7 +8,7 @@ from starlette.routing import Route
 from fastapi_aad_auth._base.authenticators import SessionAuthenticator
 from fastapi_aad_auth._base.validators import Validator
 from fastapi_aad_auth.mixins import LoggingMixin
-from fastapi_aad_auth.utilities import urls
+from fastapi_aad_auth.utilities import InheritableBaseSettings, urls
 
 
 class Provider(LoggingMixin):
@@ -71,3 +72,9 @@ class Provider(LoggingMixin):
         if self._redirect_url is None:
             self._redirect_url = self._build_oauth_url(self.oauth_base_route, 'redirect')
         return self._redirect_url
+
+
+class ProviderConfig(InheritableBaseSettings):
+    """Configuration for a provider."""
+
+    _provider_klass: type = PrivateAttr(Provider)

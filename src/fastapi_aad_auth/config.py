@@ -1,10 +1,11 @@
 """fastapi_aad_auth configuration options."""
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional
 import uuid
 
 from pkg_resources import resource_filename
 from pydantic import BaseSettings as _BaseSettings, DirectoryPath, Field, FilePath, SecretStr, validator
 
+from fastapi_aad_auth._base.provider import ProviderConfig
 from fastapi_aad_auth.providers.aad import AADConfig
 from fastapi_aad_auth.utilities import bool_from_env, DeprecatableFieldsMixin, DeprecatedField, expand_doc, klass_from_str
 
@@ -137,7 +138,7 @@ class Config(BaseSettings):
     """
 
     enabled: bool = Field(True, description="Enable authentication", env='FASTAPI_AUTH_ENABLED')
-    providers: List[Union[AADConfig]] = Field(None, description="The provider configurations to use")
+    providers: List[ProviderConfig] = Field(None, description="The provider configurations to use")
     aad: Optional[AADConfig] = DeprecatedField(None, description='AAD Configuration information', deprecated_in='0.2.0', replaced_by='Config.providers')
     auth_session: AuthSessionConfig = Field(None, description="The configuration for encoding the authentication information in the session")
     routing: RoutingConfig = Field(None, description="Configuration for routing")
@@ -157,6 +158,7 @@ class Config(BaseSettings):
             value = []
             if enabled:
                 value.append(AADConfig(_env_file=cls.Config.env_file))
+
         return value
 
     @validator('aad', always=True, pre=True)
