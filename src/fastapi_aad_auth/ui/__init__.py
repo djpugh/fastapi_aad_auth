@@ -59,6 +59,7 @@ class UI(LoggingMixin):
         if 'login' not in context or context['login'] is None:  # type: ignore
             post_redirect = self._authenticator._session_validator.pop_post_auth_redirect(request)
             context['login'] = '<br>'.join([provider.get_login_button(post_redirect) for provider in self._authenticator._providers])  # type: ignore
+        self.logger.debug(f'Context {context}')
         return self.login_templates.TemplateResponse(self.login_template_path.name, context)  # type: ignore
 
     def _get_user(self, request: Request, **kwargs):

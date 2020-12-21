@@ -20,13 +20,13 @@
                 {% endblock Login %}
                 {% block ContentFooter %}
                     {% if copyright %}
-                        <p class="mt-5 mb-3 lead text-muted">© {{ copyright }}</p>
+                        <p class="mt-5 mb-3 lead text-muted">© {{ copyright | safe }}</p>
                     {% endif %}
                     {% if explanation %}
-                        <p class="mt-5 mb-3 lead text-muted">{{ explanation }}</p>
+                        <p class="mt-5 mb-3 lead text-muted">{{ explanation | safe }}</p>
                     {% endif %}
                 {% endblock ContentFooter %}
-            
+
                 </main>
             </div>
         </div>
