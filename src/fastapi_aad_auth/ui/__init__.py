@@ -143,10 +143,11 @@ class UI(LoggingMixin):
         redirect = urls.with_query_params(request.url.path, **request.query_params)
         self.logger.debug(f'Request {request.url}')
         self.logger.info(f'Forcing authentication with redirect = {redirect}')
-        if len(self._authenticator._providers) == 1:
-            redirect_url = urls.with_query_params(self._authenticator._providers[0].login_url, redirect=redirect, force=True)
+        providers = [u for u in self._authenticator._providers if u.authenticator]
+        if len(providers) == 1:
+            redirect_url = urls.with_query_params(providers[0].login_url, redirect=redirect, force=True)
         else:
-            redirect_url = urls.with_query_params(self.config.routing.landing_path, redirect=redirect)
+            redirect_url = urls.with_query_params(self.config.routing.login_path, redirect=redirect, force=True)
         if ajax:
             self.logger.debug(f'AJAX is true - handling {redirect_url}')
             url = urls.parse_url(redirect_url)
@@ -161,10 +162,11 @@ class UI(LoggingMixin):
     def __get_access_token(self, user, scopes=None):
         access_token = None
         for provider in self._authenticator._providers:
-            try:
-                access_token = provider.authenticator.get_access_token(user, scopes)
-            except ValueError:
-                pass
+            if provider.authenticator:
+                try:
+                    access_token = provider.authenticator.get_access_token(user, scopes)
+                except ValueError:
+                    pass
             if access_token is not None:
                 break
         return access_token
