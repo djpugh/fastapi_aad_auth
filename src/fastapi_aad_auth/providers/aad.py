@@ -86,6 +86,7 @@ class AADSessionAuthenticator(SessionAuthenticator):
             else:
                 port = f':{request.url.port}'
             redirect_uri = f'{request.url.scheme}://{request.url.hostname}{port}{self._redirect_path}'
+        self.logger.info(f'Created redirect uri: {redirect_uri} from {request.url}')
         return redirect_uri
 
     def _process_code(self, request: Request, auth_state, code):
