@@ -28,7 +28,7 @@ Configure a web platform for the UI based redirection (or whatever else is set i
     https://<hostname>/oauth/aad/redirect
 
 e.g. for local development::
-    
+
     http://localhost:8000/oauth/aad/redirect
 
 .. warning::
@@ -40,21 +40,21 @@ Youu also need to decide whether the application is multi-tenant or single-tenan
 
 .. figure:: figures/App-Registration-Redirect-URIs.PNG
    :alt: Overview of redirect URI configuration for local testing
-   
-   An example configuration for rediredt URIs for testing an application
+
+   An example configuration for redirect URIs for testing an application
 
 On the "Expose an API tab", you need to set the Application ID URI
 
 .. figure:: figures/App-Registration-App-ID.PNG
    :alt: Overview of app id URI
-   
+
    An example configuration for api Scopes for testing an application
 
 and add scopes as configured for the application (e.g. the default ``openid`` scope is needed)
 
 .. figure:: figures/App-Registration-Scopes.PNG
    :alt: Overview of app scopes
-   
+
    An example configuration for api Scopes for testing an application
 
 .. _config-fastapi_aad_auth-env:
@@ -88,7 +88,7 @@ You can initialise it with::
     from fastapi_aad_auth import AADAuth, AuthenticationState, Config
     auth_provider = AADAuth()
 
-    # If you had a config that wasn't set in the environment, you could use 
+    # If you had a config that wasn't set in the environment, you could use
     # auth_provider = AADAuth(Config(<my config kwargs>)
 
 The full set of configuration options is documented in :doc:`config`
@@ -133,11 +133,11 @@ The :class:``fastapi.FastAPI`` ``swagger_ui_init_oauth`` variable is set automat
 
     auth_provider.configure_app(app)
 
- 
+
 Authenticating a client
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-If you are authenticating an e.g. console client, you need to get an access token via the Azure active directory configuration, there are examples of this (developed from the 
+If you are authenticating an e.g. console client, you need to get an access token via the Azure active directory configuration, there are examples of this (developed from the
 `Azure Docs <https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-desktop-acquire-token?tabs=python#command-line-tool-without-a-web-browser>`_), e.g.::
 
     """Device Code authenticator for a target client"""
@@ -167,9 +167,9 @@ If you are authenticating an e.g. console client, you need to get an access toke
             self.msal_application = msal.PublicClientApplication(
                 client_id,
                 authority=self._authority)
-        
+
         def get_token(self):
-            """Authenticate via device code flow""" 
+            """Authenticate via device code flow"""
             # From https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-desktop-acquire-token?tabs=python#command-line-tool-without-a-web-browser
             flow = self.msal_application.initiate_device_flow(scopes=self._scopes)
             if "user_code" not in flow:
@@ -180,7 +180,7 @@ If you are authenticating an e.g. console client, you need to get an access toke
             sys.stdout.flush()  # Some terminal needs this to ensure the message is shown
             result = self.msal_application.acquire_token_by_device_flow(flow)
             return result
-        
+
         def get_session(self):
             tokens = self.get_token()
             access_token = tokens['access_token']
@@ -206,5 +206,5 @@ Tools like Postman allow you to configure authentication via oauth - this shows 
 
 .. figure:: figures/Postman-Auth-Config.PNG
    :alt: Overview of authenticating for postman
-   
+
    An example of how to configure client credentials (using another app registration) for postman - replace the {tenant} and {appid} info, along with the client id and client secret

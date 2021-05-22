@@ -6,7 +6,12 @@
 {% endblock CSS %}
 
 {% block Content %}
+    {% if containerClass %}
+        <div class='{{containerClass}}'>
+    {% else %}
         <div class='container'>
+    {% endif %}
+
         {% block ContentHeader %}
             <div class="cover-container d-flex h-5 p-3 mx-auto flex-column text-center justify-content-center">
                 <main class="inner-cover">

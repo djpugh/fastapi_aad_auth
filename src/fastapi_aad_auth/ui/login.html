@@ -1,6 +1,10 @@
 {% extends "fastapi_aad_auth.ui:base.html" %}
 {% block Content %}
+    {% if containerClass %}
+        <div class='{{containerClass}}'>
+    {% else %}
         <div class='container'>
+    {% endif %}
             <div class="cover-container d-flex h-100 p-3 mx-auto flex-column text-center justify-content-center">
                 <main class="inner-cover">
                 {% block ContentHeader %}

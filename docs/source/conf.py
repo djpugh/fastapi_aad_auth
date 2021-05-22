@@ -509,7 +509,7 @@ class ConfigDocumenter(ClassDocumenter):
                 config_vars.append(f'  * ``{path}.{field_name}``{type_}: {field.field_info.description}{default_str}{env_var}')
         for field_name in sorted(config_nested.keys()):
             config_vars.append(f'  ``{path}.{field_name}``:')
-            for var in config_nested[field_name]:              
+            for var in config_nested[field_name]:
                 config_vars.append(f'  {var}')
         return config_vars
 
