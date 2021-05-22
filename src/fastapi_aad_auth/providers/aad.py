@@ -273,21 +273,21 @@ class AADProvider(Provider):
         """Initialise the auth backend.
 
         Args:
-            session_serializer: Session serializer object
-            client_id: Client ID from Azure App Registration
-            tenant_id: Tenant ID to connect to for Azure App Registration
+            * session_serializer: Session serializer object
+            * client_id: Client ID from Azure App Registration
+            * tenant_id: Tenant ID to connect to for Azure App Registration
 
         Keyword Args:
-            prompt: Prompt options for Azure AD
-            client_secret: Client secret value
-            scopes: Additional scopes requested
-            enabled: Boolean flag to enable this backend
-            client_app_ids: List of client apps to accept tokens from
-            strict_token: Strictly evaluate token
-            api_audience: Api Audience declared in Azure AD App registration
-            redirect_uri: Full URI for post authentication callbacks
-            domain_hint: Hint for the domain
-            user_klass: Class to use as a user.
+            * prompt: Prompt options for Azure AD
+            * client_secret: Client secret value
+            * scopes: Additional scopes requested
+            * enabled: Boolean flag to enable this backend
+            * client_app_ids: List of client apps to accept tokens from
+            * strict_token: Strictly evaluate token
+            * api_audience: Api Audience declared in Azure AD App registration
+            * redirect_uri: Full URI for post authentication callbacks
+            * domain_hint: Hint for the domain
+            * user_klass: Class to use as a user.
         """
         redirect_path = self._build_oauth_url(oauth_base_route, 'redirect')
         token_validator = AADTokenValidator(client_id=client_id, tenant_id=tenant_id, api_audience=api_audience,

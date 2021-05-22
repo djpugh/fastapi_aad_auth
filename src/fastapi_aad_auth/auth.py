@@ -26,17 +26,17 @@ _BASE_ROUTES = ['openapi', 'swagger_ui_html', 'swagger_ui_redirect', 'redoc_html
 class Authenticator(LoggingMixin):
     """Authenticator class.
 
-    Creates the key components based on the provided configurations
+    Creates the key components based on the provided configurations.
     """
 
     def __init__(self, config: Config = None, add_to_base_routes: bool = True, base_context: Optional[Dict[str, Any]] = None, user_klass: Optional[type] = None):
         """Initialise the Authenticator based on the provided configuration.
 
         Keyword Args:
-            config (fastapi_aad_auth.config.Config): Authentication configuration (includes ui and routing, as well as AAD Application and Tenant IDs)
-            add_to_base_routes (bool): Add the authentication to the router
-            base_context (Dict[str, Any]): a base context to provide
-            user_klass (type): The user class to use as part of the auth state
+            * config (fastapi_aad_auth.config.Config): Authentication configuration (includes ui and routing, as well as AAD Application and Tenant IDs)
+            * add_to_base_routes (bool): Add the authentication to the router
+            * base_context (Dict[str, Any]): a base context to provide
+            * user_klass (type): The user class to use as part of the auth state
         """
         super().__init__()
         if config is None:

@@ -43,6 +43,7 @@ def DeprecatedField(*args, **kwargs):  # noqa: D103
 
 class DeprecatableFieldsMixin:
     """Mixin for deprecatable fields."""
+
     def __new__(cls, *args, **kwargs):
         """Initialise the Field Deprecation Validator."""
         for field_name, field in cls.__fields__.items():
@@ -110,7 +111,7 @@ def _update_docstring(deprecation_message, docstring=None):
         docstring = ''
     else:
         docstring += '\n\n'
-    docstring += f"DEPRECATED - {deprecation_message}"
+    docstring += f"*DEPRECATED* - {deprecation_message}"
     return docstring
 
 

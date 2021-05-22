@@ -1,7 +1,9 @@
 """Utilities."""
 import importlib
+from pathlib import Path
 from typing import List, Union
 
+from pydantic import SecretStr
 from pydantic.main import ModelMetaclass
 from starlette.requests import Request
 
@@ -49,8 +51,19 @@ def expand_doc(klass: ModelMetaclass) -> ModelMetaclass:
     docs = ['', '', 'Keyword Args:']
     for name, field in klass.__fields__.items():  # type: ignore
         default_str = ''
+        #
         if field.default:
-            default_str = f' [default: ``{field.default}``]'
+            default_str = ''
+            if field.default:
+                if SecretStr not in field.type_.__mro__:
+                    if Path in field.type_.__mro__:
+                        field.default = str(Path(field.default).relative_to(Path(field.default).parents[2]))
+                    if field.name == 'user_klass':
+                        default_str = f' [default: :class:`{field.default.replace("`", "").replace(":", ".")}`]'
+                    else:
+                        default_str = f' [default: ``{field.default}``]'
+                else:
+                    default_str = ' [default: ``uuid.uuid4()``]'
         module = field.outer_type_.__module__
         if module != 'builtins':
             if hasattr(field.outer_type_, '__origin__'):
