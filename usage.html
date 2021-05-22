@@ -429,7 +429,7 @@ for the Authorization Code Flow with PKCE for:</p>
 <p>Youu also need to decide whether the application is multi-tenant or single-tenant</p>
 <div class="figure align-default" id="id2">
 <img alt="Overview of redirect URI configuration for local testing" src="_images/App-Registration-Redirect-URIs.PNG"/>
-<p class="caption"><span class="caption-text">An example configuration for rediredt URIs for testing an application</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">An example configuration for redirect URIs for testing an application</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <p>On the "Expose an API tab", you need to set the Application ID URI</p>
 <div class="figure align-default" id="id3">
@@ -485,7 +485,7 @@ from the certificates and secrets section of the app registration)</p>
 <span class="n">router</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">()</span>
 
 <span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'/hello'</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">auth_state</span><span class="p">:</span> <span class="n">AuthenticationState</span> <span class="o">=</span><span class="n">D</span> <span class="n">epends</span><span class="p">(</span><span class="n">auth_provider</span><span class="o">.</span><span class="n">auth_backend</span><span class="o">.</span><span class="n">requires_auth</span><span class="p">(</span><span class="n">allow_session</span><span class="o">=</span><span class="kc">True</span><span class="p">))):</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">auth_state</span><span class="p">:</span> <span class="n">AuthenticationState</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">auth_provider</span><span class="o">.</span><span class="n">auth_backend</span><span class="o">.</span><span class="n">requires_auth</span><span class="p">(</span><span class="n">allow_session</span><span class="o">=</span><span class="kc">True</span><span class="p">))):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">auth_state</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="s1">'hello'</span><span class="p">:</span> <span class="s1">'world'</span><span class="p">}</span>
 </pre></div>
@@ -624,14 +624,14 @@ from the certificates and secrets section of the app registration)</p>
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

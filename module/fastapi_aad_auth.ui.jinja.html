@@ -355,22 +355,22 @@
 <p>Provide Jinja2 Helpers.</p>
 <dl class="py class">
 <dt id="fastapi_aad_auth.ui.jinja.Jinja2Templates">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.ui.jinja.</code><code class="sig-name descname">Jinja2Templates</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">directory</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/ui/jinja.html#Jinja2Templates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.ui.jinja.Jinja2Templates" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth.ui.jinja.</span></code><code class="sig-name descname"><span class="pre">Jinja2Templates</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/ui/jinja.html#Jinja2Templates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth.ui.jinja.Jinja2Templates" title="Permalink to this definition">¶</a></dt>
 <dd><p>templates = Jinja2Templates("templates")</p>
 <p>return templates.TemplateResponse("index.html", {"request": request})</p>
 <dl class="py method">
 <dt id="fastapi_aad_auth.ui.jinja.Jinja2Templates.get_env">
-<code class="sig-name descname">get_env</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">directory</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> → jinja2.environment.Environment<a class="reference internal" href="../_modules/fastapi_aad_auth/ui/jinja.html#Jinja2Templates.get_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.ui.jinja.Jinja2Templates.get_env" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_env</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> → <span class="pre">jinja2.environment.Environment</span><a class="reference internal" href="../_modules/fastapi_aad_auth/ui/jinja.html#Jinja2Templates.get_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth.ui.jinja.Jinja2Templates.get_env" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the environment.</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
 <dt id="fastapi_aad_auth.ui.jinja.PkgResourcesTemplateLoader">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.ui.jinja.</code><code class="sig-name descname">PkgResourcesTemplateLoader</code><a class="reference internal" href="../_modules/fastapi_aad_auth/ui/jinja.html#PkgResourcesTemplateLoader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.ui.jinja.PkgResourcesTemplateLoader" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth.ui.jinja.</span></code><code class="sig-name descname"><span class="pre">PkgResourcesTemplateLoader</span></code><a class="reference internal" href="../_modules/fastapi_aad_auth/ui/jinja.html#PkgResourcesTemplateLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth.ui.jinja.PkgResourcesTemplateLoader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load jinja templates via pkg_resources.</p>
 <dl class="py method">
 <dt id="fastapi_aad_auth.ui.jinja.PkgResourcesTemplateLoader.get_source">
-<em class="property">static </em><code class="sig-name descname">get_source</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">environment</span><span class="p">:</span> <span class="n">jinja2.environment.Environment</span></em>, <em class="sig-param"><span class="n">template</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/ui/jinja.html#PkgResourcesTemplateLoader.get_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.ui.jinja.PkgResourcesTemplateLoader.get_source" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">get_source</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jinja2.environment.Environment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/ui/jinja.html#PkgResourcesTemplateLoader.get_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth.ui.jinja.PkgResourcesTemplateLoader.get_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the template via package resources.</p>
 </dd></dl>
 </dd></dl>
@@ -419,14 +419,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

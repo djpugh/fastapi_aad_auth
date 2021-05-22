@@ -354,7 +354,11 @@
 <h1 id="module-fastapi-aad-auth-ui-error-html--page-root">fastapi_aad_auth.ui:error.html<a class="headerlink" href="#module-fastapi-aad-auth-ui-error-html--page-root" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span>{% extends "fastapi_aad_auth.ui:base.html" %}
 {% block Content %}
+    {% if containerClass %}
+        <span class="p">&lt;</span><span class="nt">main</span> <span class="na">class</span><span class="o">=</span><span class="s">'{{containerClass}}'</span> <span class="na">role</span><span class="o">=</span><span class="s">"main"</span><span class="p">&gt;</span>
+    {% else %}
         <span class="p">&lt;</span><span class="nt">main</span> <span class="na">class</span><span class="o">=</span><span class="s">'container'</span> <span class="na">role</span><span class="o">=</span><span class="s">"main"</span><span class="p">&gt;</span>
+    {% endif %}
         {% block ContentHeader %}
             {% if logo %}
                 {{logo | safe }}
@@ -439,14 +443,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

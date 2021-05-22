@@ -361,7 +361,12 @@
 
 
 <div class="viewcode-block" id="BaseSettings"><a class="viewcode-back" href="../../module/fastapi_aad_auth.config.html#fastapi_aad_auth.config.BaseSettings">[docs]</a><span class="k">class</span> <span class="nc">BaseSettings</span><span class="p">(</span><span class="n">DeprecatableFieldsMixin</span><span class="p">,</span> <span class="n">_BaseSettings</span><span class="p">):</span>
-    <span class="sd">"""Allow deprecations in the BaseSettings object."""</span></div>
+    <span class="sd">"""Allow deprecations in the BaseSettings object."""</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># type: ignore[no-redef]</span>
+        <span class="sd">"""Initialise the config object."""</span>
+        <span class="c1"># For handling docstrings</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <span class="n">_DEPRECATION_VERSION</span> <span class="o">=</span> <span class="s1">'0.2.0'</span>
@@ -448,9 +453,9 @@
 <span class="sd">    variables in a multi-worker/multi-processing environment to enable</span>
 <span class="sd">    authentication across workers)</span>
 <span class="sd">    """</span>
-    <span class="n">secret</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Secret used for encoding authentication information"</span><span class="p">,</span>
+    <span class="n">secret</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Secret used for encoding authentication information"</span><span class="p">,</span>
                               <span class="n">env</span><span class="o">=</span><span class="s1">'SESSION_AUTH_SECRET'</span><span class="p">)</span>
-    <span class="n">salt</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Salt used for encoding authentication information"</span><span class="p">,</span>
+    <span class="n">salt</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Salt used for encoding authentication information"</span><span class="p">,</span>
                             <span class="n">env</span><span class="o">=</span><span class="s1">'SESSION_AUTH_SALT'</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># noqa D106</span>
@@ -467,7 +472,7 @@
 
 <span class="sd">    Provides configuration for the fastapi session middleware</span>
 <span class="sd">    """</span>
-    <span class="n">secret_key</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Secret used for the session middleware"</span><span class="p">,</span>
+    <span class="n">secret_key</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Secret used for the session middleware"</span><span class="p">,</span>
                                   <span class="n">env</span><span class="o">=</span><span class="s1">'SESSION_SECRET'</span><span class="p">)</span>
     <span class="n">session_cookie</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s1">'session'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Cookie name for the session information"</span><span class="p">,</span>
                                 <span class="n">env</span><span class="o">=</span><span class="s1">'SESSION_COOKIE'</span><span class="p">)</span>
@@ -566,14 +571,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

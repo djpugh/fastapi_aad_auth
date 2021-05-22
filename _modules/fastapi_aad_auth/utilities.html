@@ -350,8 +350,10 @@
   <h1 id="modules-fastapi-aad-auth-utilities--page-root">Source code for fastapi_aad_auth.utilities</h1><div class="highlight"><pre>
 <span></span><span class="sd">"""Utilities."""</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">SecretStr</span>
 <span class="kn">from</span> <span class="nn">pydantic.main</span> <span class="kn">import</span> <span class="n">ModelMetaclass</span>
 <span class="kn">from</span> <span class="nn">starlette.requests</span> <span class="kn">import</span> <span class="n">Request</span>
 
@@ -399,8 +401,20 @@
     <span class="n">docs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">''</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">'Keyword Args:'</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">klass</span><span class="o">.</span><span class="n">__fields__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="c1"># type: ignore</span>
         <span class="n">default_str</span> <span class="o">=</span> <span class="s1">''</span>
+        <span class="c1">#</span>
         <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">default</span><span class="p">:</span>
-            <span class="n">default_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">' [default: ``</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">default</span><span class="si">}</span><span class="s1">``]'</span>
+            <span class="n">default_str</span> <span class="o">=</span> <span class="s1">''</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">default</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">SecretStr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">field</span><span class="o">.</span><span class="n">type_</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+                    <span class="n">default</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">default</span>
+                    <span class="k">if</span> <span class="n">Path</span> <span class="ow">in</span> <span class="n">field</span><span class="o">.</span><span class="n">type_</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+                        <span class="n">default</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">default</span><span class="p">)</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">default</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                    <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'user_klass'</span><span class="p">:</span>
+                        <span class="n">default_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">' [default: :class:`</span><span class="si">{</span><span class="n">default</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"`"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">":"</span><span class="p">,</span> <span class="s2">"."</span><span class="p">)</span><span class="si">}</span><span class="s1">`]'</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">default_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">' [default: ``</span><span class="si">{</span><span class="n">default</span><span class="si">}</span><span class="s1">``]'</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">default_str</span> <span class="o">=</span> <span class="s1">' [default: ``uuid.uuid4()``]'</span>
         <span class="n">module</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">outer_type_</span><span class="o">.</span><span class="vm">__module__</span>
         <span class="k">if</span> <span class="n">module</span> <span class="o">!=</span> <span class="s1">'builtins'</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">outer_type_</span><span class="p">,</span> <span class="s1">'__origin__'</span><span class="p">):</span>
@@ -439,14 +453,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

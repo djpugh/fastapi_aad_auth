@@ -356,42 +356,42 @@
 <p>Session based validator for interactive (UI) sessions.</p>
 <dl class="py class">
 <dt id="fastapi_aad_auth._base.validators.session.SessionValidator">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth._base.validators.session.</code><code class="sig-name descname">SessionValidator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">session_serializer</span><span class="p">:</span> <span class="n">itsdangerous.url_safe.URLSafeSerializer</span></em>, <em class="sig-param"><span class="n">ignore_redirect_routes</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.validators.session.</span></code><code class="sig-name descname"><span class="pre">SessionValidator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_serializer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">itsdangerous.url_safe.URLSafeSerializer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_redirect_routes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validator for session based authentication.</p>
 <p>Initialise validator for session based authentication.</p>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.validators.session.SessionValidator.check">
-<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.check" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">check</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check the authentication from the request.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.validators.session.SessionValidator.get_session_serializer">
-<em class="property">static </em><code class="sig-name descname">get_session_serializer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">secret</span></em>, <em class="sig-param"><span class="n">salt</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.get_session_serializer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.get_session_serializer" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">get_session_serializer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">salt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.get_session_serializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.get_session_serializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get or Initialise the session serializer.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.validators.session.SessionValidator.get_state_from_session">
-<code class="sig-name descname">get_state_from_session</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.get_state_from_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.get_state_from_session" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_state_from_session</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.get_state_from_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.get_state_from_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the session from the request.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.validators.session.SessionValidator.is_valid_redirect">
-<code class="sig-name descname">is_valid_redirect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">redirect</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.is_valid_redirect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.is_valid_redirect" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">is_valid_redirect</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">redirect</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.is_valid_redirect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.is_valid_redirect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if the redirect is not to endpoints that we don't want to redirect to.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.validators.session.SessionValidator.logout">
-<code class="sig-name descname">logout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.logout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.logout" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">logout</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.logout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.logout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process a logout request.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.validators.session.SessionValidator.pop_post_auth_redirect">
-<code class="sig-name descname">pop_post_auth_redirect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.pop_post_auth_redirect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.pop_post_auth_redirect" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">pop_post_auth_redirect</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.pop_post_auth_redirect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.pop_post_auth_redirect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear post-authentication redirects.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.validators.session.SessionValidator.set_post_auth_redirect">
-<code class="sig-name descname">set_post_auth_redirect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em>, <em class="sig-param"><span class="n">redirect</span><span class="o">=</span><span class="default_value">'/'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.set_post_auth_redirect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.set_post_auth_redirect" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">set_post_auth_redirect</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redirect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/session.html#SessionValidator.set_post_auth_redirect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.session.SessionValidator.set_post_auth_redirect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set post-authentication redirects.</p>
 </dd></dl>
 </dd></dl>
@@ -440,14 +440,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

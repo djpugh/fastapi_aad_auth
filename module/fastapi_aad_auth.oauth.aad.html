@@ -353,36 +353,40 @@
   
 <span id="fastapi-aad-auth-oauth-aad"></span><h1 id="module-fastapi-aad-auth-oauth-aad--page-root">fastapi_aad_auth.oauth.aad<a class="headerlink" href="#module-fastapi-aad-auth-oauth-aad--page-root" title="Permalink to this headline">¶</a></h1>
 <p>AAD handlers.</p>
-<p>DEPRECATED - fastapi_aad_auth.oauth.aad will be deprecated in version 0.2.0, and is replaced by fastapi_aad_auth.providers.aad and fastapi_aad_auth.auth</p>
+<p><em>DEPRECATED</em> - fastapi_aad_auth.oauth.aad will be deprecated in version 0.2.0, and is replaced by fastapi_aad_auth.providers.aad and fastapi_aad_auth.auth</p>
 <dl class="py class">
 <dt id="fastapi_aad_auth.oauth.aad.AADOAuthBackend">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth.oauth.aad.</code><code class="sig-name descname">AADOAuthBackend</code><span class="sig-paren">(</span><em class="sig-param">session_validator: fastapi_aad_auth._base.validators.session.SessionValidator</em>, <em class="sig-param">client_id: str</em>, <em class="sig-param">tenant_id: str</em>, <em class="sig-param">prompt: Optional[str] = None</em>, <em class="sig-param">client_secret: Optional[str] = None</em>, <em class="sig-param">scopes: Optional[List[str]] = None</em>, <em class="sig-param">enabled: bool = True</em>, <em class="sig-param">client_app_ids: Optional[List[str]] = None</em>, <em class="sig-param">strict_token: bool = True</em>, <em class="sig-param">api_audience: Optional[str] = None</em>, <em class="sig-param">redirect_uri: Optional[str] = None</em>, <em class="sig-param">domain_hint: Optional[str] = None</em>, <em class="sig-param">user_klass: type = &lt;class 'fastapi_aad_auth._base.state.User'&gt;</em>, <em class="sig-param">oauth_base_route: str = '/oauth'</em>, <em class="sig-param">token_type: Union[str</em>, <em class="sig-param">fastapi_aad_auth.providers.aad.TokenType] = &lt;TokenType.access: 'access_token'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/oauth/aad.html#AADOAuthBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.oauth.aad.AADOAuthBackend" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth.oauth.aad.</span></code><code class="sig-name descname"><span class="pre">AADOAuthBackend</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">session_validator:</span> <span class="pre">fastapi_aad_auth._base.validators.session.SessionValidator</span></em>, <em class="sig-param"><span class="pre">client_id:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">tenant_id:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">prompt:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">client_secret:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">scopes:</span> <span class="pre">Optional[List[str]]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">enabled:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">client_app_ids:</span> <span class="pre">Optional[List[str]]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">strict_token:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">api_audience:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">redirect_uri:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">domain_hint:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">user_klass:</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'fastapi_aad_auth._base.state.User'&gt;</span></em>, <em class="sig-param"><span class="pre">oauth_base_route:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'/oauth'</span></em>, <em class="sig-param"><span class="pre">token_type:</span> <span class="pre">Union[str</span></em>, <em class="sig-param"><span class="pre">fastapi_aad_auth.providers.aad.TokenType]</span> <span class="pre">=</span> <span class="pre">&lt;TokenType.access:</span> <span class="pre">'access_token'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/oauth/aad.html#AADOAuthBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth.oauth.aad.AADOAuthBackend" title="Permalink to this definition">¶</a></dt>
 <dd><p>fastapi auth backend for Azure Active Directory.</p>
-<p>DEPRECATED - fastapi_aad_auth.oauth.aad:AADOAuthBackend will be deprecated in version 0.2.0, and is replaced by fastapi_aad_auth.providers.aad:AADProvider</p>
+<p><em>DEPRECATED</em> - fastapi_aad_auth.oauth.aad:AADOAuthBackend will be deprecated in version 0.2.0, and is replaced by fastapi_aad_auth.providers.aad:AADProvider</p>
 <p>Initialise the auth backend.</p>
 <blockquote>
 <div><dl class="simple">
-<dt>Args:</dt><dd><p>session_serializer: Session serializer object
-client_id: Client ID from Azure App Registration
-tenant_id: Tenant ID to connect to for Azure App Registration</p>
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>session_serializer: Session serializer object</p></li>
+<li><p>client_id: Client ID from Azure App Registration</p></li>
+<li><p>tenant_id: Tenant ID to connect to for Azure App Registration</p></li>
+</ul>
 </dd>
-<dt>Keyword Args:</dt><dd><p>prompt: Prompt options for Azure AD
-client_secret: Client secret value
-scopes: Additional scopes requested
-enabled: Boolean flag to enable this backend
-client_app_ids: List of client apps to accept tokens from
-strict_token: Strictly evaluate token
-api_audience: Api Audience declared in Azure AD App registration
-redirect_uri: Full URI for post authentication callbacks
-domain_hint: Hint for the domain
-user_klass: Class to use as a user.</p>
+<dt>Keyword Args:</dt><dd><ul class="simple">
+<li><p>prompt: Prompt options for Azure AD</p></li>
+<li><p>client_secret: Client secret value</p></li>
+<li><p>scopes: Additional scopes requested</p></li>
+<li><p>enabled: Boolean flag to enable this backend</p></li>
+<li><p>client_app_ids: List of client apps to accept tokens from</p></li>
+<li><p>strict_token: Strictly evaluate token</p></li>
+<li><p>api_audience: Api Audience declared in Azure AD App registration</p></li>
+<li><p>redirect_uri: Full URI for post authentication callbacks</p></li>
+<li><p>domain_hint: Hint for the domain</p></li>
+<li><p>user_klass: Class to use as a user.</p></li>
+</ul>
 </dd>
 </dl>
 </div></blockquote>
-<p>DEPRECATED - fastapi_aad_auth.oauth.aad:AADOAuthBackend will be deprecated in version 0.2.0, and is replaced by fastapi_aad_auth.providers.aad:AADProvider</p>
+<p><em>DEPRECATED</em> - fastapi_aad_auth.oauth.aad:AADOAuthBackend will be deprecated in version 0.2.0, and is replaced by fastapi_aad_auth.providers.aad:AADProvider</p>
 <dl class="py method">
 <dt id="fastapi_aad_auth.oauth.aad.AADOAuthBackend.from_config">
-<em class="property">classmethod </em><code class="sig-name descname">from_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n"><a class="reference internal" href="fastapi_aad_auth.config.html#fastapi_aad_auth.config.Config" title="fastapi_aad_auth.config.Config">fastapi_aad_auth.config.Config</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/oauth/aad.html#AADOAuthBackend.from_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth.oauth.aad.AADOAuthBackend.from_config" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">from_config</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="fastapi_aad_auth.config.html#fastapi_aad_auth.config.Config" title="fastapi_aad_auth.config.Config"><span class="pre">fastapi_aad_auth.config.Config</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/oauth/aad.html#AADOAuthBackend.from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth.oauth.aad.AADOAuthBackend.from_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the auth backend from a config.</p>
 <blockquote>
 <div><dl class="simple">
@@ -392,7 +396,7 @@ user_klass: Class to use as a user.</p>
 </dd>
 </dl>
 </div></blockquote>
-<p>DEPRECATED - fastapi_aad_auth.oauth.aad:AADOAuthBackend.from_config will be deprecated in version 0.2.0, and is replaced by fastapi_aad_auth.providers.aad:AADProvider.from_config and fastapi_aad_auth.auth:Authenticator</p>
+<p><em>DEPRECATED</em> - fastapi_aad_auth.oauth.aad:AADOAuthBackend.from_config will be deprecated in version 0.2.0, and is replaced by fastapi_aad_auth.providers.aad:AADProvider.from_config and fastapi_aad_auth.auth:Authenticator</p>
 </dd></dl>
 </dd></dl>
 
@@ -440,14 +444,14 @@ user_klass: Class to use as a user.</p>
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

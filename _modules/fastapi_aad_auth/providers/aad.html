@@ -623,21 +623,21 @@
         <span class="sd">"""Initialise the auth backend.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            session_serializer: Session serializer object</span>
-<span class="sd">            client_id: Client ID from Azure App Registration</span>
-<span class="sd">            tenant_id: Tenant ID to connect to for Azure App Registration</span>
+<span class="sd">            * session_serializer: Session serializer object</span>
+<span class="sd">            * client_id: Client ID from Azure App Registration</span>
+<span class="sd">            * tenant_id: Tenant ID to connect to for Azure App Registration</span>
 
 <span class="sd">        Keyword Args:</span>
-<span class="sd">            prompt: Prompt options for Azure AD</span>
-<span class="sd">            client_secret: Client secret value</span>
-<span class="sd">            scopes: Additional scopes requested</span>
-<span class="sd">            enabled: Boolean flag to enable this backend</span>
-<span class="sd">            client_app_ids: List of client apps to accept tokens from</span>
-<span class="sd">            strict_token: Strictly evaluate token</span>
-<span class="sd">            api_audience: Api Audience declared in Azure AD App registration</span>
-<span class="sd">            redirect_uri: Full URI for post authentication callbacks</span>
-<span class="sd">            domain_hint: Hint for the domain</span>
-<span class="sd">            user_klass: Class to use as a user.</span>
+<span class="sd">            * prompt: Prompt options for Azure AD</span>
+<span class="sd">            * client_secret: Client secret value</span>
+<span class="sd">            * scopes: Additional scopes requested</span>
+<span class="sd">            * enabled: Boolean flag to enable this backend</span>
+<span class="sd">            * client_app_ids: List of client apps to accept tokens from</span>
+<span class="sd">            * strict_token: Strictly evaluate token</span>
+<span class="sd">            * api_audience: Api Audience declared in Azure AD App registration</span>
+<span class="sd">            * redirect_uri: Full URI for post authentication callbacks</span>
+<span class="sd">            * domain_hint: Hint for the domain</span>
+<span class="sd">            * user_klass: Class to use as a user.</span>
 <span class="sd">        """</span>
         <span class="n">redirect_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_oauth_url</span><span class="p">(</span><span class="n">oauth_base_route</span><span class="p">,</span> <span class="s1">'redirect'</span><span class="p">)</span>
         <span class="n">token_validator</span> <span class="o">=</span> <span class="n">AADTokenValidator</span><span class="p">(</span><span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span> <span class="n">tenant_id</span><span class="o">=</span><span class="n">tenant_id</span><span class="p">,</span> <span class="n">api_audience</span><span class="o">=</span><span class="n">api_audience</span><span class="p">,</span>
@@ -744,14 +744,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

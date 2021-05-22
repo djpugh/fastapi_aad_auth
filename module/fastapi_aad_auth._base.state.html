@@ -355,47 +355,47 @@
 <p>Authentication State Handler.</p>
 <dl class="py class">
 <dt id="fastapi_aad_auth._base.state.AuthenticationOptions">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth._base.state.</code><code class="sig-name descname">AuthenticationOptions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationOptions" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.state.</span></code><code class="sig-name descname"><span class="pre">AuthenticationOptions</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationOptions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Authentication Options.</p>
 </dd></dl>
 <dl class="py class">
 <dt id="fastapi_aad_auth._base.state.AuthenticationState">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth._base.state.</code><code class="sig-name descname">AuthenticationState</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">session_state: str = '510b79a7-0c2a-48f1-ab90-59e3fffd42a3'</em>, <em class="sig-param">state: fastapi_aad_auth._base.state.AuthenticationOptions = &lt;AuthenticationOptions.unauthenticated: 0&gt;</em>, <em class="sig-param">user: fastapi_aad_auth._base.state.User = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.state.</span></code><code class="sig-name descname"><span class="pre">AuthenticationState</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Authentication State.</p>
 <p>Initialise the logger.</p>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.AuthenticationState.as_unauthenticated">
-<em class="property">classmethod </em><code class="sig-name descname">as_unauthenticated</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serializer</span></em>, <em class="sig-param"><span class="n">session</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.as_unauthenticated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.as_unauthenticated" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">as_unauthenticated</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.as_unauthenticated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.as_unauthenticated" title="Permalink to this definition">¶</a></dt>
 <dd><p>Store as an un-authenticated user.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.AuthenticationState.authenticate_as">
-<em class="property">classmethod </em><code class="sig-name descname">authenticate_as</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user</span></em>, <em class="sig-param"><span class="n">serializer</span></em>, <em class="sig-param"><span class="n">session</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.authenticate_as"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.authenticate_as" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">authenticate_as</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serializer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.authenticate_as"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.authenticate_as" title="Permalink to this definition">¶</a></dt>
 <dd><p>Store the authenticated user.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.AuthenticationState.authenticated_user">
-<em class="property">property </em><code class="sig-name descname">authenticated_user</code><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.authenticated_user" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">authenticated_user</span></code><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.authenticated_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the authenticated user.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.AuthenticationState.check_session_state">
-<code class="sig-name descname">check_session_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">session_state</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.check_session_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.check_session_state" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">check_session_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.check_session_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.check_session_state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check state against session state.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.AuthenticationState.credentials">
-<em class="property">property </em><code class="sig-name descname">credentials</code><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.credentials" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">credentials</span></code><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.credentials" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the credentials object.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.AuthenticationState.is_authenticated">
-<code class="sig-name descname">is_authenticated</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.is_authenticated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.is_authenticated" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">is_authenticated</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.is_authenticated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.is_authenticated" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if the state is authenticated.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.AuthenticationState.load">
-<em class="property">classmethod </em><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serializer</span><span class="p">:</span> <span class="n">itsdangerous.url_safe.URLSafeSerializer</span></em>, <em class="sig-param"><span class="n">encoded_state</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.load" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">itsdangerous.url_safe.URLSafeSerializer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoded_state</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load from encoded state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -408,39 +408,39 @@
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.AuthenticationState.load_from_session">
-<em class="property">classmethod </em><code class="sig-name descname">load_from_session</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serializer</span><span class="p">:</span> <span class="n">itsdangerous.url_safe.URLSafeSerializer</span></em>, <em class="sig-param"><span class="n">session</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.load_from_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.load_from_session" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">load_from_session</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">itsdangerous.url_safe.URLSafeSerializer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.load_from_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.load_from_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load from a session.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.AuthenticationState.logout">
-<em class="property">classmethod </em><code class="sig-name descname">logout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serializer</span><span class="p">:</span> <span class="n">itsdangerous.url_safe.URLSafeSerializer</span></em>, <em class="sig-param"><span class="n">session</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.logout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.logout" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">logout</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">itsdangerous.url_safe.URLSafeSerializer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.logout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.logout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear the sessions state.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.AuthenticationState.save_to_session">
-<code class="sig-name descname">save_to_session</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serializer</span><span class="p">:</span> <span class="n">itsdangerous.url_safe.URLSafeSerializer</span></em>, <em class="sig-param"><span class="n">session</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.save_to_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.save_to_session" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">save_to_session</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">itsdangerous.url_safe.URLSafeSerializer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.save_to_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.save_to_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save to a session.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.AuthenticationState.store">
-<code class="sig-name descname">store</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serializer</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.store" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">store</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#AuthenticationState.store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.AuthenticationState.store" title="Permalink to this definition">¶</a></dt>
 <dd><p>Store in serializer.</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
 <dt id="fastapi_aad_auth._base.state.User">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth._base.state.</code><code class="sig-name descname">User</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">email</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">roles</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groups</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scopes</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.User" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.state.</span></code><code class="sig-name descname"><span class="pre">User</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/state.html#User"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.state.User" title="Permalink to this definition">¶</a></dt>
 <dd><p>User Model.</p>
 <p>Create a new model by parsing and validating input data from keyword arguments.</p>
 <p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.User.klass">
-<em class="property">property </em><code class="sig-name descname">klass</code><a class="headerlink" href="#fastapi_aad_auth._base.state.User.klass" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">klass</span></code><a class="headerlink" href="#fastapi_aad_auth._base.state.User.klass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the user klass information for loading from a session.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.state.User.permissions">
-<em class="property">property </em><code class="sig-name descname">permissions</code><a class="headerlink" href="#fastapi_aad_auth._base.state.User.permissions" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">permissions</span></code><a class="headerlink" href="#fastapi_aad_auth._base.state.User.permissions" title="Permalink to this definition">¶</a></dt>
 <dd><p>User Permissions.</p>
 </dd></dl>
 </dd></dl>
@@ -489,14 +489,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

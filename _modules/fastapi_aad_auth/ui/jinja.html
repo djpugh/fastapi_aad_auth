@@ -380,7 +380,7 @@
         <span class="sd">"""Get the environment."""</span>
         <span class="n">env</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_env</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
         <span class="c1"># We want to setup the choice loader here</span>
-        <span class="n">env</span><span class="o">.</span><span class="n">loader</span> <span class="o">=</span> <span class="n">ChoiceLoader</span><span class="p">([</span><span class="n">PkgResourcesTemplateLoader</span><span class="p">(),</span> <span class="n">env</span><span class="o">.</span><span class="n">loader</span><span class="p">])</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">loader</span> <span class="o">=</span> <span class="n">ChoiceLoader</span><span class="p">([</span><span class="n">PkgResourcesTemplateLoader</span><span class="p">(),</span> <span class="n">env</span><span class="o">.</span><span class="n">loader</span><span class="p">])</span>  <span class="c1"># type: ignore[list-item]</span>
         <span class="k">return</span> <span class="n">env</span></div></div>
 </pre></div>
 
@@ -402,14 +402,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

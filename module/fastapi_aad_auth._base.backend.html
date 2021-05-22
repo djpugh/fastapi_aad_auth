@@ -355,34 +355,34 @@
 <p>Base OAuthBackend with token and session validators.</p>
 <dl class="py class">
 <dt id="fastapi_aad_auth._base.backend.BaseOAuthBackend">
-<em class="property">class </em><code class="sig-prename descclassname">fastapi_aad_auth._base.backend.</code><code class="sig-name descname">BaseOAuthBackend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">validators</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="fastapi_aad_auth._base.validators.base.html#fastapi_aad_auth._base.validators.base.Validator" title="fastapi_aad_auth._base.validators.base.Validator">fastapi_aad_auth._base.validators.base.Validator</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">enabled</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/backend.html#BaseOAuthBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.backend.BaseOAuthBackend" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.backend.</span></code><code class="sig-name descname"><span class="pre">BaseOAuthBackend</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validators</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="fastapi_aad_auth._base.validators.base.html#fastapi_aad_auth._base.validators.base.Validator" title="fastapi_aad_auth._base.validators.base.Validator"><span class="pre">fastapi_aad_auth._base.validators.base.Validator</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enabled</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/backend.html#BaseOAuthBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.backend.BaseOAuthBackend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base OAuthBackend with token and session validators.</p>
 <p>Initialise the validators.</p>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.backend.BaseOAuthBackend.api_auth_scheme">
-<em class="property">property </em><code class="sig-name descname">api_auth_scheme</code><a class="headerlink" href="#fastapi_aad_auth._base.backend.BaseOAuthBackend.api_auth_scheme" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">api_auth_scheme</span></code><a class="headerlink" href="#fastapi_aad_auth._base.backend.BaseOAuthBackend.api_auth_scheme" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the API Authentication Schema.</p>
-<p>DEPRECATED - fastapi_aad_auth._base.backend:BaseOAuthBackend.api_auth_scheme will be deprecated in version 0.2.0, and is replaced by fastapi_aad_auth._base.backend:BaseOAuthBackend.requires_auth</p>
+<p><em>DEPRECATED</em> - fastapi_aad_auth._base.backend:BaseOAuthBackend.api_auth_scheme will be deprecated in version 0.2.0, and is replaced by fastapi_aad_auth._base.backend:BaseOAuthBackend.requires_auth</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.backend.BaseOAuthBackend.authenticate">
-<em class="property">async </em><code class="sig-name descname">authenticate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/backend.html#BaseOAuthBackend.authenticate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.backend.BaseOAuthBackend.authenticate" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">authenticate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/backend.html#BaseOAuthBackend.authenticate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.backend.BaseOAuthBackend.authenticate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Authenticate a request.</p>
 <p>Required by starlette authentication middleware</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.backend.BaseOAuthBackend.check">
-<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">starlette.requests.Request</span></em>, <em class="sig-param"><span class="n">allow_session</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span> → Optional<span class="p">[</span><a class="reference internal" href="fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState" title="fastapi_aad_auth._base.state.AuthenticationState">fastapi_aad_auth._base.state.AuthenticationState</a><span class="p">]</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/backend.html#BaseOAuthBackend.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.backend.BaseOAuthBackend.check" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">check</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">starlette.requests.Request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> → <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState" title="fastapi_aad_auth._base.state.AuthenticationState"><span class="pre">fastapi_aad_auth._base.state.AuthenticationState</span></a><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/backend.html#BaseOAuthBackend.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.backend.BaseOAuthBackend.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check/validate a request.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.backend.BaseOAuthBackend.is_authenticated">
-<code class="sig-name descname">is_authenticated</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">starlette.requests.Request</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/backend.html#BaseOAuthBackend.is_authenticated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.backend.BaseOAuthBackend.is_authenticated" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">is_authenticated</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">starlette.requests.Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/backend.html#BaseOAuthBackend.is_authenticated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.backend.BaseOAuthBackend.is_authenticated" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a request is authenticated.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="fastapi_aad_auth._base.backend.BaseOAuthBackend.requires_auth">
-<code class="sig-name descname">requires_auth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">allow_session</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/backend.html#BaseOAuthBackend.requires_auth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastapi_aad_auth._base.backend.BaseOAuthBackend.requires_auth" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">requires_auth</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">allow_session</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/backend.html#BaseOAuthBackend.requires_auth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.backend.BaseOAuthBackend.requires_auth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Require authentication, use with fastapi Depends.</p>
 </dd></dl>
 </dd></dl>
@@ -431,14 +431,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

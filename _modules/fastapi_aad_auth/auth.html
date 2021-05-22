@@ -376,17 +376,17 @@
 <div class="viewcode-block" id="Authenticator"><a class="viewcode-back" href="../../module/fastapi_aad_auth.auth.html#fastapi_aad_auth.auth.Authenticator">[docs]</a><span class="k">class</span> <span class="nc">Authenticator</span><span class="p">(</span><span class="n">LoggingMixin</span><span class="p">):</span>
     <span class="sd">"""Authenticator class.</span>
 
-<span class="sd">    Creates the key components based on the provided configurations</span>
+<span class="sd">    Creates the key components based on the provided configurations.</span>
 <span class="sd">    """</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">add_to_base_routes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">base_context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">user_klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">"""Initialise the Authenticator based on the provided configuration.</span>
 
 <span class="sd">        Keyword Args:</span>
-<span class="sd">            config (fastapi_aad_auth.config.Config): Authentication configuration (includes ui and routing, as well as AAD Application and Tenant IDs)</span>
-<span class="sd">            add_to_base_routes (bool): Add the authentication to the router</span>
-<span class="sd">            base_context (Dict[str, Any]): a base context to provide</span>
-<span class="sd">            user_klass (type): The user class to use as part of the auth state</span>
+<span class="sd">            * config (fastapi_aad_auth.config.Config): Authentication configuration (includes ui and routing, as well as AAD Application and Tenant IDs)</span>
+<span class="sd">            * add_to_base_routes (bool): Add the authentication to the router</span>
+<span class="sd">            * base_context (Dict[str, Any]): a base context to provide</span>
+<span class="sd">            * user_klass (type): The user class to use as part of the auth state</span>
 <span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -603,14 +603,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

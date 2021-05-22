@@ -404,10 +404,10 @@ The <code class="docutils literal notranslate"><span class="pre">/me/token</span
 <h2 id="customising-the-user-model">Customising the User Model<a class="headerlink" href="#customising-the-user-model" title="Permalink to this headline">¶</a></h2>
 <p>The authentication state user can be processed within the application methods - the <code class="docutils literal notranslate"><span class="pre">Depends</span></code> part of the api route returns an
 <a class="reference internal" href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState" title="fastapi_aad_auth._base.state.AuthenticationState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AuthenticationState</span></code></a> object - <code class="docutils literal notranslate"><span class="pre">auth_state</span></code> in the <code class="docutils literal notranslate"><span class="pre">testapp</span></code> (see <a class="reference internal" href="development.html#testing"><span class="std std-ref">Integration tests</span></a>).</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'/hello'</span><span class="p">)</span>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'/hello'</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">auth_state</span><span class="p">:</span> <span class="n">AuthenticationState</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">auth_provider</span><span class="o">.</span><span class="n">auth_backend</span><span class="o">.</span><span class="n">requires_auth</span><span class="p">(</span><span class="n">allow_session</span><span class="o">=</span><span class="kc">True</span><span class="p">))):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">auth_state</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="s1">'hello'</span><span class="p">:</span> <span class="s1">'world'</span><span class="p">}</span>
@@ -415,16 +415,16 @@ The <code class="docutils literal notranslate"><span class="pre">/me/token</span
 </td></tr></table></div>
 <p>The associated user is then available at <code class="docutils literal notranslate"><span class="pre">auth_state.user</span></code></p>
 <p>The <a class="reference internal" href="module/fastapi_aad_auth.auth.html#fastapi_aad_auth.auth.Authenticator" title="fastapi_aad_auth.auth.Authenticator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Authenticator</span></code></a> object takes a <code class="docutils literal notranslate"><span class="pre">user_klass</span></code> argument:</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6
-7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Authenticator</span><span class="p">(</span><span class="n">LoggingMixin</span><span class="p">):</span>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Authenticator</span><span class="p">(</span><span class="n">LoggingMixin</span><span class="p">):</span>
     <span class="sd">"""Authenticator class.</span>
 
-<span class="sd">    Creates the key components based on the provided configurations</span>
+<span class="sd">    Creates the key components based on the provided configurations.</span>
 <span class="sd">    """</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">add_to_base_routes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">base_context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">user_klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
@@ -488,6 +488,8 @@ the context is built (note that this class should inherit from (or duck-type the
 </pre></div>
 </div>
 <p>And can easily be extended or customised.</p>
+<p>Lastly, there is a context option on the <a class="reference internal" href="module/fastapi_aad_auth.config.html#fastapi_aad_auth.config.LoginUIConfig" title="fastapi_aad_auth.config.LoginUIConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoginUIConfig</span></code></a> which can set additional context variables including the <code class="docutils literal notranslate"><span class="pre">containerClass</span></code>
+to change the CSS <code class="docutils literal notranslate"><span class="pre">div</span></code> class to use.</p>
 
 
 <h2 id="token-scopes">Token Scopes<a class="headerlink" href="#token-scopes" title="Permalink to this headline">¶</a></h2>
@@ -542,14 +544,14 @@ access Microsoft (or other APIs) you will need to use e.g. an additional msal in
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2020 David Pugh.
+              &#169; Copyright 2021 David Pugh.
               
           </div>
             Last updated on
-              Dec 22, 2020 (version 0.1.19).
+              May 22, 2021 (version 0.1.20).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>
