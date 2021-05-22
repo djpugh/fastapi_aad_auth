@@ -26,6 +26,7 @@ from fastapi_aad_auth.utilities import urls
 
 class UI(LoggingMixin):
     """Provides Login endpoint methods, which are then wrapped in a factory method."""
+
     def __init__(self, config: 'config.Config', authenticator: 'auth.Authenticator', base_context: Dict[str, Any] = None):
         """Initialise the UI based on the provided configuration.
 
