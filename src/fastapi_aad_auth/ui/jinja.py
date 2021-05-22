@@ -29,5 +29,5 @@ class Jinja2Templates(_Jinja2Templates):  # noqa: D101
         """Get the environment."""
         env = super().get_env(directory)
         # We want to setup the choice loader here
-        env.loader = ChoiceLoader([PkgResourcesTemplateLoader(), env.loader])
+        env.loader = ChoiceLoader([PkgResourcesTemplateLoader(), env.loader])  # type: ignore[list-item]
         return env

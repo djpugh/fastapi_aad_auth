@@ -1,9 +1,9 @@
 msal
 aiofiles
-jinja2
+jinja2>=2.11.3
 fastapi
 authlib
-cryptography>3.2
+cryptography>=3.3.2
 python-multipart
 requests
 pydantic[dotenv]
