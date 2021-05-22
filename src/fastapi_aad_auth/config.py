@@ -13,7 +13,7 @@ from fastapi_aad_auth.utilities import bool_from_env, DeprecatableFieldsMixin, D
 class BaseSettings(DeprecatableFieldsMixin, _BaseSettings):
     """Allow deprecations in the BaseSettings object."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # type: ignore[no-redef]
         """Initialise the config object."""
         # For handling docstrings
         super().__init__(*args, **kwargs)

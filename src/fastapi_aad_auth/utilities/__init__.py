@@ -56,12 +56,13 @@ def expand_doc(klass: ModelMetaclass) -> ModelMetaclass:
             default_str = ''
             if field.default:
                 if SecretStr not in field.type_.__mro__:
+                    default = field.default
                     if Path in field.type_.__mro__:
-                        field.default = str(Path(field.default).relative_to(Path(field.default).parents[2]))
+                        default = str(Path(default).relative_to(Path(default).parents[2]))
                     if field.name == 'user_klass':
-                        default_str = f' [default: :class:`{field.default.replace("`", "").replace(":", ".")}`]'
+                        default_str = f' [default: :class:`{default.replace("`", "").replace(":", ".")}`]'
                     else:
-                        default_str = f' [default: ``{field.default}``]'
+                        default_str = f' [default: ``{default}``]'
                 else:
                     default_str = ' [default: ``uuid.uuid4()``]'
         module = field.outer_type_.__module__
