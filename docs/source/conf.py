@@ -53,8 +53,8 @@ extensions = [
 ]
 
 extlinks = {
-    "issue": ("https://github.com/djpugh/azure_devops_artifacts_helpers/issues/%s", "#"),
-    "pull": ("https://github.com/djpugh/azure_devops_artifacts_helpers/pull/%s", "PR #"),
+    "issue": ("https://github.com/djpugh/fastapi_aad_auth/issues/%s", "#"),
+    "pull": ("https://github.com/djpugh/fastapi_aad_auth/pull/%s", "PR #"),
     "user": ("https://github.com/%s", "@"),
     "pypi": ("https://pypi.org/project/%s", ""),
 }
@@ -181,7 +181,7 @@ html_theme_options = {
         }
     ],
     "heroes": {
-        "index": "Adding Azure Active Directory Authentical for fastAPI",
+        "index": "Adding Azure Active Directory Authentication for fastAPI",
     },
     "version_dropdown": False,
 }
