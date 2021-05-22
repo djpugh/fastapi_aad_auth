@@ -66,6 +66,9 @@ These jinja templates also are structured (see :doc:`module/fastapi_aad_auth.ui`
 
 And can easily be extended or customised.
 
+Lastly, there is a context option on the :class:`~fastapi_aad_auth.config.LoginUIConfig` which can set additional context variables including the ``containerClass``
+to change the CSS ``div`` class to use.
+
 
 Token Scopes
 ~~~~~~~~~~~~
