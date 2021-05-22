@@ -127,6 +127,8 @@ rst_epilog = """
 #keep_warnings = False
 
 autoclass_content='both'
+autodoc_class_signature='mix'
+
 # -- Options for HTML output ----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -478,7 +480,10 @@ class ConfigDocumenter(ClassDocumenter):
         config_vars = []
         config_nested = {}
         for field_name, field in object.__fields__.items():
-            if BaseModel in field.type_.__mro__:
+
+            if 'providers' == field_name:
+                config_nested[field_name] = ['    List of auth provider classes to use (defaults to AAD)', '']
+            elif BaseModel in field.type_.__mro__:
                 # This is recursive here
                 config_nested[field_name] = self._process_variables(field.type_, f'{path}.{field_name}')
             else:
@@ -486,7 +491,7 @@ class ConfigDocumenter(ClassDocumenter):
                 if field.default:
                     if not SecretStr in field.type_.__mro__:
                         if Path in field.type_.__mro__:
-                            field.default = Path(field.default).relative_to(Path(field.default).parents[2])
+                            field.default = str(Path(field.default).relative_to(Path(field.default).parents[2]))
                         if field_name == 'user_klass':
                             default_str = f' [default: :class:`{field.default.replace("`", "").replace(":", ".")}`]'
                         else:
@@ -511,10 +516,18 @@ class ConfigDocumenter(ClassDocumenter):
             config_vars.append(f'  ``{path}.{field_name}``:')
             for var in config_nested[field_name]:
                 config_vars.append(f'  {var}')
+        config_vars.append('')
         return config_vars
+
+
+def autodoc_process_pydantic_signature(app, what, name, obj, options, signature, return_annotation):
+    if what=='class' and BaseModel in obj.__mro__:
+        signature = '(**kwargs)'
+    return signature, return_annotation
 
 
 def setup(app):
     from sphinx.util.texescape import tex_replacements
     tex_replacements += [(u'£', u"\\")]
     app.add_autodocumenter(ConfigDocumenter)
+    app.connect('autodoc-process-signature', autodoc_process_pydantic_signature)

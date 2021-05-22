@@ -13,6 +13,11 @@ from fastapi_aad_auth.utilities import bool_from_env, DeprecatableFieldsMixin, D
 class BaseSettings(DeprecatableFieldsMixin, _BaseSettings):
     """Allow deprecations in the BaseSettings object."""
 
+    def __init__(self, *args, **kwargs):  # type: ignore[no-redef]
+        """Initialise the config object."""
+        # For handling docstrings
+        super().__init__(*args, **kwargs)
+
 
 _DEPRECATION_VERSION = '0.2.0'
 
@@ -98,9 +103,9 @@ class AuthSessionConfig(BaseSettings):
     variables in a multi-worker/multi-processing environment to enable
     authentication across workers)
     """
-    secret: SecretStr = Field(str(uuid.uuid4()), description="Secret used for encoding authentication information",
+    secret: SecretStr = Field(default_factory=lambda: str(uuid.uuid4()), description="Secret used for encoding authentication information",
                               env='SESSION_AUTH_SECRET')
-    salt: SecretStr = Field(str(uuid.uuid4()), description="Salt used for encoding authentication information",
+    salt: SecretStr = Field(default_factory=lambda: str(uuid.uuid4()), description="Salt used for encoding authentication information",
                             env='SESSION_AUTH_SALT')
 
     class Config:  # noqa D106
@@ -117,7 +122,7 @@ class SessionConfig(BaseSettings):
 
     Provides configuration for the fastapi session middleware
     """
-    secret_key: SecretStr = Field(str(uuid.uuid4()), description="Secret used for the session middleware",
+    secret_key: SecretStr = Field(default_factory=lambda: str(uuid.uuid4()), description="Secret used for the session middleware",
                                   env='SESSION_SECRET')
     session_cookie: str = Field('session', description="Cookie name for the session information",
                                 env='SESSION_COOKIE')
