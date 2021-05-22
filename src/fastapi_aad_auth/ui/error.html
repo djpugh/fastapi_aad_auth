@@ -1,6 +1,10 @@
 {% extends "fastapi_aad_auth.ui:base.html" %}
 {% block Content %}
+    {% if containerClass %}
+        <main class='{{containerClass}}' role="main">
+    {% else %}
         <main class='container' role="main">
+    {% endif %}
         {% block ContentHeader %}
             {% if logo %}
                 {{logo | safe }}
