@@ -79,5 +79,5 @@ class ProviderConfig(InheritableBaseSettings):
     """Configuration for a provider."""
 
     _provider_klass: type = PrivateAttr(Provider)
-    flow_type: OAuthFlowType = Field(OAuthFlowType.authorizationCode, description='Select the OpenAPI OAuth2 flow', env='FASTAPI_AUTH_OPENAPI_OAUTH2_FLOW')
+    flow_type: OAuthFlowType = Field(OAuthFlowType.authorizationCode, description='Select the OpenAPI OAuth2 flow', env='FASTAPI_AUTH_OPENAPI_OAUTH2_FLOW')  # type: ignore
     token_scopes: Dict[str, str] = Field(default_factory=dict, description='Set the (global) token scopes', env='FASTAPI_AUTH_TOKEN_SCOPES')

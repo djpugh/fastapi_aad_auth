@@ -163,7 +163,7 @@ class AADTokenValidator(TokenValidator):
                  strict: bool = True,
                  client_app_ids: Optional[List[str]] = None,
                  user_klass: type = User,
-                 flow_type: OAuthFlowType = OAuthFlowType.authorizationCode):
+                 flow_type: OAuthFlowType = OAuthFlowType.authorizationCode):  # type: ignore
         """Initialise validator for AAD token based authentication."""
         authorization_url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/authorize"
         token_url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token"
@@ -272,7 +272,7 @@ class AADProvider(Provider):
             oauth_base_route: str = '/oauth',
             token_type: Union[str, TokenType] = TokenType.access,
             token_scopes: Optional[Dict[str, str]] = None,
-            flow_type: OAuthFlowType = OAuthFlowType.authorizationCode):
+            flow_type: OAuthFlowType = OAuthFlowType.authorizationCode):  # type: ignore
         """Initialise the auth backend.
 
         Args:

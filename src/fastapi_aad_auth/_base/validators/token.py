@@ -13,7 +13,7 @@ from fastapi_aad_auth._base.state import AuthenticationState, User
 from fastapi_aad_auth._base.validators.base import Validator
 
 
-OAuthFlowType = Enum('OAuthFlowType', {u: u for u in OAuthFlows.__fields__.keys()})
+OAuthFlowType = Enum('OAuthFlowType', {u: u for u in OAuthFlows.__fields__.keys()})  # type: ignore
 OAuthFlowType.__doc__ = 'Enumeration of OAuth Flows for OpenAPI\n\nOptions:\n\t'+'\n\t'.join([f'* ``{u}``' for u in OAuthFlowType.__members__])
 
 
@@ -39,7 +39,7 @@ class TokenValidator(Validator, OAuth2AuthorizationCodeBearer):  # type: ignore
         enabled: bool = True,
         use_pkce: bool = True,
         user_klass: type = User,
-        flow_type: OAuthFlowType = OAuthFlowType.authorizationCode
+        flow_type: OAuthFlowType = OAuthFlowType.authorizationCode  # type: ignore
     ):
         """Initialise validator for token based authentication."""
         super().__init__(authorizationUrl=authorizationUrl, tokenUrl=tokenUrl, refreshUrl=api_audience, scheme_name=scheme_name, scopes=scopes, auto_error=auto_error)
@@ -50,9 +50,9 @@ class TokenValidator(Validator, OAuth2AuthorizationCodeBearer):  # type: ignore
         self.api_audience = api_audience
         self._use_pkce = use_pkce
         self._user_klass = user_klass
-        if flow_type != OAuthFlowType.authorizationCode:
-            self.model.flows = OAuthFlows(**{flow_type.value: {'tokenUrl': tokenUrl, 'authorizationUrl': authorizationUrl, 'scopes': scopes}})
-            self.logger.info(f'Using non default flow : {self.model.flows}')
+        if flow_type != OAuthFlowType.authorizationCode:  # type: ignore
+            self.model.flows = OAuthFlows(**{flow_type.value: {'tokenUrl': tokenUrl, 'authorizationUrl': authorizationUrl, 'scopes': scopes}})  # type: ignore
+            self.logger.info(f'Using non default flow : {self.model.flows}')  # type: ignore
 
     def check(self, request: Request):
         """Check the authentication from the request."""
