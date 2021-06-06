@@ -145,7 +145,7 @@ class Authenticator(LoggingMixin):
         as well as handling the redirection based on the session information
 
         Keyword Args:
-            scopes: scopes for the fastapi requires decorator
+            scopes: scopes for the starlette requires decorator
             redirect: name of the redirection url
         """
 
@@ -206,7 +206,7 @@ class Authenticator(LoggingMixin):
         def on_auth_error(request: Request, exc: AuthenticationError):
             return self._authentication_error_handler(request, exc)
 
-        app.add_middleware(AuthenticationMiddleware, backend=self.  auth_backend, on_error=on_auth_error)
+        app.add_middleware(AuthenticationMiddleware, backend=self.auth_backend, on_error=on_auth_error)
         if add_error_handlers:
             self._set_error_handlers(app)
         # Check if session middleware is there

@@ -1,7 +1,7 @@
 """Base OAuthBackend with token and session validators."""
 from typing import List, Optional
 
-from fastapi.security import OAuth2AuthorizationCodeBearer
+from fastapi.security import OAuth2
 from starlette.authentication import AuthCredentials, AuthenticationBackend, UnauthenticatedUser
 from starlette.requests import Request
 
@@ -64,16 +64,14 @@ class BaseOAuthBackend(NotAuthenticatedMixin, LoggingMixin, AuthenticationBacken
         # We create this here "dynamically" for each endpoint, as we allow customisation on whether a session is permissible
 
         if self.enabled:
-            class OAuthValidator(OAuth2AuthorizationCodeBearer):
+
+            class OAuthValidator(OAuth2):
                 """OAuthValidator for API Auth."""
 
                 def __init__(self_):
                     """Initialise the validator."""
                     token_validators = [u for u in self.validators if isinstance(u, TokenValidator)]
-                    super().__init__(authorizationUrl=token_validators[0].model.flows.authorizationCode.authorizationUrl,
-                                     tokenUrl=token_validators[0].model.flows.authorizationCode.tokenUrl,
-                                     scopes=token_validators[0].model.flows.authorizationCode.scopes,
-                                     refreshUrl=token_validators[0].model.flows.authorizationCode.refreshUrl)
+                    super().__init__(flows=token_validators[0].model.flows)
 
                 async def __call__(self_, request: Request):
                     """Validate a request."""

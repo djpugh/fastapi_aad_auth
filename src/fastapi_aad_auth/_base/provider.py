@@ -1,14 +1,14 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 
-from pydantic import PrivateAttr
+from pydantic import Field, PrivateAttr
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from starlette.routing import Route
 
 from fastapi_aad_auth._base.authenticators import SessionAuthenticator
-from fastapi_aad_auth._base.validators import Validator
+from fastapi_aad_auth._base.validators import OAuthFlowType, Validator
 from fastapi_aad_auth.mixins import LoggingMixin
-from fastapi_aad_auth.utilities import InheritableBaseSettings, urls
+from fastapi_aad_auth.utilities import expand_doc, InheritableBaseSettings, urls
 
 
 class Provider(LoggingMixin):
@@ -74,7 +74,10 @@ class Provider(LoggingMixin):
         return self._redirect_url
 
 
+@expand_doc
 class ProviderConfig(InheritableBaseSettings):
     """Configuration for a provider."""
 
     _provider_klass: type = PrivateAttr(Provider)
+    flow_type: OAuthFlowType = Field(OAuthFlowType.authorizationCode, description='Select the OpenAPI OAuth2 flow', env='FASTAPI_AUTH_OPENAPI_OAUTH2_FLOW')  # type: ignore
+    token_scopes: Dict[str, str] = Field(default_factory=dict, description='Set the (global) token scopes', env='FASTAPI_AUTH_TOKEN_SCOPES')
