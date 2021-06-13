@@ -57,6 +57,10 @@ and add scopes as configured for the application (e.g. the default ``openid`` sc
 
    An example configuration for api Scopes for testing an application
 
+.. warning::
+    Some people have reported an Azure Active Directory issue - ``AADSTS90009`` (:issue:`59`). The scope given in ``acquire_token_interactive()`` has the prefix ``api://``,
+    which seems to sometimes work, and sometimes not. It seems to always work when removing this prefix and using ``'<client_id>/.default'``.
+
 .. _config-fastapi_aad_auth-env:
 
 Configuring the fastapi environment
