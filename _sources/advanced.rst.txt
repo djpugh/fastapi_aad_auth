@@ -80,3 +80,17 @@ access Microsoft (or other APIs) you will need to use e.g. an additional msal in
 :py:meth:`fastapi_aad_auth.providers.aad.AADSessionAuthenticator.get_access_token`, with ``app_scopes=False``), if those permissions are added on the App Registration.
 
 Alternatively, you can use an on-behalf-of flow (see `Azure Docs <https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-on-behalf-of-flow>`_).
+
+
+Custom Token Scopes
+~~~~~~~~~~~~~~~~~~~
+
+You may want to request tokens with specific scopes to be parsed, these are currently provided using the ``token_scopes`` configuration option on the
+:class:`fastapi_aad_auth._base.provider.ProviderConfig`.
+The scopes of a given token are added to the user class in the authentication state object.
+
+Custom OpenAPI OAuth Flows
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The default OAuth2 flow is ``authorizationCode``, however we support all the options in :py:mod:`fastapi`, and these can be customized using the ``flow_type`` option on
+:class:`fastapi_aad_auth._base.provider.ProviderConfig`.

@@ -362,8 +362,22 @@
 <p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p>
 </dd></dl>
 <dl class="py class">
+<dt id="fastapi_aad_auth._base.validators.token.OAuthFlowType">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.validators.token.</span></code><code class="sig-name descname"><span class="pre">OAuthFlowType</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.OAuthFlowType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enumeration of OAuth Flows for OpenAPI</p>
+<dl class="simple">
+<dt>Options:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">implicit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">password</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clientCredentials</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">authorizationCode</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py class">
 <dt id="fastapi_aad_auth._base.validators.token.TokenValidator">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.validators.token.</span></code><code class="sig-name descname"><span class="pre">TokenValidator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">client_id:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">authorizationUrl:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">tokenUrl:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">api_audience:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">scheme_name:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">scopes:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">auto_error:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">enabled:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">use_pkce:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">user_klass:</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'fastapi_aad_auth._base.state.User'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/token.html#TokenValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.TokenValidator" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.validators.token.</span></code><code class="sig-name descname"><span class="pre">TokenValidator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">client_id:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">authorizationUrl:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">tokenUrl:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">api_audience:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">scheme_name:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">scopes:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">auto_error:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">enabled:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">use_pkce:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">user_klass:</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'fastapi_aad_auth._base.state.User'&gt;</span></em>, <em class="sig-param"><span class="pre">flow_type:</span> <span class="pre">fastapi_aad_auth._base.validators.token.OAuthFlowType</span> <span class="pre">=</span> <span class="pre">&lt;OAuthFlowType.authorizationCode:</span> <span class="pre">'authorizationCode'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/token.html#TokenValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.TokenValidator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validator for token based authentication.</p>
 <p>Initialise validator for token based authentication.</p>
 <dl class="py method">
@@ -436,7 +450,7 @@
               
           </div>
             Last updated on
-              May 22, 2021 (version 0.1.20).
+              Jun 13, 2021 (version 0.1.21).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.

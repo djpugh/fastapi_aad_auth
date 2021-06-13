@@ -376,6 +376,8 @@
 </ul>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad</span></code>:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.flow_type</span></code> (<a class="reference internal" href="module/fastapi_aad_auth._base.validators.token.html#fastapi_aad_auth._base.validators.token.OAuthFlowType" title="fastapi_aad_auth._base.validators.token.OAuthFlowType"><code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi_aad_auth._base.validators.token.OAuthFlowType</span></code></a>) : Select the OpenAPI OAuth2 flow [default: <code class="docutils literal notranslate"><span class="pre">OAuthFlowType.authorizationCode</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_OPENAPI_OAUTH2_FLOW</span></code> environment variable)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.token_scopes</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) : Set the (global) token scopes (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_TOKEN_SCOPES</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.client_id</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.SecretStr</span></code>) : Application Registration Client ID (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_ID</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.tenant_id</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.SecretStr</span></code>) : Application Registration Tenant ID (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_TENANT_ID</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.client_secret</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.SecretStr</span></code>) : Application Registration Client Secret (if required) (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_SECRET</span></code> environment variable)</p></li>
@@ -479,7 +481,7 @@
               
           </div>
             Last updated on
-              May 22, 2021 (version 0.1.20).
+              Jun 13, 2021 (version 0.1.21).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.

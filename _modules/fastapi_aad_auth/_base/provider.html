@@ -348,17 +348,17 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <h1 id="modules-fastapi-aad-auth-base-provider--page-root">Source code for fastapi_aad_auth._base.provider</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">PrivateAttr</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">PrivateAttr</span>
 <span class="kn">from</span> <span class="nn">starlette.requests</span> <span class="kn">import</span> <span class="n">Request</span>
 <span class="kn">from</span> <span class="nn">starlette.responses</span> <span class="kn">import</span> <span class="n">RedirectResponse</span>
 <span class="kn">from</span> <span class="nn">starlette.routing</span> <span class="kn">import</span> <span class="n">Route</span>
 
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.authenticators</span> <span class="kn">import</span> <span class="n">SessionAuthenticator</span>
-<span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.validators</span> <span class="kn">import</span> <span class="n">Validator</span>
+<span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.validators</span> <span class="kn">import</span> <span class="n">OAuthFlowType</span><span class="p">,</span> <span class="n">Validator</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.mixins</span> <span class="kn">import</span> <span class="n">LoggingMixin</span>
-<span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities</span> <span class="kn">import</span> <span class="n">InheritableBaseSettings</span><span class="p">,</span> <span class="n">urls</span>
+<span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities</span> <span class="kn">import</span> <span class="n">expand_doc</span><span class="p">,</span> <span class="n">InheritableBaseSettings</span><span class="p">,</span> <span class="n">urls</span>
 
 
 <div class="viewcode-block" id="Provider"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.provider.html#fastapi_aad_auth._base.provider.Provider">[docs]</a><span class="k">class</span> <span class="nc">Provider</span><span class="p">(</span><span class="n">LoggingMixin</span><span class="p">):</span>
@@ -424,10 +424,13 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redirect_url</span></div>
 
 
-<div class="viewcode-block" id="ProviderConfig"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.provider.html#fastapi_aad_auth._base.provider.ProviderConfig">[docs]</a><span class="k">class</span> <span class="nc">ProviderConfig</span><span class="p">(</span><span class="n">InheritableBaseSettings</span><span class="p">):</span>
+<div class="viewcode-block" id="ProviderConfig"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.provider.html#fastapi_aad_auth._base.provider.ProviderConfig">[docs]</a><span class="nd">@expand_doc</span>
+<span class="k">class</span> <span class="nc">ProviderConfig</span><span class="p">(</span><span class="n">InheritableBaseSettings</span><span class="p">):</span>
     <span class="sd">"""Configuration for a provider."""</span>
 
-    <span class="n">_provider_klass</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">Provider</span><span class="p">)</span></div>
+    <span class="n">_provider_klass</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">Provider</span><span class="p">)</span>
+    <span class="n">flow_type</span><span class="p">:</span> <span class="n">OAuthFlowType</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">OAuthFlowType</span><span class="o">.</span><span class="n">authorizationCode</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Select the OpenAPI OAuth2 flow'</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">'FASTAPI_AUTH_OPENAPI_OAUTH2_FLOW'</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">token_scopes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Set the (global) token scopes'</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">'FASTAPI_AUTH_TOKEN_SCOPES'</span><span class="p">)</span></div>
 </pre></div>
 
           </article>
@@ -452,7 +455,7 @@
               
           </div>
             Last updated on
-              May 22, 2021 (version 0.1.20).
+              Jun 13, 2021 (version 0.1.21).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.

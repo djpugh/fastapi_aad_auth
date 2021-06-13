@@ -349,7 +349,10 @@
             
   <h1 id="modules-fastapi-aad-auth-base-validators-token--page-root">Source code for fastapi_aad_auth._base.validators.token</h1><div class="highlight"><pre>
 <span></span><span class="sd">"""Base validator for token based authentication."""</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
 <span class="kn">from</span> <span class="nn">authlib.jose</span> <span class="kn">import</span> <span class="n">errors</span> <span class="k">as</span> <span class="n">jwt_errors</span>
+<span class="kn">from</span> <span class="nn">fastapi.openapi.models</span> <span class="kn">import</span> <span class="n">OAuthFlows</span>
 <span class="kn">from</span> <span class="nn">fastapi.security</span> <span class="kn">import</span> <span class="n">OAuth2AuthorizationCodeBearer</span>
 <span class="kn">from</span> <span class="nn">fastapi.security.utils</span> <span class="kn">import</span> <span class="n">get_authorization_scheme_param</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
@@ -358,6 +361,10 @@
 
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.state</span> <span class="kn">import</span> <span class="n">AuthenticationState</span><span class="p">,</span> <span class="n">User</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.validators.base</span> <span class="kn">import</span> <span class="n">Validator</span>
+
+
+<span class="n">OAuthFlowType</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="s1">'OAuthFlowType'</span><span class="p">,</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">OAuthFlows</span><span class="o">.</span><span class="n">__fields__</span><span class="o">.</span><span class="n">keys</span><span class="p">()})</span>  <span class="c1"># type: ignore</span>
+<span class="n">OAuthFlowType</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s1">'Enumeration of OAuth Flows for OpenAPI</span><span class="se">\n\n</span><span class="s1">Options:</span><span class="se">\n\t</span><span class="s1">'</span><span class="o">+</span><span class="s1">'</span><span class="se">\n\t</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s1">'* ``</span><span class="si">{</span><span class="n">u</span><span class="si">}</span><span class="s1">``'</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">OAuthFlowType</span><span class="o">.</span><span class="n">__members__</span><span class="p">])</span>
 
 
 <div class="viewcode-block" id="InitOAuth"><a class="viewcode-back" href="../../../../module/fastapi_aad_auth._base.validators.token.html#fastapi_aad_auth._base.validators.token.InitOAuth">[docs]</a><span class="k">class</span> <span class="nc">InitOAuth</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
@@ -381,7 +388,8 @@
         <span class="n">auto_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">use_pkce</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="n">user_klass</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">User</span>
+        <span class="n">user_klass</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">User</span><span class="p">,</span>
+        <span class="n">flow_type</span><span class="p">:</span> <span class="n">OAuthFlowType</span> <span class="o">=</span> <span class="n">OAuthFlowType</span><span class="o">.</span><span class="n">authorizationCode</span>  <span class="c1"># type: ignore</span>
     <span class="p">):</span>
         <span class="sd">"""Initialise validator for token based authentication."""</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">authorizationUrl</span><span class="o">=</span><span class="n">authorizationUrl</span><span class="p">,</span> <span class="n">tokenUrl</span><span class="o">=</span><span class="n">tokenUrl</span><span class="p">,</span> <span class="n">refreshUrl</span><span class="o">=</span><span class="n">api_audience</span><span class="p">,</span> <span class="n">scheme_name</span><span class="o">=</span><span class="n">scheme_name</span><span class="p">,</span> <span class="n">scopes</span><span class="o">=</span><span class="n">scopes</span><span class="p">,</span> <span class="n">auto_error</span><span class="o">=</span><span class="n">auto_error</span><span class="p">)</span>
@@ -392,6 +400,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">api_audience</span> <span class="o">=</span> <span class="n">api_audience</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_use_pkce</span> <span class="o">=</span> <span class="n">use_pkce</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_user_klass</span> <span class="o">=</span> <span class="n">user_klass</span>
+        <span class="k">if</span> <span class="n">flow_type</span> <span class="o">!=</span> <span class="n">OAuthFlowType</span><span class="o">.</span><span class="n">authorizationCode</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">flows</span> <span class="o">=</span> <span class="n">OAuthFlows</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">flow_type</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="p">{</span><span class="s1">'tokenUrl'</span><span class="p">:</span> <span class="n">tokenUrl</span><span class="p">,</span> <span class="s1">'authorizationUrl'</span><span class="p">:</span> <span class="n">authorizationUrl</span><span class="p">,</span> <span class="s1">'scopes'</span><span class="p">:</span> <span class="n">scopes</span><span class="p">}})</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Using non default flow : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">flows</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
 <div class="viewcode-block" id="TokenValidator.check"><a class="viewcode-back" href="../../../../module/fastapi_aad_auth._base.validators.token.html#fastapi_aad_auth._base.validators.token.TokenValidator.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
         <span class="sd">"""Check the authentication from the request."""</span>
@@ -489,7 +500,7 @@
               
           </div>
             Last updated on
-              May 22, 2021 (version 0.1.20).
+              Jun 13, 2021 (version 0.1.21).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.

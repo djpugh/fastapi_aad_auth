@@ -441,6 +441,11 @@ for the Authorization Code Flow with PKCE for:</p>
 <img alt="Overview of app scopes" src="_images/App-Registration-Scopes.PNG"/>
 <p class="caption"><span class="caption-text">An example configuration for api Scopes for testing an application</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Some people have reported an Azure Active Directory issue - <code class="docutils literal notranslate"><span class="pre">AADSTS90009</span></code> (<a class="reference external" href="https://github.com/djpugh/fastapi_aad_auth/issues/59">#59</a>). The scope given in <code class="docutils literal notranslate"><span class="pre">acquire_token_interactive()</span></code> has the prefix <code class="docutils literal notranslate"><span class="pre">api://</span></code>,
+which seems to sometimes work, and sometimes not. It seems to always work when removing this prefix and using <code class="docutils literal notranslate"><span class="pre">'&lt;client_id&gt;/.default'</span></code>.</p>
+</div>
 
 
 <span id="config-fastapi-aad-auth-env"></span><h2 id="configuring-the-fastapi-environment">Configuring the fastapi environment<a class="headerlink" href="#configuring-the-fastapi-environment" title="Permalink to this headline">¶</a></h2>
@@ -628,7 +633,7 @@ from the certificates and secrets section of the app registration)</p>
               
           </div>
             Last updated on
-              May 22, 2021 (version 0.1.20).
+              Jun 13, 2021 (version 0.1.21).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.

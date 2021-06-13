@@ -242,6 +242,10 @@
         <li class="md-nav__item"><a href="#customising-the-ui" class="md-nav__link">Customising the UI</a>
         </li>
         <li class="md-nav__item"><a href="#token-scopes" class="md-nav__link">Token Scopes</a>
+        </li>
+        <li class="md-nav__item"><a href="#custom-token-scopes" class="md-nav__link">Custom Token Scopes</a>
+        </li>
+        <li class="md-nav__item"><a href="#custom-openapi-oauth-flows" class="md-nav__link">Custom OpenAPI OAuth Flows</a>
         </li></ul>
             </nav>
         </li>
@@ -370,6 +374,10 @@
         <li class="md-nav__item"><a href="#customising-the-ui" class="md-nav__link">Customising the UI</a>
         </li>
         <li class="md-nav__item"><a href="#token-scopes" class="md-nav__link">Token Scopes</a>
+        </li>
+        <li class="md-nav__item"><a href="#custom-token-scopes" class="md-nav__link">Custom Token Scopes</a>
+        </li>
+        <li class="md-nav__item"><a href="#custom-openapi-oauth-flows" class="md-nav__link">Custom OpenAPI OAuth Flows</a>
         </li></ul>
             </nav>
         </li>
@@ -500,6 +508,17 @@ access Microsoft (or other APIs) you will need to use e.g. an additional msal in
 <p>Alternatively, you can use an on-behalf-of flow (see <a class="reference external" href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-on-behalf-of-flow">Azure Docs</a>).</p>
 
 
+<h2 id="custom-token-scopes">Custom Token Scopes<a class="headerlink" href="#custom-token-scopes" title="Permalink to this headline">¶</a></h2>
+<p>You may want to request tokens with specific scopes to be parsed, these are currently provided using the <code class="docutils literal notranslate"><span class="pre">token_scopes</span></code> configuration option on the
+<a class="reference internal" href="module/fastapi_aad_auth._base.provider.html#fastapi_aad_auth._base.provider.ProviderConfig" title="fastapi_aad_auth._base.provider.ProviderConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi_aad_auth._base.provider.ProviderConfig</span></code></a>.
+The scopes of a given token are added to the user class in the authentication state object.</p>
+
+
+<h2 id="custom-openapi-oauth-flows">Custom OpenAPI OAuth Flows<a class="headerlink" href="#custom-openapi-oauth-flows" title="Permalink to this headline">¶</a></h2>
+<p>The default OAuth2 flow is <code class="docutils literal notranslate"><span class="pre">authorizationCode</span></code>, however we support all the options in <code class="xref py py-mod docutils literal notranslate"><span class="pre">fastapi</span></code>, and these can be customized using the <code class="docutils literal notranslate"><span class="pre">flow_type</span></code> option on
+<a class="reference internal" href="module/fastapi_aad_auth._base.provider.html#fastapi_aad_auth._base.provider.ProviderConfig" title="fastapi_aad_auth._base.provider.ProviderConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi_aad_auth._base.provider.ProviderConfig</span></code></a>.</p>
+
+
 
 
           </article>
@@ -548,7 +567,7 @@ access Microsoft (or other APIs) you will need to use e.g. an additional msal in
               
           </div>
             Last updated on
-              May 22, 2021 (version 0.1.20).
+              Jun 13, 2021 (version 0.1.21).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.

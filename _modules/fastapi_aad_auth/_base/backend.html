@@ -351,7 +351,7 @@
 <span></span><span class="sd">"""Base OAuthBackend with token and session validators."""</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">fastapi.security</span> <span class="kn">import</span> <span class="n">OAuth2AuthorizationCodeBearer</span>
+<span class="kn">from</span> <span class="nn">fastapi.security</span> <span class="kn">import</span> <span class="n">OAuth2</span>
 <span class="kn">from</span> <span class="nn">starlette.authentication</span> <span class="kn">import</span> <span class="n">AuthCredentials</span><span class="p">,</span> <span class="n">AuthenticationBackend</span><span class="p">,</span> <span class="n">UnauthenticatedUser</span>
 <span class="kn">from</span> <span class="nn">starlette.requests</span> <span class="kn">import</span> <span class="n">Request</span>
 
@@ -414,16 +414,14 @@
         <span class="c1"># We create this here "dynamically" for each endpoint, as we allow customisation on whether a session is permissible</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span>
-            <span class="k">class</span> <span class="nc">OAuthValidator</span><span class="p">(</span><span class="n">OAuth2AuthorizationCodeBearer</span><span class="p">):</span>
+
+            <span class="k">class</span> <span class="nc">OAuthValidator</span><span class="p">(</span><span class="n">OAuth2</span><span class="p">):</span>
                 <span class="sd">"""OAuthValidator for API Auth."""</span>
 
                 <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="n">self_</span><span class="p">):</span>
                     <span class="sd">"""Initialise the validator."""</span>
                     <span class="n">token_validators</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">validators</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">TokenValidator</span><span class="p">)]</span>
-                    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">authorizationUrl</span><span class="o">=</span><span class="n">token_validators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">authorizationCode</span><span class="o">.</span><span class="n">authorizationUrl</span><span class="p">,</span>
-                                     <span class="n">tokenUrl</span><span class="o">=</span><span class="n">token_validators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">authorizationCode</span><span class="o">.</span><span class="n">tokenUrl</span><span class="p">,</span>
-                                     <span class="n">scopes</span><span class="o">=</span><span class="n">token_validators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">authorizationCode</span><span class="o">.</span><span class="n">scopes</span><span class="p">,</span>
-                                     <span class="n">refreshUrl</span><span class="o">=</span><span class="n">token_validators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">authorizationCode</span><span class="o">.</span><span class="n">refreshUrl</span><span class="p">)</span>
+                    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">flows</span><span class="o">=</span><span class="n">token_validators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
 
                 <span class="k">async</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="n">self_</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
                     <span class="sd">"""Validate a request."""</span>
@@ -469,7 +467,7 @@
               
           </div>
             Last updated on
-              May 22, 2021 (version 0.1.20).
+              Jun 13, 2021 (version 0.1.21).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.

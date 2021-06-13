@@ -495,7 +495,7 @@
 <span class="sd">        as well as handling the redirection based on the session information</span>
 
 <span class="sd">        Keyword Args:</span>
-<span class="sd">            scopes: scopes for the fastapi requires decorator</span>
+<span class="sd">            scopes: scopes for the starlette requires decorator</span>
 <span class="sd">            redirect: name of the redirection url</span>
 <span class="sd">        """</span>
 
@@ -556,7 +556,7 @@
         <span class="k">def</span> <span class="nf">on_auth_error</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="n">AuthenticationError</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_authentication_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
 
-        <span class="n">app</span><span class="o">.</span><span class="n">add_middleware</span><span class="p">(</span><span class="n">AuthenticationMiddleware</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span>  <span class="n">auth_backend</span><span class="p">,</span> <span class="n">on_error</span><span class="o">=</span><span class="n">on_auth_error</span><span class="p">)</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">add_middleware</span><span class="p">(</span><span class="n">AuthenticationMiddleware</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">auth_backend</span><span class="p">,</span> <span class="n">on_error</span><span class="o">=</span><span class="n">on_auth_error</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">add_error_handlers</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_error_handlers</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
         <span class="c1"># Check if session middleware is there</span>
@@ -607,7 +607,7 @@
               
           </div>
             Last updated on
-              May 22, 2021 (version 0.1.20).
+              Jun 13, 2021 (version 0.1.21).
             <br/>
             Created using
             <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
