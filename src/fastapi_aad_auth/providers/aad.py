@@ -86,9 +86,9 @@ class AADSessionAuthenticator(SessionAuthenticator):
             else:
                 port = f':{request.url.port}'
             if 'X-Forwarded-Proto' in request.headers and request.headers['X-Forwarded-Proto'] == 'https':
-                url_scheme='https'
+                url_scheme = 'https'
             else:
-                url_scheme='http'
+                url_scheme = 'http'
             redirect_uri = f'{url_scheme}://{request.url.hostname}{port}{self._redirect_path}'
         self.logger.info(f'Created redirect uri: {redirect_uri} from {request.url}')
         return redirect_uri
