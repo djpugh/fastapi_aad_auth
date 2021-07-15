@@ -121,13 +121,13 @@ For starlette routes (i.e. interactive/HTML pages), use the auth_provider.auth_r
     from starlette.responses import PlainTextResponse
 
     @auth_provider.auth_required()
-    async def test(request):
+    async def test(request: Request):
         if request.user.is_authenticated:
             return PlainTextResponse('Hello, ' + request.user.display_name)
 
 This middleware will set the request.user object and request.credentials object::
 
-    async def homepage(request):
+    async def homepage(request: Request):
         if request.user.is_authenticated:
             return PlainTextResponse('Hello, ' + request.user.display_name)
         return PlainTextResponse(f'Hello, you')
