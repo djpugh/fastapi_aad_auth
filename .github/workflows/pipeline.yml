@@ -87,7 +87,7 @@ jobs:
     - name: Run Test Suite
       run: tox -e test --skip-pkg-install
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v2
       with:
         directory: ./reports/
         flags: tests
