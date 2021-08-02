@@ -21,6 +21,12 @@ async def hello_world(auth_state: AuthenticationState = Depends(auth_provider.au
     print(auth_state)
     return {'hello': 'world'}
 
+@router.get('/test_auth_decorator')
+@auth_provider.api_auth_required('authenticated', allow_session=False)
+async def hello_world2(auth_state: AuthenticationState, a: str = 'b'):
+    print(auth_state)
+    return {'hello': 'world', 'a': a}
+
 
 if 'untagged' in __version__ or 'unknown':
     API_VERSION = 0
@@ -38,7 +44,7 @@ async def homepage(request):
 async def test(request):
     if request.user.is_authenticated:
         return PlainTextResponse('Hello, ' + request.user.display_name)
- 
+
 routes = [
     Route("/", endpoint=homepage),
     Route("/test", endpoint=test)

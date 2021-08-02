@@ -1,9 +1,10 @@
 """Authenticator Class."""
 from functools import wraps
+import inspect
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from starlette.authentication import requires
 from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.sessions import SessionMiddleware
@@ -12,6 +13,7 @@ from starlette.responses import RedirectResponse, Response
 from starlette.routing import request_response, Route
 
 from fastapi_aad_auth._base.backend import BaseOAuthBackend
+from fastapi_aad_auth._base.state import AuthenticationState
 from fastapi_aad_auth._base.validators import SessionValidator
 from fastapi_aad_auth.config import Config
 from fastapi_aad_auth.errors import AuthenticationError, AuthorisationError, base_error_handler, ConfigurationError, json_error_handler, redirect_error_handler
@@ -162,6 +164,51 @@ class Authenticator(LoggingMixin):
 
                     return await req_wrapper(request, *args, **kwargs)
 
+                return require_endpoint
+            else:
+                return endpoint
+
+        return wrapper
+
+    def api_auth_required(self, scopes: str = 'authenticated', allow_session: bool = True):
+        """Decorator to require specific scopes (and redirect to the login ui) for an endpoint.
+
+        This can be used for enabling authentication on an API endpoint, using the fastapi
+        dependency injection logic.
+
+        This adds the authentication state to the endpoint arguments as ``auth_state``.
+
+        Keyword Args:
+            scopes: scopes for the starlette requires decorator
+            allow_session: whether to allow session authentication or not
+        """
+        def wrapper(endpoint):
+            if self.config.enabled:
+
+                # Create the oauth endpoint
+                oauth = self.auth_backend.requires_auth(scopes=scopes, allow_session=allow_session)
+
+                # We need to do some signature hackery for fastapi
+                endpoint_signature = inspect.signature(endpoint)
+                endpoint_args = [v for v in endpoint_signature.parameters.values() if v.default is inspect._empty and v.name != 'auth_state']
+                endpoint_kwarg_params = [v for v in endpoint_signature.parameters.values() if v.default is not inspect._empty and v.name != 'auth_state']
+                new_params = [inspect.Parameter('auth_state',
+                                                inspect.Parameter.POSITIONAL_OR_KEYWORD,
+                                                default=Depends(oauth),
+                                                annotation=AuthenticationState)]
+
+                # This is the actual dectorator
+
+                @wraps(endpoint)
+                async def require_endpoint(auth_state: AuthenticationState = Depends(oauth), *args, **kwargs):
+                    if ('auth_state' in endpoint_signature.parameters):
+                        kwargs['auth_state'] = auth_state
+                    return await endpoint(*args, **kwargs)
+
+                # We need to set the signature to have the endpoints signature with the additional auth_state params
+                require_endpoint.__signature__ = endpoint_signature.replace(parameters=endpoint_args+new_params+endpoint_kwarg_params)
+                # We also want to set the annotation correctly
+                require_endpoint.__annotations__['auth_state'] = AuthenticationState
                 return require_endpoint
             else:
                 return endpoint

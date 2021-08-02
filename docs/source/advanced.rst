@@ -2,6 +2,20 @@ Using fastapi_aad_auth
 **********************
 Please see `Basic Usage <usage>`_ for information on how to configure and setup ``fastapi_aad_auth``.
 
+Customising authentication dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The :meth:`~fastapi_aad_auth.auth.Authenticator.api_auth_required` method decorator provides controls over the scope, and is
+using the ``fastapi`` dependency injection system. If you want more customisation, you can use::
+
+    router = APIRouter()
+
+    @router.get('/hello')
+    async def hello_world(auth_state: AuthenticationState = Depends(auth_provider.auth_backend.requires_auth(allow_session=True))):
+        print(auth_state)
+        return {'hello': 'world'}
+
+
 Accessing User Tokens/View
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
