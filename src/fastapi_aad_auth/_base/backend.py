@@ -7,6 +7,7 @@ from starlette.requests import Request
 
 from fastapi_aad_auth._base.state import AuthenticationState
 from fastapi_aad_auth._base.validators import SessionValidator, TokenValidator, Validator
+from fastapi_aad_auth.errors import AuthorisationError
 from fastapi_aad_auth.mixins import LoggingMixin, NotAuthenticatedMixin
 from fastapi_aad_auth.utilities import deprecate
 
@@ -58,7 +59,7 @@ class BaseOAuthBackend(NotAuthenticatedMixin, LoggingMixin, AuthenticationBacken
         for validator in self.validators:
             yield validator
 
-    def requires_auth(self, allow_session: bool = False):
+    def requires_auth(self, scopes: str = 'authenticated', allow_session: bool = False):
         """Require authentication, use with fastapi Depends."""
         # This is a bit horrible, but is needed for fastapi to get this into OpenAPI (or similar) - it needs to be an OAuth2 object
         # We create this here "dynamically" for each endpoint, as we allow customisation on whether a session is permissible
@@ -78,6 +79,9 @@ class BaseOAuthBackend(NotAuthenticatedMixin, LoggingMixin, AuthenticationBacken
                     state = self.check(request, allow_session)
                     if state is None or not state.is_authenticated():
                         raise self.not_authenticated
+                    elif not state.check_scopes(scopes):
+                        raise AuthorisationError(f'Not authorised for this API endpoint - Requires {scopes}')
+
                     return state
 
             return OAuthValidator()

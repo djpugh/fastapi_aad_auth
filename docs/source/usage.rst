@@ -112,7 +112,8 @@ You can use it for fastapi routes::
     router = APIRouter()
 
     @router.get('/hello')
-    async def hello_world(auth_state: AuthenticationState = Depends(auth_provider.auth_backend.requires_auth(allow_session=True))):
+    @auth_provider.api_auth_required(allow_session=True)
+    async def hello_world(auth_state: AuthenticationState):
         print(auth_state)
         return {'hello': 'world'}
 

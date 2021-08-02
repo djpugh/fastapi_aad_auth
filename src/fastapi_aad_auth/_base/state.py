@@ -2,7 +2,7 @@
 from enum import Enum
 import importlib
 import json
-from typing import List, Optional
+from typing import List, Optional, Union
 import uuid
 
 from itsdangerous import URLSafeSerializer
@@ -164,3 +164,14 @@ class AuthenticationState(LoggingMixin, InheritableBaseModel):
     def as_unauthenticated(cls, serializer, session):
         """Store as an un-authenticated user."""
         return cls.authenticate_as(None, serializer, session)
+
+    def check_scopes(self, required_scopes: Optional[Union[List[str], str]] = None):
+        """Check if the user has the required scopes."""
+        if required_scopes is None:
+            return True
+        elif isinstance(required_scopes, str):
+            required_scopes = required_scopes.split(' ')
+        for scope in required_scopes:
+            if scope in self.credentials.scopes:
+                return True
+        return False
