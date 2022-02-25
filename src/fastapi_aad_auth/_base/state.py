@@ -203,7 +203,7 @@ class AuthenticationState(LoggingMixin, InheritableBaseModel):
         elif isinstance(required_roles, str):
             required_roles = required_roles.split(' ')
         for role in required_roles:
-            if self.user.roles and role in self.user.roles:
+            if self.user and self.user.roles and role in self.user.roles:
                 return True
         return False
 
@@ -213,7 +213,7 @@ class AuthenticationState(LoggingMixin, InheritableBaseModel):
             return True
         elif isinstance(required_groups, str):
             required_groups = required_groups.split(' ')
-        for role in required_groups:
-            if self.user.groups and role in self.user.groups:
+        for group in required_groups:
+            if self.user and self.user.groups and group in self.user.groups:
                 return True
         return False

@@ -2,7 +2,7 @@
 from functools import wraps
 import inspect
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from fastapi import Depends, FastAPI
 from starlette.authentication import requires
@@ -140,8 +140,12 @@ class Authenticator(LoggingMixin):
         else:
             return json_error_handler(error_message, status_code=status_code)
 
-    def auth_required(self, scopes: str = 'authenticated', redirect: str = 'login'):
-        """Decorator to require specific scopes (and redirect to the login ui) for an endpoint.
+    def auth_required(self,
+                      scopes: str = 'authenticated',
+                      redirect: str = 'login',
+                      roles: Optional[Union[List[str], str]] = None,
+                      groups: Optional[Union[List[str], str]] = None):
+        """Decorator to require specific permissions (and redirect to the login ui) for an endpoint.
 
         This can be used for toggling authentication (e.g. between an internal/external server)
         as well as handling the redirection based on the session information
@@ -150,6 +154,17 @@ class Authenticator(LoggingMixin):
             scopes: scopes for the starlette requires decorator
             redirect: name of the redirection url
         """
+        if groups or roles:
+            _scopes = scopes.split(' ')
+            if isinstance(groups, str):
+                groups = groups.split(' ')
+            elif not groups:
+                groups = []
+            if isinstance(roles, str):
+                roles = roles.split(' ')
+            elif not roles:
+                roles = []
+            scopes = ' '.join(_scopes+roles+groups)
 
         def wrapper(endpoint):
             if self.config.enabled:
