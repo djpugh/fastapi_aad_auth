@@ -26,6 +26,7 @@ class AuthenticationOptions(Enum):
 
 
 class InteractiveUser(SimpleUser):
+    """User for interactive components through Starlette."""
 
     def __init__(self,
                  username: str,
@@ -34,6 +35,7 @@ class InteractiveUser(SimpleUser):
                  roles: Optional[List[str]] = None,
                  groups: Optional[List[str]] = None,
                  scopes: Optional[List[str]] = None):
+        """Initialise the user."""
         super().__init__(username)
         self.name = name
         self.email = email

@@ -323,7 +323,7 @@ class AADProvider(Provider):
             token_scopes = {}
         token_validator = AADTokenValidator(client_id=client_id, tenant_id=tenant_id, api_audience=api_audience,
                                             client_app_ids=client_app_ids, scopes=token_scopes, enabled=enabled, strict=strict_token,
-                                            user_klass=user_klass, flow_type=flow_type, roles=roles, jwks_cache_ttl=jwks_cache_ttl) 
+                                            user_klass=user_klass, flow_type=flow_type, roles=roles, jwks_cache_ttl=jwks_cache_ttl)
         session_authenticator = AADSessionAuthenticator(session_validator=session_validator, token_validator=token_validator,
                                                         client_id=client_id, tenant_id=tenant_id, redirect_path=redirect_path,
                                                         prompt=prompt, client_secret=client_secret, scopes=scopes,
