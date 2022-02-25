@@ -4,7 +4,7 @@ import base64
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from authlib.jose import errors as jwt_errors, jwk, jwt, JsonWebKey
+from authlib.jose import errors as jwt_errors, JsonWebKey, jwk, jwt
 from authlib.jose.util import extract_header
 from cachetools import TTLCache
 from cryptography.hazmat.primitives import serialization
