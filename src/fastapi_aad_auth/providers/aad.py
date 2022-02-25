@@ -2,10 +2,11 @@
 
 import base64
 from enum import Enum
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
-from authlib.jose import errors as jwt_errors, jwk, jwt
+from authlib.jose import errors as jwt_errors, jwk, jwt, JsonWebKey
 from authlib.jose.util import extract_header
+from cachetools import TTLCache
 from cryptography.hazmat.primitives import serialization
 import msal
 from pkg_resources import resource_string
@@ -167,7 +168,8 @@ class AADTokenValidator(TokenValidator):
                  strict: bool = True,
                  client_app_ids: Optional[List[str]] = None,
                  user_klass: type = User,
-                 flow_type: OAuthFlowType = OAuthFlowType.authorizationCode):  # type: ignore
+                 flow_type: OAuthFlowType = OAuthFlowType.authorizationCode,  # type: ignore
+                 jwks_cache_ttl: int = 0):
         """Initialise validator for AAD token based authentication."""
         authorization_url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/authorize"
         token_url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token"
@@ -179,12 +181,21 @@ class AADTokenValidator(TokenValidator):
         if client_app_ids is None:
             client_app_ids = []
         self.client_app_ids = client_app_ids
+        self._jwks_cache: TTLCache = TTLCache(maxsize=1, ttl=jwks_cache_ttl)
 
-    def _get_ms_jwk(self, token):
+    def _request_ms_jwks(self) -> Dict[str, Any]:
+        if len(self._jwks_cache):
+            jwks = self._jwks_cache[None]
+        else:
+            jwks = requests.get(self.key_url).json()
+            self._jwks_cache[None] = jwks
+        return jwks
+
+    def _get_ms_jwk(self, token: str) -> JsonWebKey:
         try:
             self.logger.info(f'Getting signing keys from {self.key_url}')
-            jwks = requests.get(self.key_url).json()
             token_header = token.split(".")[0].encode()
+            jwks = self._request_ms_jwks()
             unverified_header = extract_header(token_header, jwt_errors.DecodeError)
             for key in jwks["keys"]:
                 if key["kid"] == unverified_header["kid"]:
@@ -276,7 +287,8 @@ class AADProvider(Provider):
             oauth_base_route: str = '/oauth',
             token_type: Union[str, TokenType] = TokenType.access,
             token_scopes: Optional[Dict[str, str]] = None,
-            flow_type: OAuthFlowType = OAuthFlowType.authorizationCode):  # type: ignore
+            flow_type: OAuthFlowType = OAuthFlowType.authorizationCode,  # type: ignore
+            jwks_cache_ttl: int = 0):
         """Initialise the auth backend.
 
         Args:
@@ -302,7 +314,7 @@ class AADProvider(Provider):
             token_scopes = {}
         token_validator = AADTokenValidator(client_id=client_id, tenant_id=tenant_id, api_audience=api_audience,
                                             client_app_ids=client_app_ids, scopes=token_scopes, enabled=enabled, strict=strict_token,
-                                            user_klass=user_klass, flow_type=flow_type)
+                                            user_klass=user_klass, flow_type=flow_type, jwks_cache_ttl=jwks_cache_ttl)
         session_authenticator = AADSessionAuthenticator(session_validator=session_validator, token_validator=token_validator,
                                                         client_id=client_id, tenant_id=tenant_id, redirect_path=redirect_path,
                                                         prompt=prompt, client_secret=client_secret, scopes=scopes,
@@ -335,7 +347,8 @@ class AADProvider(Provider):
                   prompt=provider_config.prompt, domain_hint=provider_config.domain_hint,
                   redirect_uri=provider_config.redirect_uri, user_klass=user_klass,
                   oauth_base_route=config.routing.oauth_base_route, token_type=provider_config.token_type,
-                  token_scopes=provider_config.token_scopes, flow_type=provider_config.flow_type)
+                  token_scopes=provider_config.token_scopes, flow_type=provider_config.flow_type,
+                  jwks_cache_ttl=provider_config.jwks_cache_ttl)
         # We need to override the login and redirect etc until it is deprecated
         if hasattr(config.routing, 'login_path') and config.routing.login_path and not is_deprecated(config.routing.__fields__['login_path']):
             obj._login_url = config.routing.login_path
@@ -377,6 +390,7 @@ class AADConfig(ProviderConfig):
     domain_hint: Optional[str] = Field(None, description="AAD domain hint", env='AAD_DOMAIN_HINT')
     roles: Optional[List[str]] = Field(None, description="AAD roles required in claims", env='AAD_ROLES')
     token_type: TokenType = Field(TokenType.access, description='The AAD token type to use to validate (we should use the access token if it is configured, unless we are acting as a pure UI component')
+    jwks_cache_ttl: int = Field(0, description='Cache Time to Live value for MS JWKs token', env='AAD_JWKS_CACHE_TTL')
     _provider_klass: type = PrivateAttr(AADProvider)
 
     class Config:  # noqa D106
