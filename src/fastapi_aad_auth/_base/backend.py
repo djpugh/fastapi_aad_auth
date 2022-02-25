@@ -1,5 +1,5 @@
 """Base OAuthBackend with token and session validators."""
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from fastapi.security import OAuth2
 from starlette.authentication import AuthCredentials, AuthenticationBackend, UnauthenticatedUser
