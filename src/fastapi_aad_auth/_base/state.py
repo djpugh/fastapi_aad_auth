@@ -42,6 +42,14 @@ class User(InheritablePropertyBaseModel):
             for scope in self.scopes:
                 if not scope.startswith('.'):
                     permissions.append(scope)
+        if self.groups:
+            for group in self.groups:
+                if not group.startswith('.'):
+                    permissions.append(group)
+        if self.roles:
+            for role in self.roles:
+                if not role.startswith('.'):
+                    permissions.append(role)
         return permissions[:]
 
     @property
