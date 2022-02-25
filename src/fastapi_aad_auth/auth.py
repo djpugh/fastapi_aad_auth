@@ -170,7 +170,11 @@ class Authenticator(LoggingMixin):
 
         return wrapper
 
-    def api_auth_required(self, scopes: str = 'authenticated', allow_session: bool = True):
+    def api_auth_required(self,
+                          scopes: str = 'authenticated',
+                          allow_session: bool = True,
+                          roles: Optional[Union[List['str'], 'str']] = None,
+                          groups: Optional[Union[List['str'], 'str']] = None):
         """Decorator to require specific scopes (and redirect to the login ui) for an endpoint.
 
         This can be used for enabling authentication on an API endpoint, using the fastapi
@@ -186,7 +190,7 @@ class Authenticator(LoggingMixin):
             if self.config.enabled:
 
                 # Create the oauth endpoint
-                oauth = self.auth_backend.requires_auth(scopes=scopes, allow_session=allow_session)
+                oauth = self.auth_backend.requires_auth(scopes=scopes, allow_session=allow_session, roles=roles, groups=groups)
 
                 # We need to do some signature hackery for fastapi
                 endpoint_signature = inspect.signature(endpoint)
