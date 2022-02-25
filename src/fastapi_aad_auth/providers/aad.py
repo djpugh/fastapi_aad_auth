@@ -167,12 +167,14 @@ class AADTokenValidator(TokenValidator):
                  strict: bool = True,
                  client_app_ids: Optional[List[str]] = None,
                  user_klass: type = User,
-                 flow_type: OAuthFlowType = OAuthFlowType.authorizationCode):  # type: ignore
+                 flow_type: OAuthFlowType = OAuthFlowType.authorizationCode,  # type: ignore
+                 roles: Optional[List[str]] = None):
         """Initialise validator for AAD token based authentication."""
         authorization_url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/authorize"
         token_url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token"
         self.key_url = f"https://login.microsoftonline.com/{tenant_id}/discovery/v2.0/keys"
         self.tenant_id = tenant_id
+        self._roles = roles
         super().__init__(client_id=client_id, authorizationUrl=authorization_url, tokenUrl=token_url, api_audience=api_audience, scheme_name=scheme_name,
                          scopes=scopes, auto_error=auto_error, enabled=enabled, use_pkce=use_pkce, user_klass=user_klass, flow_type=flow_type)
         self.strict = strict
@@ -234,6 +236,12 @@ class AADTokenValidator(TokenValidator):
     @property
     def _claims_options(self):
         options = super()._claims_options
+        if self._roles:
+            roles = self._roles
+            if not isinstance(roles, str):
+                # This is a space delimited string of roles in the claims
+                roles = ' '.join(self._roles)
+            options['roles'] = roles
         options["iss"] = {"essential": True, "values": [f"https://sts.windows.net/{self.tenant_id}/", f"https://login.microsoftonline.com/{self.tenant_id}/v2.0"]}
         options["aud"] = {"essential": True, "values": [self.api_audience] + [self.client_id] + self.client_app_ids}
         options["azp"] = {"essential": True, "values": [self.client_id] + self.client_app_ids}
@@ -276,7 +284,8 @@ class AADProvider(Provider):
             oauth_base_route: str = '/oauth',
             token_type: Union[str, TokenType] = TokenType.access,
             token_scopes: Optional[Dict[str, str]] = None,
-            flow_type: OAuthFlowType = OAuthFlowType.authorizationCode):  # type: ignore
+            flow_type: OAuthFlowType = OAuthFlowType.authorizationCode,  # type: ignore
+            roles: Optional[List[str]] = None):
         """Initialise the auth backend.
 
         Args:
@@ -302,7 +311,7 @@ class AADProvider(Provider):
             token_scopes = {}
         token_validator = AADTokenValidator(client_id=client_id, tenant_id=tenant_id, api_audience=api_audience,
                                             client_app_ids=client_app_ids, scopes=token_scopes, enabled=enabled, strict=strict_token,
-                                            user_klass=user_klass, flow_type=flow_type)
+                                            user_klass=user_klass, flow_type=flow_type, roles=roles)
         session_authenticator = AADSessionAuthenticator(session_validator=session_validator, token_validator=token_validator,
                                                         client_id=client_id, tenant_id=tenant_id, redirect_path=redirect_path,
                                                         prompt=prompt, client_secret=client_secret, scopes=scopes,
@@ -335,7 +344,8 @@ class AADProvider(Provider):
                   prompt=provider_config.prompt, domain_hint=provider_config.domain_hint,
                   redirect_uri=provider_config.redirect_uri, user_klass=user_klass,
                   oauth_base_route=config.routing.oauth_base_route, token_type=provider_config.token_type,
-                  token_scopes=provider_config.token_scopes, flow_type=provider_config.flow_type)
+                  token_scopes=provider_config.token_scopes, flow_type=provider_config.flow_type,
+                  roles=provider_config.roles)
         # We need to override the login and redirect etc until it is deprecated
         if hasattr(config.routing, 'login_path') and config.routing.login_path and not is_deprecated(config.routing.__fields__['login_path']):
             obj._login_url = config.routing.login_path
