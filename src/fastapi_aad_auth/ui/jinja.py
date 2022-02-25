@@ -25,9 +25,7 @@ class PkgResourcesTemplateLoader(BaseLoader):
 class Jinja2Templates(_Jinja2Templates):  # noqa: D101
     __doc__ = _Jinja2Templates.__doc__
 
-    def get_env(self, directory: str) -> Environment:
-        """Get the environment."""
-        env = super().get_env(directory)
-        # We want to setup the choice loader here
-        env.loader = ChoiceLoader([PkgResourcesTemplateLoader(), env.loader])  # type: ignore[list-item]
-        return env
+    def __init__(self, *args, **kwargs) -> Environment:
+        """Initialise the templates and update the environment."""
+        super().__init__(*args, **kwargs)
+        self.env.loader = ChoiceLoader([PkgResourcesTemplateLoader(), self.env.loader])  # type: ignore[list-item]
