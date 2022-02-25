@@ -55,6 +55,18 @@ class User(InheritablePropertyBaseModel):
             value = value.split(' ')
         return value
 
+    @validator('roles', always=True, pre=True)
+    def _validate_roles(cls, value):
+        if isinstance(value, str):
+            value = value.split(' ')
+        return value
+
+    @validator('groups', always=True, pre=True)
+    def _validate_groups(cls, value):
+        if isinstance(value, str):
+            value = json.loads(value)
+        return value
+
 
 class AuthenticationState(LoggingMixin, InheritableBaseModel):
     """Authentication State."""
@@ -173,5 +185,27 @@ class AuthenticationState(LoggingMixin, InheritableBaseModel):
             required_scopes = required_scopes.split(' ')
         for scope in required_scopes:
             if scope in self.credentials.scopes:
+                return True
+        return False
+
+    def check_roles(self, required_roles: Optional[Union[List[str], str]] = None):
+        """Check if the user has the required roles."""
+        if required_roles is None:
+            return True
+        elif isinstance(required_roles, str):
+            required_roles = required_roles.split(' ')
+        for role in required_roles:
+            if self.user.roles and role in self.user.roles:
+                return True
+        return False
+
+    def check_groups(self, required_groups: Optional[Union[List[str], str]] = None):
+        """Check if the user has the required roles."""
+        if required_groups is None:
+            return True
+        elif isinstance(required_groups, str):
+            required_groups = required_groups.split(' ')
+        for role in required_groups:
+            if self.user.groups and role in self.user.groups:
                 return True
         return False
