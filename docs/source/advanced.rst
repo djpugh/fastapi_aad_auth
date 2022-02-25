@@ -108,3 +108,10 @@ Custom OpenAPI OAuth Flows
 
 The default OAuth2 flow is ``authorizationCode``, however we support all the options in :py:mod:`fastapi`, and these can be customized using the ``flow_type`` option on
 :class:`fastapi_aad_auth._base.provider.ProviderConfig`.
+
+
+Caching Microsoft JWKS
+~~~~~~~~~~~~~~~~~~~~~~
+
+If you are making frequent authentication requests without sessions, then there will be frequent calls to get the Microsoft JWKs. There is an implemented
+cache using a Time-to-Live cache, which can be set through the `~fastapi_aad_auth.providers.aad.AADConfig` ``jwks_cache_ttl`` variable (or ``AAD_JWKS_CACHE_TTL`` environment variable).
