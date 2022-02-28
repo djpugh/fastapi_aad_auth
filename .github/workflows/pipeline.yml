@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -47,7 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -75,7 +75,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.py }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.py }}
     - name: Install dependencies
@@ -153,7 +153,7 @@ jobs:
         with:
           clean: true
       - name: Set up Python ${{ matrix.py }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -176,7 +176,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.py }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -219,7 +219,7 @@ jobs:
         with:
           path: ./repo
       - name: Set up Python ${{ matrix.py }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.py }}
       - name: Download build
@@ -276,7 +276,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.py }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
       - name: Download build
         uses: actions/download-artifact@v2
         with:
