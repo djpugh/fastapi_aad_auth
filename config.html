@@ -4,7 +4,8 @@
 <html lang="English">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -49,9 +50,9 @@
   
   
     <title>Configuration Options &#8212; fastapi_aad_auth documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/material.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/material.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -106,7 +107,7 @@
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
-    <form class="md-search__form" action="search.html" method="GET" name="search">
+    <form class="md-search__form" action="search.html" method="get" name="search">
       <input type="text" class="md-search__input" name="q" placeholder="Search"
              autocapitalize="off" autocomplete="off" spellcheck="false"
              data-md-component="query" data-md-state="active">
@@ -361,13 +362,13 @@
         <div class="md-content">
           <article class="md-content__inner md-typeset" role="main">
             
-  
+  <section id="configuration-options">
 <h1 id="config--page-root">Configuration Options<a class="headerlink" href="#config--page-root" title="Permalink to this headline">¶</a></h1>
 <p>Many of the configuration options can be set using environment variables (or a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file).</p>
 <p>This section describes the overall configuration object and it's (nested) options, defined in:</p>
 <dl class="py data">
-<dt>
-<code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth.config.</span></code><code class="sig-name descname"><span class="pre">Config</span></code><a class="reference internal" href="_modules/fastapi_aad_auth/config.html#Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">fastapi_aad_auth.config.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="_modules/fastapi_aad_auth/config.html#Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd></dd></dl>
 <dl>
 <dt><strong>Options:</strong></dt><dd><ul class="simple">
@@ -377,19 +378,20 @@
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad</span></code>:</dt><dd><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.flow_type</span></code> (<a class="reference internal" href="module/fastapi_aad_auth._base.validators.token.html#fastapi_aad_auth._base.validators.token.OAuthFlowType" title="fastapi_aad_auth._base.validators.token.OAuthFlowType"><code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi_aad_auth._base.validators.token.OAuthFlowType</span></code></a>) : Select the OpenAPI OAuth2 flow [default: <code class="docutils literal notranslate"><span class="pre">OAuthFlowType.authorizationCode</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_OPENAPI_OAUTH2_FLOW</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.token_scopes</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) : Set the (global) token scopes (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_TOKEN_SCOPES</span></code> environment variable)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.token_scopes</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) : Set the (global) token scopes (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_TOKEN_SCOPES</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.client_id</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.SecretStr</span></code>) : Application Registration Client ID (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_ID</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.tenant_id</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.SecretStr</span></code>) : Application Registration Tenant ID (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_TENANT_ID</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.client_secret</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.SecretStr</span></code>) : Application Registration Client Secret (if required) (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_SECRET</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.scopes</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) : Additional scopes requested - if the scope is not configured to the application this will throw an error when validating the token</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.client_app_ids</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) : Additional Client App IDs to accept tokens from (when running as a backend service) (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_APP_IDS</span></code> environment variable)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.scopes</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) : Additional scopes requested - if the scope is not configured to the application this will throw an error when validating the token</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.client_app_ids</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) : Additional Client App IDs to accept tokens from (when running as a backend service) (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_APP_IDS</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.strict</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) : Check that all claims are provided [default: <code class="docutils literal notranslate"><span class="pre">True</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_STRICT_CLAIM_CHECK</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.api_audience</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : Corresponds to the Application ID URI - used for token validation, defaults to api://{client_id} (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_API_AUDIENCE</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.redirect_uri</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.networks.HttpUrl</span></code>) : The redirect URI to use - overwrites the default path handling etc (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_REDIRECT_URI</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.prompt</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : AAD prompt to request (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_PROMPT</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.domain_hint</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : AAD domain hint (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_DOMAIN_HINT</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.roles</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) : AAD roles required in claims (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_ROLES</span></code> environment variable)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.roles</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) : AAD roles required in claims (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_ROLES</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.token_type</span></code> (<a class="reference internal" href="module/fastapi_aad_auth.providers.aad.html#fastapi_aad_auth.providers.aad.TokenType" title="fastapi_aad_auth.providers.aad.TokenType"><code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi_aad_auth.providers.aad.TokenType</span></code></a>) : The AAD token type to use to validate (we should use the access token if it is configured, unless we are acting as a pure UI component [default: <code class="docutils literal notranslate"><span class="pre">TokenType.access</span></code>]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.aad.jwks_cache_ttl</span></code> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) : Cache Time to Live value for MS JWKs token (Can be set by <code class="docutils literal notranslate"><span class="pre">AAD_JWKS_CACHE_TTL</span></code> environment variable)</p></li>
 </ul>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.auth_session</span></code>:</dt><dd><ul class="simple">
@@ -404,7 +406,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.login_ui.user_template_file</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.FilePath</span></code>) : The jinja2 template to use for the user view [default: <code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth\ui\user.html</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_USER_TEMPLATE_FILE</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.login_ui.static_directory</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.types.DirectoryPath</span></code>) : Static path for the UI components [default: <code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth\ui\static</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_STATIC_DIR</span></code> environment variable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.login_ui.static_path</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) : Path to mount the login static dir in [default: <code class="docutils literal notranslate"><span class="pre">/static-login</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_LOGIN_STATIC_PATH</span></code> environment variable)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.login_ui.context</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) : Any additional context variables required for the template</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.login_ui.context</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) : Any additional context variables required for the template</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;Config&gt;.login_ui.ui_klass</span></code> (<code class="docutils literal notranslate"><span class="pre">type</span></code>) : UI class to use to handle creating and returning the routes for the login, error and user screens, this will be treated as an import path if provided as a string, with the last part the class to load [default: <code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth.ui:UI</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_UI_KLASS</span></code> environment variable)</p></li>
 </ul>
 </dd>
@@ -432,7 +434,7 @@
 </dl>
 </dd>
 </dl>
-
+</section>
 
 
           </article>
@@ -477,14 +479,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2021 David Pugh.
+              &#169; Copyright 2022 David Pugh.
               
           </div>
             Last updated on
-              Jun 13, 2021 (version 0.1.21).
+              Apr 17, 2022 (version 0.1.22).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

@@ -4,7 +4,8 @@
 <html lang="English">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -49,9 +50,9 @@
   
   
     <title>Using fastapi_aad_auth &#8212; fastapi_aad_auth documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/material.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/material.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -106,7 +107,7 @@
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
-    <form class="md-search__form" action="search.html" method="GET" name="search">
+    <form class="md-search__form" action="search.html" method="get" name="search">
       <input type="text" class="md-search__input" name="q" placeholder="Search"
              autocapitalize="off" autocomplete="off" spellcheck="false"
              data-md-component="query" data-md-state="active">
@@ -395,12 +396,12 @@
         <div class="md-content">
           <article class="md-content__inner md-typeset" role="main">
             
-  
+  <section id="using-fastapi-aad-auth">
 <h1 id="usage--page-root">Using fastapi_aad_auth<a class="headerlink" href="#usage--page-root" title="Permalink to this headline">¶</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth</span></code> requires an Azure Active Directory App Registration (from the Azure Active Directory you want
 the application to authenticate against), and these parameters should then be set in environment variables
 (or a <code class="docutils literal notranslate"><span class="pre">.env</span></code> environment file) within the environment that fastapi is being served from.</p>
-
+<section id="configuring-the-azure-active-directory-app-registration">
 <span id="config-aad-appreg"></span><h2 id="configuring-the-azure-active-directory-app-registration">Configuring the Azure Active Directory App Registration<a class="headerlink" href="#configuring-the-azure-active-directory-app-registration" title="Permalink to this headline">¶</a></h2>
 <p>There are several parts of the App Registration to Configure</p>
 <p>In the "Authentication Tab" you need to configure the callback urls:</p>
@@ -427,27 +428,33 @@ for the Authorization Code Flow with PKCE for:</p>
 <a class="reference internal" href="module/fastapi_aad_auth.config.html#fastapi_aad_auth.config.RoutingConfig" title="fastapi_aad_auth.config.RoutingConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">RoutingConfig</span></code></a> <code class="docutils literal notranslate"><span class="pre">login_path</span></code> and <code class="docutils literal notranslate"><span class="pre">login_redirect_path</span></code> variables to the empty string or <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </div>
 <p>Youu also need to decide whether the application is multi-tenant or single-tenant</p>
-<div class="figure align-default" id="id2">
+<figure class="align-default" id="id2">
 <img alt="Overview of redirect URI configuration for local testing" src="_images/App-Registration-Redirect-URIs.PNG"/>
-<p class="caption"><span class="caption-text">An example configuration for redirect URIs for testing an application</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
-</div>
+<figcaption>
+<p><span class="caption-text">An example configuration for redirect URIs for testing an application</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
 <p>On the "Expose an API tab", you need to set the Application ID URI</p>
-<div class="figure align-default" id="id3">
+<figure class="align-default" id="id3">
 <img alt="Overview of app id URI" src="_images/App-Registration-App-ID.PNG"/>
-<p class="caption"><span class="caption-text">An example configuration for api Scopes for testing an application</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
-</div>
+<figcaption>
+<p><span class="caption-text">An example configuration for api Scopes for testing an application</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
 <p>and add scopes as configured for the application (e.g. the default <code class="docutils literal notranslate"><span class="pre">openid</span></code> scope is needed)</p>
-<div class="figure align-default" id="id4">
+<figure class="align-default" id="id4">
 <img alt="Overview of app scopes" src="_images/App-Registration-Scopes.PNG"/>
-<p class="caption"><span class="caption-text">An example configuration for api Scopes for testing an application</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
-</div>
+<figcaption>
+<p><span class="caption-text">An example configuration for api Scopes for testing an application</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Some people have reported an Azure Active Directory issue - <code class="docutils literal notranslate"><span class="pre">AADSTS90009</span></code> (<a class="reference external" href="https://github.com/djpugh/fastapi_aad_auth/issues/59">#59</a>). The scope given in <code class="docutils literal notranslate"><span class="pre">acquire_token_interactive()</span></code> has the prefix <code class="docutils literal notranslate"><span class="pre">api://</span></code>,
 which seems to sometimes work, and sometimes not. It seems to always work when removing this prefix and using <code class="docutils literal notranslate"><span class="pre">'&lt;client_id&gt;/.default'</span></code>.</p>
 </div>
-
-
+</section>
+<section id="configuring-the-fastapi-environment">
 <span id="config-fastapi-aad-auth-env"></span><h2 id="configuring-the-fastapi-environment">Configuring the fastapi environment<a class="headerlink" href="#configuring-the-fastapi-environment" title="Permalink to this headline">¶</a></h2>
 <p>The configuration is defined in <code class="docutils literal notranslate"><span class="pre">src/fastapi_aad_auth/config.py</span></code>, and includes options for configuring
 the AAD config, the login UI and the routes.</p>
@@ -460,9 +467,9 @@ the AAD config, the login UI and the routes.</p>
 </div></blockquote>
 <p>The <code class="docutils literal notranslate"><span class="pre">AAD_CLIENT_SECRET</span></code> parameter is needed if your application is not a public client (Generated
 from the certificates and secrets section of the app registration)</p>
-<div class="figure align-default">
+<figure class="align-default">
 <img alt="Overview of client type on Azure AD App Registration Authentication Tab" src="_images/App-Registration-Client-Type.PNG"/>
-</div>
+</figure>
 <p>These can be set in a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file (e.g. for a private client):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AAD_CLIENT_ID</span><span class="o">=</span><span class="s2">"&lt;enter-your-client-id-here&gt;"</span>
 <span class="n">AAD_TENANT_ID</span><span class="o">=</span><span class="s2">"&lt;enter-your-tenant-id-here&gt;"</span>
@@ -478,8 +485,8 @@ from the certificates and secrets section of the app registration)</p>
 </pre></div>
 </div>
 <p>The full set of configuration options is documented in <a class="reference internal" href="config.html"><span class="doc">Configuration Options</span></a></p>
-
-
+</section>
+<section id="including-fastapi-aad-auth-in-your-code">
 <h2 id="including-fastapi-aad-auth-in-your-code">Including fastapi_aad_auth in your code<a class="headerlink" href="#including-fastapi-aad-auth-in-your-code" title="Permalink to this headline">¶</a></h2>
 <p>You can use it for fastapi routes:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Depends</span>
@@ -490,7 +497,8 @@ from the certificates and secrets section of the app registration)</p>
 <span class="n">router</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">()</span>
 
 <span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'/hello'</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">auth_state</span><span class="p">:</span> <span class="n">AuthenticationState</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">auth_provider</span><span class="o">.</span><span class="n">auth_backend</span><span class="o">.</span><span class="n">requires_auth</span><span class="p">(</span><span class="n">allow_session</span><span class="o">=</span><span class="kc">True</span><span class="p">))):</span>
+<span class="nd">@auth_provider</span><span class="o">.</span><span class="n">api_auth_required</span><span class="p">(</span><span class="n">allow_session</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">auth_state</span><span class="p">:</span> <span class="n">AuthenticationState</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">auth_state</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="s1">'hello'</span><span class="p">:</span> <span class="s1">'world'</span><span class="p">}</span>
 </pre></div>
@@ -499,13 +507,13 @@ from the certificates and secrets section of the app registration)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">starlette.responses</span> <span class="kn">import</span> <span class="n">PlainTextResponse</span>
 
 <span class="nd">@auth_provider</span><span class="o">.</span><span class="n">auth_required</span><span class="p">()</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">PlainTextResponse</span><span class="p">(</span><span class="s1">'Hello, '</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">display_name</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This middleware will set the request.user object and request.credentials object:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">homepage</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">homepage</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">PlainTextResponse</span><span class="p">(</span><span class="s1">'Hello, '</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">display_name</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">PlainTextResponse</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Hello, you'</span><span class="p">)</span>
@@ -515,8 +523,8 @@ from the certificates and secrets section of the app registration)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">auth_provider</span><span class="o">.</span><span class="n">configure_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 </pre></div>
 </div>
-
-
+</section>
+<section id="authenticating-a-client">
 <h2 id="authenticating-a-client">Authenticating a client<a class="headerlink" href="#authenticating-a-client" title="Permalink to this headline">¶</a></h2>
 <p>If you are authenticating an e.g. console client, you need to get an access token via the Azure active directory configuration, there are examples of this (developed from the
 <a class="reference external" href="https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-desktop-acquire-token?tabs=python#command-line-tool-without-a-web-browser">Azure Docs</a>), e.g.:</p>
@@ -575,16 +583,18 @@ from the certificates and secrets section of the app registration)</p>
 <p>Alternatively you can request a permission using the <code class="docutils literal notranslate"><span class="pre">Request</span> <span class="pre">API</span> <span class="pre">permissions</span></code> part of the <code class="docutils literal notranslate"><span class="pre">API</span> <span class="pre">permissions</span></code> tab in the App Registration configuration, and adding that to the requested scope.</p>
 <p>If you are authenticating from an app registration (e.g. a daemon application or other), you should use the client credentials flow - see the
 <a class="reference external" href="https://github.com/Azure-Samples/ms-identity-python-daemon/blob/master/1-Call-MsGraph-WithSecret/confidential_client_secret_sample.py">Azure Samples</a>.</p>
-
+<section id="postman">
 <h3 id="postman">Postman<a class="headerlink" href="#postman" title="Permalink to this headline">¶</a></h3>
 <p>Tools like Postman allow you to configure authentication via oauth - this shows the example for the test server.</p>
-<div class="figure align-default" id="id5">
+<figure class="align-default" id="id5">
 <img alt="Overview of authenticating for postman" src="_images/Postman-Auth-Config.PNG"/>
-<p class="caption"><span class="caption-text">An example of how to configure client credentials (using another app registration) for postman - replace the {tenant} and {appid} info, along with the client id and client secret</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
-</div>
-
-
-
+<figcaption>
+<p><span class="caption-text">An example of how to configure client credentials (using another app registration) for postman - replace the {tenant} and {appid} info, along with the client id and client secret</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+</section>
 
 
           </article>
@@ -629,14 +639,14 @@ from the certificates and secrets section of the app registration)</p>
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2021 David Pugh.
+              &#169; Copyright 2022 David Pugh.
               
           </div>
             Last updated on
-              Jun 13, 2021 (version 0.1.21).
+              Apr 17, 2022 (version 0.1.22).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

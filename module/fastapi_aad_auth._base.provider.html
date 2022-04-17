@@ -4,7 +4,8 @@
 <html lang="English">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -49,9 +50,9 @@
   
   
     <title>fastapi_aad_auth._base.provider &#8212; fastapi_aad_auth documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/material.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -106,7 +107,7 @@
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
-    <form class="md-search__form" action="../search.html" method="GET" name="search">
+    <form class="md-search__form" action="../search.html" method="get" name="search">
       <input type="text" class="md-search__input" name="q" placeholder="Search"
              autocapitalize="off" autocomplete="off" spellcheck="false"
              data-md-component="query" data-md-state="active">
@@ -350,48 +351,48 @@
         <div class="md-content">
           <article class="md-content__inner md-typeset" role="main">
             
-  
+  <section id="module-fastapi_aad_auth._base.provider">
 <span id="fastapi-aad-auth-base-provider"></span><h1 id="module-fastapi-aad-auth-base-provider--page-root">fastapi_aad_auth._base.provider<a class="headerlink" href="#module-fastapi-aad-auth-base-provider--page-root" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="fastapi_aad_auth._base.provider.Provider">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.provider.</span></code><code class="sig-name descname"><span class="pre">Provider</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validators</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="fastapi_aad_auth._base.validators.base.html#fastapi_aad_auth._base.validators.base.Validator" title="fastapi_aad_auth._base.validators.base.Validator"><span class="pre">fastapi_aad_auth._base.validators.base.Validator</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authenticator</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="fastapi_aad_auth._base.authenticators.session.html#fastapi_aad_auth._base.authenticators.session.SessionAuthenticator" title="fastapi_aad_auth._base.authenticators.session.SessionAuthenticator"><span class="pre">fastapi_aad_auth._base.authenticators.session.SessionAuthenticator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">enabled</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oauth_base_route</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'/oauth'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/provider.html#Provider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.provider.Provider" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.provider.Provider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.provider.</span></span><span class="sig-name descname"><span class="pre">Provider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validators</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="fastapi_aad_auth._base.validators.base.html#fastapi_aad_auth._base.validators.base.Validator" title="fastapi_aad_auth._base.validators.base.Validator"><span class="pre">fastapi_aad_auth._base.validators.base.Validator</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authenticator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fastapi_aad_auth._base.authenticators.session.html#fastapi_aad_auth._base.authenticators.session.SessionAuthenticator" title="fastapi_aad_auth._base.authenticators.session.SessionAuthenticator"><span class="pre">fastapi_aad_auth._base.authenticators.session.SessionAuthenticator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oauth_base_route</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'/oauth'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/provider.html#Provider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.provider.Provider" title="Permalink to this definition">¶</a></dt>
 <dd><p>Authentication Provider.</p>
 <p>Initialise the authentication provider.</p>
 <dl class="py method">
-<dt id="fastapi_aad_auth._base.provider.Provider.get_routes">
-<code class="sig-name descname"><span class="pre">get_routes</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noauth_redirect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/provider.html#Provider.get_routes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.provider.Provider.get_routes" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.provider.Provider.get_routes">
+<span class="sig-name descname"><span class="pre">get_routes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noauth_redirect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/provider.html#Provider.get_routes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.provider.Provider.get_routes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the authenticator routes.</p>
 </dd></dl>
-<dl class="py method">
-<dt id="fastapi_aad_auth._base.provider.Provider.login_url">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">login_url</span></code><a class="headerlink" href="#fastapi_aad_auth._base.provider.Provider.login_url" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.provider.Provider.login_url">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">login_url</span></span><a class="headerlink" href="#fastapi_aad_auth._base.provider.Provider.login_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the login url.</p>
 </dd></dl>
 <dl class="py method">
-<dt id="fastapi_aad_auth._base.provider.Provider.logout">
-<code class="sig-name descname"><span class="pre">logout</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/provider.html#Provider.logout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.provider.Provider.logout" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.provider.Provider.logout">
+<span class="sig-name descname"><span class="pre">logout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/provider.html#Provider.logout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.provider.Provider.logout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Logout from the authenticator.</p>
 </dd></dl>
-<dl class="py method">
-<dt id="fastapi_aad_auth._base.provider.Provider.redirect_url">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">redirect_url</span></code><a class="headerlink" href="#fastapi_aad_auth._base.provider.Provider.redirect_url" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.provider.Provider.redirect_url">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">redirect_url</span></span><a class="headerlink" href="#fastapi_aad_auth._base.provider.Provider.redirect_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the login redirect url.</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt id="fastapi_aad_auth._base.provider.ProviderConfig">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.provider.</span></code><code class="sig-name descname"><span class="pre">ProviderConfig</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/provider.html#ProviderConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.provider.ProviderConfig" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.provider.ProviderConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.provider.</span></span><span class="sig-name descname"><span class="pre">ProviderConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/provider.html#ProviderConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.provider.ProviderConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configuration for a provider.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Keyword Arguments</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>flow_type</strong> (<a class="reference internal" href="fastapi_aad_auth._base.validators.token.html#fastapi_aad_auth._base.validators.token.OAuthFlowType" title="fastapi_aad_auth._base.validators.token.OAuthFlowType"><em>fastapi_aad_auth._base.validators.token.OAuthFlowType</em></a>) -- Select the OpenAPI OAuth2 flow [default: <code class="docutils literal notranslate"><span class="pre">OAuthFlowType.authorizationCode</span></code>] (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_OPENAPI_OAUTH2_FLOW</span></code> environment variable)</p></li>
-<li><p><strong>token_scopes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) -- Set the (global) token scopes (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_TOKEN_SCOPES</span></code> environment variable)</p></li>
+<li><p><strong>token_scopes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- Set the (global) token scopes (Can be set by <code class="docutils literal notranslate"><span class="pre">FASTAPI_AUTH_TOKEN_SCOPES</span></code> environment variable)</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
-
+</section>
 
 
           </article>
@@ -436,14 +437,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2021 David Pugh.
+              &#169; Copyright 2022 David Pugh.
               
           </div>
             Last updated on
-              Jun 13, 2021 (version 0.1.21).
+              Apr 17, 2022 (version 0.1.22).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

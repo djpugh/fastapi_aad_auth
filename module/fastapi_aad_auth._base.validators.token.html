@@ -4,7 +4,8 @@
 <html lang="English">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -49,9 +50,9 @@
   
   
     <title>fastapi_aad_auth._base.validators.token &#8212; fastapi_aad_auth documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/material.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -106,7 +107,7 @@
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
-    <form class="md-search__form" action="../search.html" method="GET" name="search">
+    <form class="md-search__form" action="../search.html" method="get" name="search">
       <input type="text" class="md-search__input" name="q" placeholder="Search"
              autocapitalize="off" autocomplete="off" spellcheck="false"
              data-md-component="query" data-md-state="active">
@@ -351,19 +352,19 @@
         <div class="md-content">
           <article class="md-content__inner md-typeset" role="main">
             
-  
+  <section id="module-fastapi_aad_auth._base.validators.token">
 <span id="fastapi-aad-auth-base-validators-token"></span><h1 id="module-fastapi-aad-auth-base-validators-token--page-root">fastapi_aad_auth._base.validators.token<a class="headerlink" href="#module-fastapi-aad-auth-base-validators-token--page-root" title="Permalink to this headline">¶</a></h1>
 <p>Base validator for token based authentication.</p>
 <dl class="py class">
-<dt id="fastapi_aad_auth._base.validators.token.InitOAuth">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.validators.token.</span></code><code class="sig-name descname"><span class="pre">InitOAuth</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/token.html#InitOAuth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.InitOAuth" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.validators.token.InitOAuth">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.validators.token.</span></span><span class="sig-name descname"><span class="pre">InitOAuth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/token.html#InitOAuth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.InitOAuth" title="Permalink to this definition">¶</a></dt>
 <dd><p>OAuth information for openapi docs.</p>
 <p>Create a new model by parsing and validating input data from keyword arguments.</p>
 <p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p>
 </dd></dl>
 <dl class="py class">
-<dt id="fastapi_aad_auth._base.validators.token.OAuthFlowType">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.validators.token.</span></code><code class="sig-name descname"><span class="pre">OAuthFlowType</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.OAuthFlowType" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.validators.token.OAuthFlowType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.validators.token.</span></span><span class="sig-name descname"><span class="pre">OAuthFlowType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.OAuthFlowType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enumeration of OAuth Flows for OpenAPI</p>
 <dl class="simple">
 <dt>Options:</dt><dd><ul class="simple">
@@ -376,32 +377,32 @@
 </dl>
 </dd></dl>
 <dl class="py class">
-<dt id="fastapi_aad_auth._base.validators.token.TokenValidator">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.validators.token.</span></code><code class="sig-name descname"><span class="pre">TokenValidator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">client_id:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">authorizationUrl:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">tokenUrl:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">api_audience:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">scheme_name:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">scopes:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">auto_error:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">enabled:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">use_pkce:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">user_klass:</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'fastapi_aad_auth._base.state.User'&gt;</span></em>, <em class="sig-param"><span class="pre">flow_type:</span> <span class="pre">fastapi_aad_auth._base.validators.token.OAuthFlowType</span> <span class="pre">=</span> <span class="pre">&lt;OAuthFlowType.authorizationCode:</span> <span class="pre">'authorizationCode'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/token.html#TokenValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.TokenValidator" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.validators.token.TokenValidator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fastapi_aad_auth._base.validators.token.</span></span><span class="sig-name descname"><span class="pre">TokenValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authorizationUrl:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenUrl:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_audience:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme_name:</span> <span class="pre">typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopes:</span> <span class="pre">typing.Optional[dict]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_error:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enabled:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_pkce:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_klass:</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'fastapi_aad_auth._base.state.User'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flow_type:</span> <span class="pre">fastapi_aad_auth._base.validators.token.OAuthFlowType</span> <span class="pre">=</span> <span class="pre">OAuthFlowType.authorizationCode</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/token.html#TokenValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.TokenValidator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validator for token based authentication.</p>
 <p>Initialise validator for token based authentication.</p>
 <dl class="py method">
-<dt id="fastapi_aad_auth._base.validators.token.TokenValidator.check">
-<code class="sig-name descname"><span class="pre">check</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">starlette.requests.Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/token.html#TokenValidator.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.TokenValidator.check" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.validators.token.TokenValidator.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">starlette.requests.Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/token.html#TokenValidator.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.TokenValidator.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check the authentication from the request.</p>
 </dd></dl>
 <dl class="py method">
-<dt id="fastapi_aad_auth._base.validators.token.TokenValidator.get_token">
-<code class="sig-name descname"><span class="pre">get_token</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">starlette.requests.Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/token.html#TokenValidator.get_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.TokenValidator.get_token" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.validators.token.TokenValidator.get_token">
+<span class="sig-name descname"><span class="pre">get_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">starlette.requests.Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/token.html#TokenValidator.get_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.TokenValidator.get_token" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the token from the request.</p>
 </dd></dl>
-<dl class="py method">
-<dt id="fastapi_aad_auth._base.validators.token.TokenValidator.init_oauth">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">init_oauth</span></code><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.TokenValidator.init_oauth" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.validators.token.TokenValidator.init_oauth">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_oauth</span></span><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.TokenValidator.init_oauth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the openapi docs config.</p>
 </dd></dl>
 <dl class="py method">
-<dt id="fastapi_aad_auth._base.validators.token.TokenValidator.validate_token">
-<code class="sig-name descname"><span class="pre">validate_token</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/token.html#TokenValidator.validate_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.TokenValidator.validate_token" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fastapi_aad_auth._base.validators.token.TokenValidator.validate_token">
+<span class="sig-name descname"><span class="pre">validate_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastapi_aad_auth/_base/validators/token.html#TokenValidator.validate_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fastapi_aad_auth._base.validators.token.TokenValidator.validate_token" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate provided token.</p>
 </dd></dl>
 </dd></dl>
-
+</section>
 
 
           </article>
@@ -446,14 +447,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2021 David Pugh.
+              &#169; Copyright 2022 David Pugh.
               
           </div>
             Last updated on
-              Jun 13, 2021 (version 0.1.21).
+              Apr 17, 2022 (version 0.1.22).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

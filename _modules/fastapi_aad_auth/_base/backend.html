@@ -49,9 +49,9 @@
   
   
     <title>fastapi_aad_auth._base.backend &#8212; fastapi_aad_auth documentation</title>
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/material.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/material.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
@@ -104,7 +104,7 @@
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
-    <form class="md-search__form" action="../../../search.html" method="GET" name="search">
+    <form class="md-search__form" action="../../../search.html" method="get" name="search">
       <input type="text" class="md-search__input" name="q" placeholder="Search"
              autocapitalize="off" autocomplete="off" spellcheck="false"
              data-md-component="query" data-md-state="active">
@@ -349,7 +349,7 @@
             
   <h1 id="modules-fastapi-aad-auth-base-backend--page-root">Source code for fastapi_aad_auth._base.backend</h1><div class="highlight"><pre>
 <span></span><span class="sd">"""Base OAuthBackend with token and session validators."""</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">fastapi.security</span> <span class="kn">import</span> <span class="n">OAuth2</span>
 <span class="kn">from</span> <span class="nn">starlette.authentication</span> <span class="kn">import</span> <span class="n">AuthCredentials</span><span class="p">,</span> <span class="n">AuthenticationBackend</span><span class="p">,</span> <span class="n">UnauthenticatedUser</span>
@@ -357,6 +357,7 @@
 
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.state</span> <span class="kn">import</span> <span class="n">AuthenticationState</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth._base.validators</span> <span class="kn">import</span> <span class="n">SessionValidator</span><span class="p">,</span> <span class="n">TokenValidator</span><span class="p">,</span> <span class="n">Validator</span>
+<span class="kn">from</span> <span class="nn">fastapi_aad_auth.errors</span> <span class="kn">import</span> <span class="n">AuthorisationError</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.mixins</span> <span class="kn">import</span> <span class="n">LoggingMixin</span><span class="p">,</span> <span class="n">NotAuthenticatedMixin</span>
 <span class="kn">from</span> <span class="nn">fastapi_aad_auth.utilities</span> <span class="kn">import</span> <span class="n">deprecate</span>
 
@@ -408,7 +409,11 @@
         <span class="k">for</span> <span class="n">validator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">validators</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">validator</span>
 
-<div class="viewcode-block" id="BaseOAuthBackend.requires_auth"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.backend.html#fastapi_aad_auth._base.backend.BaseOAuthBackend.requires_auth">[docs]</a>    <span class="k">def</span> <span class="nf">requires_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow_session</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseOAuthBackend.requires_auth"><a class="viewcode-back" href="../../../module/fastapi_aad_auth._base.backend.html#fastapi_aad_auth._base.backend.BaseOAuthBackend.requires_auth">[docs]</a>    <span class="k">def</span> <span class="nf">requires_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                      <span class="n">scopes</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'authenticated'</span><span class="p">,</span>
+                      <span class="n">allow_session</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                      <span class="n">roles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">groups</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">"""Require authentication, use with fastapi Depends."""</span>
         <span class="c1"># This is a bit horrible, but is needed for fastapi to get this into OpenAPI (or similar) - it needs to be an OAuth2 object</span>
         <span class="c1"># We create this here "dynamically" for each endpoint, as we allow customisation on whether a session is permissible</span>
@@ -428,6 +433,13 @@
                     <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">allow_session</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
                         <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">not_authenticated</span>
+                    <span class="k">elif</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">check_scopes</span><span class="p">(</span><span class="n">scopes</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="n">AuthorisationError</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Not authorised for this API endpoint - Requires </span><span class="si">{</span><span class="n">scopes</span><span class="si">}</span><span class="s1"> scopes'</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">check_roles</span><span class="p">(</span><span class="n">roles</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="n">AuthorisationError</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Not authorised for this API endpoint - Requires </span><span class="si">{</span><span class="n">roles</span><span class="si">}</span><span class="s1"> roles'</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">check_groups</span><span class="p">(</span><span class="n">groups</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="n">AuthorisationError</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Not authorised for this API endpoint - Requires </span><span class="si">{</span><span class="n">groups</span><span class="si">}</span><span class="s1"> groups'</span><span class="p">)</span>
+
                     <span class="k">return</span> <span class="n">state</span>
 
             <span class="k">return</span> <span class="n">OAuthValidator</span><span class="p">()</span>
@@ -463,14 +475,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2021 David Pugh.
+              &#169; Copyright 2022 David Pugh.
               
           </div>
             Last updated on
-              Jun 13, 2021 (version 0.1.21).
+              Apr 17, 2022 (version 0.1.22).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

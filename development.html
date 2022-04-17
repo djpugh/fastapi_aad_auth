@@ -4,7 +4,8 @@
 <html lang="English">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -49,9 +50,9 @@
   
   
     <title>Development &#8212; fastapi_aad_auth documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/material.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/material.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -105,7 +106,7 @@
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
-    <form class="md-search__form" action="search.html" method="GET" name="search">
+    <form class="md-search__form" action="search.html" method="get" name="search">
       <input type="text" class="md-search__input" name="q" placeholder="Search"
              autocapitalize="off" autocomplete="off" spellcheck="false"
              data-md-component="query" data-md-state="active">
@@ -430,9 +431,9 @@
         <div class="md-content">
           <article class="md-content__inner md-typeset" role="main">
             
-  
+  <section id="development">
 <h1 id="development--page-root">Development<a class="headerlink" href="#development--page-root" title="Permalink to this headline">¶</a></h1>
-
+<section id="getting-started">
 <h2 id="getting-started">Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth</span></code> is a volunteer maintained open source project and we welcome contributions of all forms. The sections
 below will help you get started with development, testing, and documentation. We’re pleased that you are interested in
@@ -440,7 +441,7 @@ working on <code class="docutils literal notranslate"><span class="pre">fastapi_
 to the development setup. If you face any issues during this process, please
 <a class="reference external" href="https://github.com/djpugh/fastapi_aad_auth/issues/new?title=Trouble+with+development+environment">open an issue</a> about it on
 the issue tracker.</p>
-
+<section id="setup">
 <h3 id="setup">Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth</span></code> is an extension component to <a class="reference external" href="https://pypi.org/project/fastapi">fastapi</a> to provide Azure Active Directory authentication,
 written in Python. To work on it, you'll need:</p>
@@ -459,8 +460,8 @@ written in Python. To work on it, you'll need:</p>
 <li><p><a class="reference external" href="https://pypi.org/project/tox">tox</a>: to automatically get the projects development dependencies and run the test suite.</p></li>
 <li><p><strong>Azure Active Directory App Registration</strong>: We recommend following the configuration section in usage</p></li>
 </ul>
-
-
+</section>
+<section id="running-tests">
 <h3 id="running-tests">Running tests<a class="headerlink" href="#running-tests" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth</span></code> tests are written using the <a class="reference external" href="https://pypi.org/project/pytest">pytest</a> test framework. <a class="reference external" href="https://pypi.org/project/tox">tox</a> is used to automate the setup
 and execution of <code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth</span></code> tests.</p>
@@ -469,8 +470,8 @@ and execution of <code class="docutils literal notranslate"><span class="pre">fa
 </pre></div>
 </div>
 <p>This will run the test suite for the same Python version as under which <code class="docutils literal notranslate"><span class="pre">tox</span></code> is installed.</p>
-
-
+</section>
+<section id="integration-tests">
 <span id="testing"></span><h3 id="integration-tests">Integration tests<a class="headerlink" href="#integration-tests" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth</span></code> is very tightly coupled to Azure Active Directory, so most of the full tests follow manual testing
 of the testapp. This needs configuring with Azure Active Directory App Registrations (see <a class="reference internal" href="usage.html#config-aad-appreg"><span class="std std-ref">Configuring the Azure Active Directory App Registration</span></a>) and
@@ -480,15 +481,15 @@ the testapp environment using a <code class="docutils literal notranslate"><span
 </pre></div>
 </div>
 <p>This will run the test app for the same Python version as under which <code class="docutils literal notranslate"><span class="pre">tox</span></code> is installed.</p>
-
+<section id="configuring-the-testapp">
 <h4 id="configuring-the-testapp">Configuring the testapp<a class="headerlink" href="#configuring-the-testapp" title="Permalink to this headline">¶</a></h4>
 <p>The testapp requires configuring (see <a class="reference internal" href="usage.html#config-aad-appreg"><span class="std std-ref">Configuring the Azure Active Directory App Registration</span></a>) for how to configure an appropriate App Registration on Azure.
 The app provides a really simple set of tests - the home page has no authentication, but if you have logged in, it will say "hello &lt;email&gt;",
 with your logged in email.</p>
 <p>The api docs (swagger UI) is authentication limited, as is the simple api endpoint '/hello'.</p>
-
-
-
+</section>
+</section>
+<section id="running-linters">
 <h3 id="running-linters">Running linters<a class="headerlink" href="#running-linters" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth</span></code> uses <a class="reference external" href="https://pypi.org/project/flake8">flake8</a> and extensions for managing linting of the codebase. <code class="docutils literal notranslate"><span class="pre">flake8</span></code> performs various checks on all
 files in <code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth</span></code> and uses tools that help follow a consistent code style within the codebase. To use linters locally,
@@ -501,8 +502,8 @@ run:</p>
 <p>Avoid using <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">noqa</span></code> comments to suppress linter warnings - wherever possible, warnings should be fixed instead.
 <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">noqa</span></code> comments are reserved for rare cases where the recommended style causes severe readability problems.</p>
 </div>
-
-
+</section>
+<section id="building-documentation">
 <h3 id="building-documentation">Building documentation<a class="headerlink" href="#building-documentation" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth</span></code> documentation is built using <a class="reference external" href="https://pypi.org/project/Sphinx">Sphinx</a>. The documentation is written in reStructuredText. To build it
 locally, run:</p>
@@ -511,15 +512,15 @@ locally, run:</p>
 </div>
 <p>The built documentation can be found in the <code class="docutils literal notranslate"><span class="pre">docs/html</span></code> folder and may be viewed by opening <code class="docutils literal notranslate"><span class="pre">index.html</span></code> within
 that folder.</p>
-
-
+</section>
+<section id="release">
 <h3 id="release">Release<a class="headerlink" href="#release" title="Permalink to this headline">¶</a></h3>
 <p>We release through GitHub using an automated process to collate and test the releases.</p>
-
-
-
+</section>
+</section>
+<section id="developing">
 <h2 id="developing">Developing<a class="headerlink" href="#developing" title="Permalink to this headline">¶</a></h2>
-
+<section id="submitting-pull-requests">
 <h3 id="submitting-pull-requests">Submitting pull requests<a class="headerlink" href="#submitting-pull-requests" title="Permalink to this headline">¶</a></h3>
 <p>Submit pull requests against the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch, providing a good description of what you're doing and why. You must
 have legal permission to distribute any code you contribute to <code class="docutils literal notranslate"><span class="pre">fastapi_aad_auth</span></code> and it must be available under the MIT
@@ -533,31 +534,31 @@ be broken up into smaller, independent parts which can be reviewed and merged in
 <p>Additionally, avoid including "cosmetic" changes to code that is unrelated to your change, as these make reviewing the
 PR more difficult. Examples include re-flowing text in comments or documentation, or addition or removal of blank lines
 or whitespace within lines. Such changes can be made separately, as a "formatting cleanup" PR, if needed.</p>
-
-
+</section>
+<section id="automated-testing">
 <h3 id="automated-testing">Automated testing<a class="headerlink" href="#automated-testing" title="Permalink to this headline">¶</a></h3>
 <p>All pull requests and merges to <code class="docutils literal notranslate"><span class="pre">master</span></code> branch are tested using
 Github actions (configured by <code class="docutils literal notranslate"><span class="pre">.github/workflows/pipeline.yml</span></code> file. You can find the status and results to the CI runs for your
 PR on GitHub's Web UI for the pull request. You can also find links to the CI services' pages for the specific builds in
 the form of "Details" links, in case the CI run fails and you wish to view the output.</p>
-
-
+</section>
+<section id="compatibility-requirements">
 <span id="id1"></span><h3 id="compatibility-requirements">Compatibility Requirements<a class="headerlink" href="#compatibility-requirements" title="Permalink to this headline">¶</a></h3>
 <p>We endeavour to support (and test) on multiple python versions, across the following matrix of os and python versions:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">os</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">windows</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">macos</span>
-<span class="nt">py</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3.6</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3.7</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3.8</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3.9</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">os</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">macos</span><span class="w"></span>
+<span class="nt">py</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.6</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.7</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.8</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.9</span><span class="w"></span>
 </pre></div>
 </div>
-
-
-
+</section>
+</section>
+</section>
 
 
           </article>
@@ -591,14 +592,14 @@ the form of "Details" links, in case the CI run fails and you wish to view the o
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2021 David Pugh.
+              &#169; Copyright 2022 David Pugh.
               
           </div>
             Last updated on
-              Jun 13, 2021 (version 0.1.21).
+              Apr 17, 2022 (version 0.1.22).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

@@ -49,9 +49,9 @@
   
   
     <title>Index &#8212; fastapi_aad_auth documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/material.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/material.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -104,7 +104,7 @@
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
-    <form class="md-search__form" action="search.html" method="GET" name="search">
+    <form class="md-search__form" action="search.html" method="get" name="search">
       <input type="text" class="md-search__input" name="q" placeholder="Search"
              autocapitalize="off" autocomplete="off" spellcheck="false"
              data-md-component="query" data-md-state="active">
@@ -388,7 +388,9 @@
 </li>
       <li><a href="module/fastapi_aad_auth.providers.aad.html#fastapi_aad_auth.providers.aad.AADTokenValidator">AADTokenValidator (class in fastapi_aad_auth.providers.aad)</a>
 </li>
-      <li><a href="module/fastapi_aad_auth._base.backend.html#fastapi_aad_auth._base.backend.BaseOAuthBackend.api_auth_scheme">api_auth_scheme() (fastapi_aad_auth._base.backend.BaseOAuthBackend property)</a>
+      <li><a href="module/fastapi_aad_auth.auth.html#fastapi_aad_auth.auth.Authenticator.api_auth_required">api_auth_required() (fastapi_aad_auth.auth.Authenticator method)</a>
+</li>
+      <li><a href="module/fastapi_aad_auth._base.backend.html#fastapi_aad_auth._base.backend.BaseOAuthBackend.api_auth_scheme">api_auth_scheme (fastapi_aad_auth._base.backend.BaseOAuthBackend property)</a>
 
       <ul>
         <li><a href="module/fastapi_aad_auth.auth.html#fastapi_aad_auth.auth.AADAuth.api_auth_scheme">(fastapi_aad_auth.auth.AADAuth property)</a>
@@ -398,10 +400,10 @@
 </li>
       <li><a href="module/fastapi_aad_auth.utilities.urls.html#fastapi_aad_auth.utilities.urls.append">append() (in module fastapi_aad_auth.utilities.urls)</a>
 </li>
-      <li><a href="module/fastapi_aad_auth.providers.aad.html#fastapi_aad_auth.providers.aad.AADSessionAuthenticator.as_app_scopes">as_app_scopes() (fastapi_aad_auth.providers.aad.AADSessionAuthenticator method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module/fastapi_aad_auth.providers.aad.html#fastapi_aad_auth.providers.aad.AADSessionAuthenticator.as_app_scopes">as_app_scopes() (fastapi_aad_auth.providers.aad.AADSessionAuthenticator method)</a>
+</li>
       <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState.as_unauthenticated">as_unauthenticated() (fastapi_aad_auth._base.state.AuthenticationState class method)</a>
 </li>
       <li><a href="module/fastapi_aad_auth.auth.html#fastapi_aad_auth.auth.Authenticator.auth_required">auth_required() (fastapi_aad_auth.auth.Authenticator method)</a>
@@ -410,7 +412,7 @@
 </li>
       <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState.authenticate_as">authenticate_as() (fastapi_aad_auth._base.state.AuthenticationState class method)</a>
 </li>
-      <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState.authenticated_user">authenticated_user() (fastapi_aad_auth._base.state.AuthenticationState property)</a>
+      <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState.authenticated_user">authenticated_user (fastapi_aad_auth._base.state.AuthenticationState property)</a>
 </li>
       <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationOptions">AuthenticationOptions (class in fastapi_aad_auth._base.state)</a>
 </li>
@@ -462,8 +464,14 @@
         <li><a href="module/fastapi_aad_auth._base.validators.token.html#fastapi_aad_auth._base.validators.token.TokenValidator.check">(fastapi_aad_auth._base.validators.token.TokenValidator method)</a>
 </li>
       </ul></li>
+      <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState.check_groups">check_groups() (fastapi_aad_auth._base.state.AuthenticationState method)</a>
+</li>
+      <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState.check_roles">check_roles() (fastapi_aad_auth._base.state.AuthenticationState method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState.check_scopes">check_scopes() (fastapi_aad_auth._base.state.AuthenticationState method)</a>
+</li>
       <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState.check_session_state">check_session_state() (fastapi_aad_auth._base.state.AuthenticationState method)</a>
 </li>
       <li><a href="module/fastapi_aad_auth.config.html#fastapi_aad_auth.config.Config">Config (class in fastapi_aad_auth.config)</a>
@@ -472,7 +480,7 @@
 </li>
       <li><a href="module/fastapi_aad_auth.auth.html#fastapi_aad_auth.auth.Authenticator.configure_app">configure_app() (fastapi_aad_auth.auth.Authenticator method)</a>
 </li>
-      <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState.credentials">credentials() (fastapi_aad_auth._base.state.AuthenticationState property)</a>
+      <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState.credentials">credentials (fastapi_aad_auth._base.state.AuthenticationState property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -692,8 +700,6 @@
       </ul></li>
       <li><a href="module/fastapi_aad_auth._base.authenticators.session.html#fastapi_aad_auth._base.authenticators.session.SessionAuthenticator.get_access_token_from_request">get_access_token_from_request() (fastapi_aad_auth._base.authenticators.session.SessionAuthenticator method)</a>
 </li>
-      <li><a href="module/fastapi_aad_auth.ui.jinja.html#fastapi_aad_auth.ui.jinja.Jinja2Templates.get_env">get_env() (fastapi_aad_auth.ui.jinja.Jinja2Templates method)</a>
-</li>
       <li><a href="module/fastapi_aad_auth._base.authenticators.session.html#fastapi_aad_auth._base.authenticators.session.SessionAuthenticator.get_login_button">get_login_button() (fastapi_aad_auth._base.authenticators.session.SessionAuthenticator method)</a>
 
       <ul>
@@ -720,18 +726,20 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module/fastapi_aad_auth._base.validators.token.html#fastapi_aad_auth._base.validators.token.TokenValidator.init_oauth">init_oauth() (fastapi_aad_auth._base.validators.token.TokenValidator property)</a>
+      <li><a href="module/fastapi_aad_auth._base.validators.token.html#fastapi_aad_auth._base.validators.token.TokenValidator.init_oauth">init_oauth (fastapi_aad_auth._base.validators.token.TokenValidator property)</a>
 </li>
       <li><a href="module/fastapi_aad_auth._base.validators.token.html#fastapi_aad_auth._base.validators.token.InitOAuth">InitOAuth (class in fastapi_aad_auth._base.validators.token)</a>
 </li>
+      <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.InteractiveUser">InteractiveUser (class in fastapi_aad_auth._base.state)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/fastapi_aad_auth._base.backend.html#fastapi_aad_auth._base.backend.BaseOAuthBackend.is_authenticated">is_authenticated() (fastapi_aad_auth._base.backend.BaseOAuthBackend method)</a>
 
       <ul>
         <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState.is_authenticated">(fastapi_aad_auth._base.state.AuthenticationState method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/fastapi_aad_auth.utilities.html#fastapi_aad_auth.utilities.is_interactive">is_interactive() (in module fastapi_aad_auth.utilities)</a>
 </li>
       <li><a href="module/fastapi_aad_auth._base.validators.session.html#fastapi_aad_auth._base.validators.session.SessionValidator.is_valid_redirect">is_valid_redirect() (fastapi_aad_auth._base.validators.session.SessionValidator method)</a>
@@ -754,7 +762,7 @@
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.User.klass">klass() (fastapi_aad_auth._base.state.User property)</a>
+      <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.User.klass">klass (fastapi_aad_auth._base.state.User property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -772,13 +780,13 @@
 </li>
       <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.AuthenticationState.load_from_session">load_from_session() (fastapi_aad_auth._base.state.AuthenticationState class method)</a>
 </li>
-      <li><a href="module/fastapi_aad_auth.mixins.logging.html#fastapi_aad_auth.mixins.logging.LoggingMixin.logger">logger() (fastapi_aad_auth.mixins.logging.LoggingMixin property)</a>
+      <li><a href="module/fastapi_aad_auth.mixins.logging.html#fastapi_aad_auth.mixins.logging.LoggingMixin.logger">logger (fastapi_aad_auth.mixins.logging.LoggingMixin property)</a>
 </li>
       <li><a href="module/fastapi_aad_auth.mixins.logging.html#fastapi_aad_auth.mixins.logging.LoggingMixin">LoggingMixin (class in fastapi_aad_auth.mixins.logging)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module/fastapi_aad_auth._base.provider.html#fastapi_aad_auth._base.provider.Provider.login_url">login_url() (fastapi_aad_auth._base.provider.Provider property)</a>
+      <li><a href="module/fastapi_aad_auth._base.provider.html#fastapi_aad_auth._base.provider.Provider.login_url">login_url (fastapi_aad_auth._base.provider.Provider property)</a>
 </li>
       <li><a href="module/fastapi_aad_auth.config.html#fastapi_aad_auth.config.LoginUIConfig">LoginUIConfig (class in fastapi_aad_auth.config)</a>
 </li>
@@ -861,11 +869,11 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module/fastapi_aad_auth.config.html#fastapi_aad_auth.config.RoutingConfig.no_redirect_routes">no_redirect_routes() (fastapi_aad_auth.config.RoutingConfig property)</a>
+      <li><a href="module/fastapi_aad_auth.config.html#fastapi_aad_auth.config.RoutingConfig.no_redirect_routes">no_redirect_routes (fastapi_aad_auth.config.RoutingConfig property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module/fastapi_aad_auth.mixins.not_authenticated.html#fastapi_aad_auth.mixins.not_authenticated.NotAuthenticatedMixin.not_authenticated">not_authenticated() (fastapi_aad_auth.mixins.not_authenticated.NotAuthenticatedMixin property)</a>
+      <li><a href="module/fastapi_aad_auth.mixins.not_authenticated.html#fastapi_aad_auth.mixins.not_authenticated.NotAuthenticatedMixin.not_authenticated">not_authenticated (fastapi_aad_auth.mixins.not_authenticated.NotAuthenticatedMixin property)</a>
 </li>
       <li><a href="module/fastapi_aad_auth.mixins.not_authenticated.html#fastapi_aad_auth.mixins.not_authenticated.NotAuthenticatedMixin">NotAuthenticatedMixin (class in fastapi_aad_auth.mixins.not_authenticated)</a>
 </li>
@@ -885,7 +893,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/fastapi_aad_auth.utilities.urls.html#fastapi_aad_auth.utilities.urls.parse_url">parse_url() (in module fastapi_aad_auth.utilities.urls)</a>
 </li>
-      <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.User.permissions">permissions() (fastapi_aad_auth._base.state.User property)</a>
+      <li><a href="module/fastapi_aad_auth._base.state.html#fastapi_aad_auth._base.state.User.permissions">permissions (fastapi_aad_auth._base.state.User property)</a>
 </li>
       <li><a href="module/fastapi_aad_auth.ui.jinja.html#fastapi_aad_auth.ui.jinja.PkgResourcesTemplateLoader">PkgResourcesTemplateLoader (class in fastapi_aad_auth.ui.jinja)</a>
 </li>
@@ -927,11 +935,11 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module/fastapi_aad_auth._base.provider.html#fastapi_aad_auth._base.provider.Provider.redirect_url">redirect_url() (fastapi_aad_auth._base.provider.Provider property)</a>
+      <li><a href="module/fastapi_aad_auth._base.provider.html#fastapi_aad_auth._base.provider.Provider.redirect_url">redirect_url (fastapi_aad_auth._base.provider.Provider property)</a>
 </li>
       <li><a href="module/fastapi_aad_auth._base.backend.html#fastapi_aad_auth._base.backend.BaseOAuthBackend.requires_auth">requires_auth() (fastapi_aad_auth._base.backend.BaseOAuthBackend method)</a>
 </li>
-      <li><a href="module/fastapi_aad_auth.ui.html#fastapi_aad_auth.ui.UI.routes">routes() (fastapi_aad_auth.ui.UI property)</a>
+      <li><a href="module/fastapi_aad_auth.ui.html#fastapi_aad_auth.ui.UI.routes">routes (fastapi_aad_auth.ui.UI property)</a>
 </li>
       <li><a href="module/fastapi_aad_auth.config.html#fastapi_aad_auth.config.RoutingConfig">RoutingConfig (class in fastapi_aad_auth.config)</a>
 </li>
@@ -1036,14 +1044,14 @@
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2021 David Pugh.
+              &#169; Copyright 2022 David Pugh.
               
           </div>
             Last updated on
-              Jun 13, 2021 (version 0.1.21).
+              Apr 17, 2022 (version 0.1.22).
             <br/>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

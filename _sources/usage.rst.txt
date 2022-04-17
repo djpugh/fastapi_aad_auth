@@ -112,7 +112,8 @@ You can use it for fastapi routes::
     router = APIRouter()
 
     @router.get('/hello')
-    async def hello_world(auth_state: AuthenticationState = Depends(auth_provider.auth_backend.requires_auth(allow_session=True))):
+    @auth_provider.api_auth_required(allow_session=True)
+    async def hello_world(auth_state: AuthenticationState):
         print(auth_state)
         return {'hello': 'world'}
 
@@ -121,13 +122,13 @@ For starlette routes (i.e. interactive/HTML pages), use the auth_provider.auth_r
     from starlette.responses import PlainTextResponse
 
     @auth_provider.auth_required()
-    async def test(request):
+    async def test(request: Request):
         if request.user.is_authenticated:
             return PlainTextResponse('Hello, ' + request.user.display_name)
 
 This middleware will set the request.user object and request.credentials object::
 
-    async def homepage(request):
+    async def homepage(request: Request):
         if request.user.is_authenticated:
             return PlainTextResponse('Hello, ' + request.user.display_name)
         return PlainTextResponse(f'Hello, you')
