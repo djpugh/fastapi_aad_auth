@@ -1,5 +1,5 @@
 """Base OAuthBackend with token and session validators."""
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from fastapi.security import OAuth2
 from starlette.authentication import AuthCredentials, AuthenticationBackend, UnauthenticatedUser
@@ -59,7 +59,11 @@ class BaseOAuthBackend(NotAuthenticatedMixin, LoggingMixin, AuthenticationBacken
         for validator in self.validators:
             yield validator
 
-    def requires_auth(self, scopes: str = 'authenticated', allow_session: bool = False):
+    def requires_auth(self,
+                      scopes: str = 'authenticated',
+                      allow_session: bool = False,
+                      roles: Optional[Union[List[str], str]] = None,
+                      groups: Optional[Union[List[str], str]] = None):
         """Require authentication, use with fastapi Depends."""
         # This is a bit horrible, but is needed for fastapi to get this into OpenAPI (or similar) - it needs to be an OAuth2 object
         # We create this here "dynamically" for each endpoint, as we allow customisation on whether a session is permissible
@@ -80,7 +84,11 @@ class BaseOAuthBackend(NotAuthenticatedMixin, LoggingMixin, AuthenticationBacken
                     if state is None or not state.is_authenticated():
                         raise self.not_authenticated
                     elif not state.check_scopes(scopes):
-                        raise AuthorisationError(f'Not authorised for this API endpoint - Requires {scopes}')
+                        raise AuthorisationError(f'Not authorised for this API endpoint - Requires {scopes} scopes')
+                    elif not state.check_roles(roles):
+                        raise AuthorisationError(f'Not authorised for this API endpoint - Requires {roles} roles')
+                    elif not state.check_groups(groups):
+                        raise AuthorisationError(f'Not authorised for this API endpoint - Requires {groups} groups')
 
                     return state
 

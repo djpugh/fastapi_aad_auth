@@ -2,13 +2,13 @@
 from enum import Enum
 import importlib
 import json
-from typing import List, Optional, Union
+from typing import List, Optional, Type, Union
 import uuid
 
 from itsdangerous import URLSafeSerializer
 from itsdangerous.exc import BadSignature
 from pydantic import Field, root_validator, validator
-from starlette.authentication import AuthCredentials, SimpleUser, UnauthenticatedUser
+from starlette.authentication import AuthCredentials, BaseUser, SimpleUser, UnauthenticatedUser
 
 from fastapi_aad_auth.errors import AuthenticationError
 from fastapi_aad_auth.mixins import LoggingMixin
@@ -25,6 +25,25 @@ class AuthenticationOptions(Enum):
     authenticated = 1
 
 
+class InteractiveUser(SimpleUser):
+    """User for interactive components through Starlette."""
+
+    def __init__(self,
+                 username: str,
+                 name: str,
+                 email: str,
+                 roles: Optional[List[str]] = None,
+                 groups: Optional[List[str]] = None,
+                 scopes: Optional[List[str]] = None):
+        """Initialise the user."""
+        super().__init__(username)
+        self.name = name
+        self.email = email
+        self.roles = roles
+        self.groups = groups
+        self.scopes = scopes
+
+
 class User(InheritablePropertyBaseModel):
     """User Model."""
     name: str = Field(..., description='Full name')
@@ -33,6 +52,12 @@ class User(InheritablePropertyBaseModel):
     roles: Optional[List[str]] = Field(None, description='Any roles provided')
     groups: Optional[List[str]] = Field(None, description='Any groups provided')
     scopes: Optional[List[str]] = Field(None, description='Token scopes provided')
+    interactive_klass: Type[BaseUser] = InteractiveUser
+
+    class Config:  # noqa: D106
+        json_encoders = {
+            type: lambda a: f'{a.__module__}:{a.__name__}'
+        }
 
     @property
     def permissions(self):
@@ -42,6 +67,14 @@ class User(InheritablePropertyBaseModel):
             for scope in self.scopes:
                 if not scope.startswith('.'):
                     permissions.append(scope)
+        if self.groups:
+            for group in self.groups:
+                if not group.startswith('.'):
+                    permissions.append(group)
+        if self.roles:
+            for role in self.roles:
+                if not role.startswith('.'):
+                    permissions.append(role)
         return permissions[:]
 
     @property
@@ -55,6 +88,28 @@ class User(InheritablePropertyBaseModel):
             value = value.split(' ')
         return value
 
+    @validator('roles', always=True, pre=True)
+    def _validate_roles(cls, value):
+        if isinstance(value, str):
+            value = value.split(' ')
+        return value
+
+    @validator('groups', always=True, pre=True)
+    def _validate_groups(cls, value):
+        if isinstance(value, str):
+            value = json.loads(value)
+        return value
+
+    @validator('interactive_klass', always=True, pre=True)
+    def _validate_user_klass(cls, value):
+        if isinstance(value, str):
+            module, name = value.split(':')
+            mod = importlib.import_module(module)
+            value = getattr(mod, name)
+        else:
+            value = InteractiveUser
+        return value
+
 
 class AuthenticationState(LoggingMixin, InheritableBaseModel):
     """Authentication State."""
@@ -65,6 +120,9 @@ class AuthenticationState(LoggingMixin, InheritableBaseModel):
 
     class Config:  # noqa: D106
         underscore_attrs_are_private = True
+        json_encoders = {
+            type: lambda a: f'{a.__module__}:{a.__name__}'
+        }
 
     @validator('user', always=True, pre=True)
     def _validate_user_klass(cls, value):
@@ -141,7 +199,12 @@ class AuthenticationState(LoggingMixin, InheritableBaseModel):
         """Get the authenticated user."""
         if self.is_authenticated() and self.user:
             if isinstance(self.user, User):
-                return SimpleUser(self.user.email)
+                return self.user.interactive_klass(username=self.user.email,
+                                                   email=self.user.email,
+                                                   name=self.user.name,
+                                                   roles=self.user.roles,
+                                                   groups=self.user.groups,
+                                                   scopes=self.user.scopes)
         return UnauthenticatedUser()
 
     @property
@@ -173,5 +236,27 @@ class AuthenticationState(LoggingMixin, InheritableBaseModel):
             required_scopes = required_scopes.split(' ')
         for scope in required_scopes:
             if scope in self.credentials.scopes:
+                return True
+        return False
+
+    def check_roles(self, required_roles: Optional[Union[List[str], str]] = None):
+        """Check if the user has the required roles."""
+        if required_roles is None:
+            return True
+        elif isinstance(required_roles, str):
+            required_roles = required_roles.split(' ')
+        for role in required_roles:
+            if self.user and self.user.roles and role in self.user.roles:
+                return True
+        return False
+
+    def check_groups(self, required_groups: Optional[Union[List[str], str]] = None):
+        """Check if the user has the required roles."""
+        if required_groups is None:
+            return True
+        elif isinstance(required_groups, str):
+            required_groups = required_groups.split(' ')
+        for group in required_groups:
+            if self.user and self.user.groups and group in self.user.groups:
                 return True
         return False
