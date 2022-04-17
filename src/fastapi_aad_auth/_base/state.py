@@ -54,6 +54,11 @@ class User(InheritablePropertyBaseModel):
     scopes: Optional[List[str]] = Field(None, description='Token scopes provided')
     interactive_klass: Type[BaseUser] = InteractiveUser
 
+    class Config:
+        json_encoders = {
+            type: lambda a: f'{a.__module__}:{a.__name__}'
+        }
+
     @property
     def permissions(self):
         """User Permissions."""
@@ -95,6 +100,16 @@ class User(InheritablePropertyBaseModel):
             value = json.loads(value)
         return value
 
+    @validator('interactive_klass', always=True, pre=True)
+    def _validate_user_klass(cls, value):
+        if isinstance(value, str):
+            module, name = value.split(':')
+            mod = importlib.import_module(module)
+            value = getattr(mod, name)
+        else:
+            value = InteractiveUser
+        return value
+
 
 class AuthenticationState(LoggingMixin, InheritableBaseModel):
     """Authentication State."""
@@ -105,6 +120,9 @@ class AuthenticationState(LoggingMixin, InheritableBaseModel):
 
     class Config:  # noqa: D106
         underscore_attrs_are_private = True
+        json_encoders = {
+            type: lambda a: f'{a.__module__}:{a.__name__}'
+        }
 
     @validator('user', always=True, pre=True)
     def _validate_user_klass(cls, value):
