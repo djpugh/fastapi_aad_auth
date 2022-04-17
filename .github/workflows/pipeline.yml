@@ -163,7 +163,7 @@ jobs:
         run: tox -e build -vvv
 
       - name: Store build artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build
           path: |
@@ -188,7 +188,7 @@ jobs:
           SPHINX_GITHUB_CHANGELOG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Store build artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: docs
           path: |
