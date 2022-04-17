@@ -54,7 +54,7 @@ class User(InheritablePropertyBaseModel):
     scopes: Optional[List[str]] = Field(None, description='Token scopes provided')
     interactive_klass: Type[BaseUser] = InteractiveUser
 
-    class Config:
+    class Config:  # noqa: D106
         json_encoders = {
             type: lambda a: f'{a.__module__}:{a.__name__}'
         }
