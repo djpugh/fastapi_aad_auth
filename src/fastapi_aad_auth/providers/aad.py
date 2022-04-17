@@ -4,11 +4,13 @@ import base64
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
+from authlib import __version__ as authlib_version
 from authlib.jose import errors as jwt_errors, JsonWebKey, jwk, jwt
 from authlib.jose.util import extract_header
 from cachetools import TTLCache
 from cryptography.hazmat.primitives import serialization
 import msal
+from packaging import version
 from pkg_resources import resource_string
 from pydantic import BaseSettings as _BaseSettings, Field, HttpUrl, PrivateAttr, SecretStr, validator
 import requests
@@ -197,12 +199,20 @@ class AADTokenValidator(TokenValidator):
             token_header = token.split(".")[0].encode()
             jwks = self._request_ms_jwks()
             unverified_header = extract_header(token_header, jwt_errors.DecodeError)
-            for key in jwks["keys"]:
-                if key["kid"] == unverified_header["kid"]:
-                    self.logger.info(f'Identified key {key["kid"]}')
-                    return jwk.loads(key)
+            # Authlib 1.0.0 changed behaviour of loads in 1.0.0
+            if version.parse(authlib_version) >= version.parse('1.0.0'):
+                # This can now raise a ValueError: Invalid JSON Web Key Set if
+                # the key is not found
+                return jwk.loads(jwks, unverified_header['kid'])
+            else:
+                for key in jwks["keys"]:
+                    if key["kid"] == unverified_header["kid"]:
+                        self.logger.info(f'Identified key {key["kid"]}')
+                        return jwk.loads(key)
         except jwt_errors.DecodeError:
             self.logger.exception('Error parsing signing keys')
+        except ValueError:
+            self.logger.exception('Error finding key')
         raise AuthenticationError("Unable to parse signing keys")
 
     def _decode_token(self, token):
@@ -210,7 +220,13 @@ class AADTokenValidator(TokenValidator):
         claims = None
         self.logger.debug(f'Key is {jwk_}')
         try:
-            if hasattr(jwk, 'public_bytes'):
+            if hasattr(jwk_, 'as_pem'):
+                # Authlib 1.0.0
+                key = jwk_.as_pem()
+            elif hasattr(jwk_, 'public_key'):
+                # Authlib 1.0.0
+                key = jwk_.public_key.public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.PKCS1)
+            elif hasattr(jwk_, 'public_bytes'):
                 key = jwk_.public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.PKCS1)
             else:
                 key = jwk_.raw_key.public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.PKCS1)
