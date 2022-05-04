@@ -9,3 +9,4 @@ requests
 pydantic[dotenv]
 itsdangerous
 cachetools
+packaging
