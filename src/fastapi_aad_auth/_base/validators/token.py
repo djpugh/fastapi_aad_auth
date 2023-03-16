@@ -2,6 +2,7 @@
 from enum import Enum
 
 from authlib.jose import errors as jwt_errors
+from authlib.jose import JWTClaims
 from fastapi.openapi.models import OAuthFlows
 from fastapi.security import OAuth2AuthorizationCodeBearer
 from fastapi.security.utils import get_authorization_scheme_param
@@ -83,7 +84,7 @@ class TokenValidator(Validator, OAuth2AuthorizationCodeBearer):  # type: ignore
         """Get the openapi docs config."""
         return InitOAuth(clientId=self.client_id, scopes=f'{self.api_audience}/openid', usePkceWithAuthorizationCodeGrant=self._use_pkce).dict()
 
-    def _validate_claims(self, claims, options=None):
+    def _validate_claims(self, claims: JWTClaims, options=None):
         if options is None:
             options = self._claims_options
         claims.options = options
@@ -121,8 +122,8 @@ class TokenValidator(Validator, OAuth2AuthorizationCodeBearer):  # type: ignore
         return self._validate_claims(claims, options)
 
     @staticmethod
-    def _compare_claims(claims):
+    def _compare_claims(claims: JWTClaims):
         return '\n\t'.join([f'{key}: {value} - {claims.options.get(key, None)}' for key, value in claims.items()])
 
-    def _get_user_from_claims(self, claims):
+    def _get_user_from_claims(self, claims: JWTClaims):
         raise NotImplementedError('Implement in sub class')

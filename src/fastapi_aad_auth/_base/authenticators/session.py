@@ -5,6 +5,7 @@ from starlette.responses import RedirectResponse
 from fastapi_aad_auth._base.state import AuthenticationState
 from fastapi_aad_auth.errors import ConfigurationError
 from fastapi_aad_auth.mixins import LoggingMixin
+from fastapi_aad_auth.utilities import urls
 
 
 class SessionAuthenticator(LoggingMixin):
@@ -41,7 +42,7 @@ class SessionAuthenticator(LoggingMixin):
         force = request.query_params.get('force', force)
         if auth_state.is_authenticated() and not force:
             self.logger.debug(f'Authenticated - redirecting {auth_state}')
-            response = self.redirect_if_authenticated(auth_state)
+            response = self.redirect_if_authenticated(auth_state, redirect=request.query_params.get('redirect', redirect))
         else:
             # Set the redirect parameter here
             self._session_validator.set_post_auth_redirect(request, request.query_params.get('redirect', redirect))
@@ -93,7 +94,7 @@ class SessionAuthenticator(LoggingMixin):
 
     def get_login_button(self, url, post_redirect='/'):
         """Get a UI login button."""
-        url = self._add_redirect_to_url(url, post_redirect)
+        url = urls.with_redirect(url, post_redirect)
         return f'<a class="btn btn-lg btn-primary btn-block col-8 offset-md-2" href="{url}">Sign in</a>'
 
     def logout(self, request):
