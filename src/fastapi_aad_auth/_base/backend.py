@@ -101,7 +101,7 @@ class BaseOAuthBackend(NotAuthenticatedMixin, LoggingMixin, AuthenticationBacken
         return noauth
 
     @property  # type: ignore
-    @deprecate('0.2.0', replaced_by=f'{__name__}:BaseOAuthBackend.requires_auth')
+    @deprecate('0.2.0', replaced_by=f'{__name__}:BaseOAuthBackend.requires_auth', warn_from='0.1.22')
     def api_auth_scheme(self):
         """Get the API Authentication Schema."""
         return self.requires_auth()

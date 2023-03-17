@@ -34,8 +34,8 @@ class RoutingConfig(BaseSettings):
     once a logout has completed.
     """
 
-    login_path: str = DeprecatedField('/login/oauth', description="Path for initiating the AAD oauth call", env='FASTAPI_AUTH_LOGIN_ROUTE', deprecated_in=_DEPRECATION_VERSION, replaced_by='Routing.oauth_base_route', additional_info=' - To access the new behaviour, set this value to None or an empty string')
-    login_redirect_path: str = DeprecatedField('/login/oauth/redirect', description="Path for handling the AAD redirect call", env='FASTAPI_AUTH_LOGIN_REDIRECT_ROUTE', deprecated_in=_DEPRECATION_VERSION, replaced_by='Routing.oauth_base_route', additional_info=' - To access the new behaviour, set this value to None or an empty string')
+    login_path: str = DeprecatedField('/login/oauth', description="Path for initiating the AAD oauth call", env='FASTAPI_AUTH_LOGIN_ROUTE', deprecated_in=_DEPRECATION_VERSION, replaced_by='Routing.oauth_base_route', additional_info=' - To access the new behaviour, set this value to None or an empty string', warn_from='0.1.22')
+    login_redirect_path: str = DeprecatedField('/login/oauth/redirect', description="Path for handling the AAD redirect call", env='FASTAPI_AUTH_LOGIN_REDIRECT_ROUTE', deprecated_in=_DEPRECATION_VERSION, replaced_by='Routing.oauth_base_route', additional_info=' - To access the new behaviour, set this value to None or an empty string', warn_from='0.1.22')
     oauth_base_route: str = Field('/oauth', description="Base Path for initiating the oauth calls", env='FASTAPI_OAUTH_BASE_ROUTE')
     logout_path: str = Field('/logout', description="Path for processing a logout request", env='FASTAPI_AUTH_LOGOUT_ROUTE')
     landing_path: str = Field('/login', description="Path for the login UI page", env='FASTAPI_AUTH_LOGIN_UI_ROUTE')
@@ -145,7 +145,7 @@ class Config(BaseSettings):
 
     enabled: bool = Field(True, description="Enable authentication", env='FASTAPI_AUTH_ENABLED')
     providers: List[ProviderConfig] = Field(None, description="The provider configurations to use")
-    aad: Optional[AADConfig] = DeprecatedField(None, description='AAD Configuration information', deprecated_in='0.2.0', replaced_by='Config.providers')
+    aad: Optional[AADConfig] = DeprecatedField(None, description='AAD Configuration information', deprecated_in='0.2.0', replaced_by='Config.providers', warn_from='0.1.22')
     auth_session: AuthSessionConfig = Field(None, description="The configuration for encoding the authentication information in the session")
     routing: RoutingConfig = Field(None, description="Configuration for routing")
     session: SessionConfig = Field(None, description="Configuration for the session middleware")
