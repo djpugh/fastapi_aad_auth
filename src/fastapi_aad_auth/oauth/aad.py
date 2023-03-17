@@ -7,16 +7,15 @@ from fastapi_aad_auth.utilities import deprecate, deprecate_module
 
 _DEPRECATED_VERSION = '0.2.0'
 
+deprecate_module(locals(), _DEPRECATED_VERSION, replaced_by=f'{_AADProvider.__module__} and {_Authenticator.__module__}', warn_from='0.1.22')
 
-deprecate_module(locals(), _DEPRECATED_VERSION, replaced_by=f'{_AADProvider.__module__} and {_Authenticator.__module__}')
 
-
-@deprecate(_DEPRECATED_VERSION, replaced_by=f'{_AADProvider.__module__}:{_AADProvider.__name__}')
+@deprecate(_DEPRECATED_VERSION, replaced_by=f'{_AADProvider.__module__}:{_AADProvider.__name__}', warn_from='0.1.22')
 class AADOAuthBackend(_AADProvider):  # noqa: D101
     __doc__ = _AADProvider.__doc__
 
     @classmethod
-    @deprecate(_DEPRECATED_VERSION, replaced_by=f'{_AADProvider.__module__}:{_AADProvider.__name__}.from_config and {_Authenticator.__module__}:{_Authenticator.__name__}')
+    @deprecate(_DEPRECATED_VERSION, replaced_by=f'{_AADProvider.__module__}:{_AADProvider.__name__}.from_config and {_Authenticator.__module__}:{_Authenticator.__name__}', warn_from='0.1.22')
     def from_config(cls, config: Config):
         """Load the auth backend from a config.
 
